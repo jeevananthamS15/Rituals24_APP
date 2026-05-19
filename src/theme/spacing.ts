@@ -1,0 +1,18 @@
+export const spacing = {
+  unit: 4,
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+  xxl: 48,
+  xxxl: 64,
+
+
+  screenPadding: 16,
+  cardPadding: 12,
+  sectionGap: 24,
+  itemGap: 12,
+} as const;
+
+export type SpacingKey = keyof typeof spacing;
