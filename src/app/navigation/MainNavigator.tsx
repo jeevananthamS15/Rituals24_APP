@@ -1,24 +1,25 @@
-// import React from 'react';
-// import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-// import { MainTabParamList } from './types';
-// import { HomeNavigator } from './HomeNavigator';
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MainTabParamList } from './types';
+import { HomeNavigator } from './HomeNavigator';
 // import { ExploreScreen } from '../../features/home/screens/ExploreScreen';
 // import { StoreNavigator } from './StoreNavigator';
 // import { MyBookingsScreen } from '../../features/bookings/screens/MyBookingsScreen';
 // import { ProfileScreen } from '../../features/profile/screens/ProfileScreen';
-// import { BottomTabBar } from '../../components/layout/BottomTabBar';
+import { BottomTabBar } from '../../components/layout/BottomTabBar';
 
-// const Tab = createBottomTabNavigator<MainTabParamList>();
 
-// export const MainNavigator: React.FC = () => (
-//   <Tab.Navigator
-//     tabBar={props => <BottomTabBar {...props} />}
-//     screenOptions={{ headerShown: false }}
-//   >
-//     <Tab.Screen name="Home" component={HomeNavigator} />
-//     <Tab.Screen name="Explore" component={ExploreScreen} />
-//     <Tab.Screen name="Store" component={StoreNavigator} />
-//     <Tab.Screen name="Booking" component={MyBookingsScreen} />
-//     <Tab.Screen name="Profile" component={ProfileScreen} />
-//   </Tab.Navigator>
-// );
+const Tab = createBottomTabNavigator<MainTabParamList>();
+
+export const MainNavigator: React.FC = () => (
+  <Tab.Navigator
+    tabBar={props => <BottomTabBar {...props} />}
+    screenOptions={{ headerShown: false }}
+  >
+    <Tab.Screen name="Home" component={HomeNavigator} />
+    <Tab.Screen name="Explore" component={null} />
+    <Tab.Screen name="Store" component={null} />
+    <Tab.Screen name="Booking" component={null} />
+    <Tab.Screen name="Profile" component={null} />
+  </Tab.Navigator>
+);

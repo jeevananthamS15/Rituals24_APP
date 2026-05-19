@@ -8,88 +8,121 @@ import {
   Dimensions,
   Image,
   ListRenderItemInfo,
+  StatusBar,
+  Platform,
 } from 'react-native';
+
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { theme } from '../../../theme';
-import { AppButton } from '../../../components/ui/AppButton';
 import { AuthStackParamList } from '../../../app/navigation/types';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
+  Dimensions.get('window');
 
 interface Slide {
   id: string;
   title: string;
   subtitle: string;
-  emoji: string;
+  image: any;
 }
 
 const SLIDES: Slide[] = [
   {
     id: '1',
-    emoji: '🕉️',
     title: 'Verified Pandits',
-    subtitle: 'Every pandit on Ritual24 is background checked, certified, and rated by thousands of devotees.',
+    subtitle:
+      'Every pandit on Ritual24 is background-checked,\ncertified, and rated by thousand of devotees.',
+    image: require('../../../../assets/images/Onboard/onboard1.png'),
   },
+
   {
     id: '2',
-    emoji: '📿',
     title: 'Easy Ritual Booking',
-    subtitle: 'Book any puja in under 2 minutes. Choose the ritual, pick a date, and your pandit is confirmed.',
+    subtitle:
+      'Book any puja in under 2 minutes. Choose the\nritual, pick a date, and your pandit is confirmed.',
+    image: require('../../../../assets/images/Onboard/onboard2.png'),
   },
+
   {
     id: '3',
-    emoji: '🛕',
     title: 'Temple & Online Puja',
-    subtitle: 'Book darshan at top temples across India, or join live online puja from anywhere in the world.',
+    subtitle:
+      'Book darshan at top temples across India, Or join\nlive online puja from anywhere in the world.',
+    image: require('../../../../assets/images/Onboard/onboard3.png'),
   },
+
   {
     id: '4',
-    emoji: '🌙',
     title: 'Sacred Muhurat Guide',
-    subtitle: 'Never miss an auspicious moment. Our Vedic calendar shows daily muhurats, festivals, and fasting days.',
+    subtitle:
+      'Never miss an auspicious Moment. Our vedic\ncalendar show daily muhurats, festivals, and\nfasting days.',
+    image: require('../../../../assets/images/Onboard/onboard4.png'),
   },
 ];
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Onboarding'>;
 
-export const OnboardingScreen: React.FC<Props> = ({ navigation }) => {
+export const OnboardingScreen = ({ navigation }: Props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const flatListRef = useRef<FlatList>(null);
 
   const handleNext = () => {
     if (currentIndex < SLIDES.length - 1) {
-      flatListRef.current?.scrollToIndex({ index: currentIndex + 1 });
+      flatListRef.current?.scrollToIndex({
+        index: currentIndex + 1,
+        animated: true,
+      });
+
       setCurrentIndex(prev => prev + 1);
     } else {
       navigation.replace('Login');
     }
   };
 
-  const handleSkip = () => navigation.replace('Login');
+  const handleSkip = () => {
+    navigation.replace('Login');
+  };
 
-  const renderSlide = ({ item }: ListRenderItemInfo<Slide>) => (
-    <View style={styles.slide}>
-      <Text style={styles.emoji}>{item.emoji}</Text>
-      <Text style={styles.title}>{item.title}</Text>
-      <Text style={styles.subtitle}>{item.subtitle}</Text>
-    </View>
-  );
+  const renderSlide = ({ item }: ListRenderItemInfo<Slide>) => {
+    return (
+      <View style={styles.slide}>
+  
+        {/* <View style={styles.topEllipse} /> */}
 
-  const isLast = currentIndex === SLIDES.length - 1;
+    
+        <View style={styles.bottomEllipse} />
+
+      
+        <View style={styles.rightCurve} />
+
+    
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>{item.title}</Text>
+
+          <Text style={styles.subtitle}>{item.subtitle}</Text>
+        </View>
+
+        
+        <View style={styles.imageContainer}>
+          <Image
+            source={item.image}
+            resizeMode="contain"
+            style={styles.image}
+          />
+        </View>
+      </View>
+    );
+  };
 
   return (
-    <View style={styles.container}>
-      {/* Header with Skip */}
-      <View style={styles.header}>
-        <Text style={styles.logo}>🔱 Rituals24</Text>
-        {!isLast && (
-          <TouchableOpacity onPress={handleSkip}>
-            <Text style={styles.skip}>Skip</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+    <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
 
-      {/* Slides */}
       <FlatList
         ref={flatListRef}
         data={SLIDES}
@@ -97,96 +130,240 @@ export const OnboardingScreen: React.FC<Props> = ({ navigation }) => {
         keyExtractor={item => item.id}
         horizontal
         pagingEnabled
-        showsHorizontalScrollIndicator={false}
+        bounces={false}
         scrollEnabled={false}
-        style={styles.slider}
+        showsHorizontalScrollIndicator={false}
       />
 
-      {/* Dots */}
-      <View style={styles.dots}>
-        {SLIDES.map((_, i) => (
-          <View
-            key={i}
-            style={[styles.dot, i === currentIndex && styles.dotActive]}
-          />
-        ))}
-      </View>
+   
+      <View style={styles.bottomContainer}>
+     
+        <View style={styles.pagination}>
+          {SLIDES.map((_, index) => (
+            <View
+              key={index}
+              style={[
+                styles.dot,
+                currentIndex === index && styles.activeDot,
+              ]}
+            />
+          ))}
+        </View>
 
-      {/* CTA */}
-      <View style={styles.cta}>
-        <AppButton
-          title={isLast ? 'Get Started' : 'Next'}
-          onPress={handleNext}
-        />
+        <View style={styles.buttonRow}>
+          {currentIndex !== SLIDES.length - 1 && (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.skipButton}
+              onPress={handleSkip}
+            >
+              <Text style={styles.skipText}>Skip</Text>
+            </TouchableOpacity>
+          )}
+
+          <TouchableOpacity
+            activeOpacity={0.9}
+            style={[
+              styles.nextButton,
+              currentIndex === SLIDES.length - 1 &&
+                styles.fullWidthButton,
+            ]}
+            onPress={handleNext}
+          >
+            <Text style={styles.nextText}>Next</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background,
+    backgroundColor: '#FAFAFA',
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: theme.spacing.screenPadding,
-    paddingTop: theme.spacing.xl,
-  },
-  logo: {
-    ...theme.typography.h2,
-    color: theme.colors.primary,
-  },
-  skip: {
-    ...theme.typography.labelLg,
-    color: theme.colors.textSecondary,
-  },
-  slider: {
-    flex: 1,
-  },
+
   slide: {
     width: SCREEN_WIDTH,
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: theme.spacing.xl,
+    backgroundColor: '#FAFAFA',
+    overflow: 'hidden',
   },
-  emoji: {
-    fontSize: 80,
-    marginBottom: theme.spacing.xl,
+
+
+
+  topEllipse: {
+    position: 'absolute',
+
+    width: 383.57,
+    height: 383.57,
+
+    top: 62,
+    left: -6,
+
+    borderRadius: 999,
+
+    backgroundColor: 'rgba(43,0,10,0.05)',
   },
+
+  bottomEllipse: {
+    position: 'absolute',
+
+    width: 383.57,
+    height: 383.57,
+
+    top: SCREEN_HEIGHT * 0.53,
+    left: -168,
+
+    borderRadius: 999,
+
+    backgroundColor: 'rgba(43,0,10,0.04)',
+  },
+
+  rightCurve: {
+    position: 'absolute',
+
+    width: SCREEN_WIDTH * 1.15,
+    height: SCREEN_WIDTH * 1.15,
+
+    borderRadius: 999,
+
+    right: -SCREEN_WIDTH * 0.58,
+    bottom: SCREEN_HEIGHT * 0.19,
+
+    backgroundColor: 'rgba(43,0,10,0.05)',
+  },
+
+ 
+
+  textContainer: {
+    marginTop:
+      Platform.OS === 'ios'
+        ? SCREEN_HEIGHT * 0.07
+        : SCREEN_HEIGHT * 0.06,
+
+    paddingHorizontal: 16,
+    zIndex: 10,
+  },
+
   title: {
-    ...theme.typography.displayMd,
-    color: theme.colors.primary,
-    textAlign: 'center',
-    marginBottom: theme.spacing.md,
+    fontSize: 22,
+    lineHeight: 30,
+    fontWeight: '700',
+    color: '#111111',
+    marginBottom: 10,
   },
+
   subtitle: {
-    ...theme.typography.bodyLg,
-    color: theme.colors.textSecondary,
-    textAlign: 'center',
-    lineHeight: 26,
+    width: '92%',
+    fontSize: 14,
+    lineHeight: 22,
+    fontWeight: '400',
+    color: '#222222',
   },
-  dots: {
+
+
+
+  imageContainer: {
+    position: 'absolute',
+
+    right: -35,
+    bottom: 92,
+
+    zIndex: 5,
+  },
+
+  image: {
+    width: SCREEN_WIDTH * 0.86,
+    height: SCREEN_HEIGHT * 0.42,
+  },
+
+
+
+  bottomContainer: {
+    position: 'absolute',
+
+    bottom: Platform.OS === 'ios' ? 24 : 18,
+
+    width: '100%',
+
+    paddingHorizontal: 16,
+  },
+
+  pagination: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: theme.spacing.sm,
-    marginVertical: theme.spacing.xl,
+    alignItems: 'center',
+
+    marginBottom: 26,
   },
+
   dot: {
-    width: 8,
-    height: 8,
-    borderRadius: theme.radii.full,
-    backgroundColor: theme.colors.border,
+    width: 6,
+    height: 6,
+    borderRadius: 99,
+
+    backgroundColor: '#D9D9D9',
+
+    marginHorizontal: 4,
   },
-  dotActive: {
-    width: 24,
-    backgroundColor: theme.colors.primary,
+
+  activeDot: {
+    width: 20,
+    height: 6,
+    borderRadius: 99,
+
+    backgroundColor: '#4B0013',
   },
-  cta: {
-    paddingHorizontal: theme.spacing.screenPadding,
-    paddingBottom: theme.spacing.xxxl,
+
+  buttonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  skipButton: {
+    width: 62,
+    height: 38,
+
+    borderRadius: 10,
+
+    borderWidth: 1,
+    borderColor: '#4B0013',
+
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    marginRight: 10,
+
+    backgroundColor: '#FFFFFF',
+  },
+
+  skipText: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: '#4B0013',
+  },
+
+  nextButton: {
+    flex: 1,
+    height: 38,
+
+    borderRadius: 10,
+
+    backgroundColor: '#4B0013',
+
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  fullWidthButton: {
+    width: '100%',
+  },
+
+  nextText: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: '#FFFFFF',
   },
 });

@@ -1,12 +1,11 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 
-// Auth Stack
+
 export type AuthStackParamList = {
   Onboarding: undefined;
   Login: undefined;
 };
 
-// Home Stack
 export type HomeStackParamList = {
   HomeMain: undefined;
   PujaDetail: { pujaId: string };
@@ -14,14 +13,14 @@ export type HomeStackParamList = {
   TempleDetail: { templeId: string };
 };
 
-// Store Stack
+
 export type StoreStackParamList = {
   StoreMain: undefined;
   ProductDetail: { productId: string };
   Cart: undefined;
 };
 
-// Booking Stack (checkout flow)
+
 export type CheckoutStackParamList = {
   ServiceMode: { pujaId: string };
   DateMuhurat: undefined;
@@ -30,7 +29,7 @@ export type CheckoutStackParamList = {
   Payment: undefined;
 };
 
-// Bottom Tab
+
 export type MainTabParamList = {
   Home: NavigatorScreenParams<HomeStackParamList>;
   Explore: undefined;
@@ -39,8 +38,9 @@ export type MainTabParamList = {
   Profile: undefined;
 };
 
-// Root
+
 export type RootStackParamList = {
+  Splash: undefined;  
   Auth: NavigatorScreenParams<AuthStackParamList>;
   Main: NavigatorScreenParams<MainTabParamList>;
   Checkout: NavigatorScreenParams<CheckoutStackParamList>;

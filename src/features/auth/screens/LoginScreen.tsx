@@ -8,240 +8,517 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Dimensions,
+  Image,
+  StatusBar,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { theme } from '../../../theme';
-import { AppButton } from '../../../components/ui/AppButton';
 import { AuthStackParamList } from '../../../app/navigation/types';
-// import { useAuthStore } from '../store/authStore';
+
+const { width, height } = Dimensions.get('window');
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
 export const LoginScreen: React.FC<Props> = () => {
   const [mobile, setMobile] = useState('');
   const [loading, setLoading] = useState(false);
-  // const login = useAuthStore(state => state.login);
-  // const continueAsGuest = useAuthStore(state => state.continueAsGuest);
-  const login = () => {};
-const continueAsGuest = () => {};
+  const [activeTab, setActiveTab] = useState<'mobile' | 'email'>('mobile');
 
   const handleSendOTP = async () => {
     if (mobile.length !== 10) return;
+
     setLoading(true);
-    // Simulate OTP send
+
     setTimeout(() => {
       setLoading(false);
-      // login(mobile, 'Amit'); // In production: navigate to OTP screen
       console.log('OTP Sent');
     }, 1500);
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <ScrollView
-        contentContainerStyle={styles.scroll}
-        keyboardShouldPersistTaps="handled"
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
+
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.logoEmoji}>🔱</Text>
-          <Text style={styles.appName}>Rituals24</Text>
-          <Text style={styles.tagline}>Your Sacred Journey, Simplified</Text>
-        </View>
+        <LinearGradient
+          colors={['#2B0008', '#4A0012', '#5B1A10']}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 1}}
+          style={styles.headerGradient}
+        >
+       
 
-        {/* Card */}
-        <View style={styles.card}>
-          <Text style={styles.title}>Welcome Back</Text>
-          <Text style={styles.subtitle}>
-            Sign in to book pandits, poojas, and temple darshan
-          </Text>
+          <View style={[styles.circle, styles.circleTopLeft]} />
+          <View style={[styles.circle, styles.circleTopRight]} />
+          <View style={[styles.circle, styles.circleMiddleRight]} />
 
-          {/* Tabs */}
-          <View style={styles.tabs}>
-            <View style={[styles.tab, styles.tabActive]}>
-              <Text style={styles.tabActiveText}>Mobile</Text>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollContent}
+            keyboardShouldPersistTaps="handled"
+          >
+           
+
+            <View style={styles.logoContainer}>
+              <Image
+                source={require('../../../../assets/images/logo.png')}
+                resizeMode="contain"
+                style={styles.logo}
+              />
             </View>
-            <View style={styles.tab}>
-              <Text style={styles.tabText}>Email</Text>
+
+          
+
+            <View style={styles.card}>
+              <Text style={styles.title}>Welcome Back</Text>
+
+              <Text style={styles.subtitle}>
+                Sign in to book pandits, poojas, and temple darshan
+              </Text>
+
+
+              <View style={styles.segmentContainer}>
+                <TouchableOpacity
+                  activeOpacity={0.9}
+                  onPress={() => setActiveTab('mobile')}
+                  style={[
+                    styles.segmentButton,
+                    activeTab === 'mobile' && styles.segmentActive,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.segmentText,
+                      activeTab === 'mobile' && styles.segmentTextActive,
+                    ]}
+                  >
+                    Mobile
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  activeOpacity={0.9}
+                  onPress={() => setActiveTab('email')}
+                  style={[
+                    styles.segmentButton,
+                    activeTab === 'email' && styles.segmentActive,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.segmentText,
+                      activeTab === 'email' && styles.segmentTextActive,
+                    ]}
+                  >
+                    Email
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+
+              <View style={styles.inputWrapper}>
+                <View style={styles.countrySection}>
+                  <Text style={styles.flag}>🇮🇳</Text>
+
+                  <Text style={styles.countryCode}>+91</Text>
+                </View>
+
+                <View style={styles.inputDivider} />
+
+                <TextInput
+                  value={mobile}
+                  onChangeText={setMobile}
+                  keyboardType="phone-pad"
+                  maxLength={10}
+                  placeholder="Enter mobile number"
+                  placeholderTextColor="#757575"
+                  style={styles.input}
+                />
+              </View>
+
+           
+
+              <View style={styles.helperRow}>
+                <Text style={styles.helperIcon}>🔒</Text>
+
+                <Text style={styles.helperText}>
+                  Secure OTP Verification. Your data is protected.
+                </Text>
+              </View>
+
+             
+
+              <TouchableOpacity
+                activeOpacity={0.9}
+                disabled={mobile.length !== 10 || loading}
+                onPress={handleSendOTP}
+                style={[
+                  styles.otpButton,
+                  mobile.length === 10 && styles.otpButtonActive,
+                ]}
+              >
+                <Text style={styles.otpButtonText}>
+                  {loading ? 'Sending...' : 'Send OTP →'}
+                </Text>
+              </TouchableOpacity>
+
+            
+
+              <TouchableOpacity activeOpacity={0.8}>
+                <Text style={styles.createAccountText}>
+                  New here?{' '}
+                  <Text style={styles.createAccountLink}>
+                    Create Account
+                  </Text>
+                </Text>
+              </TouchableOpacity>
+
+
+
+              <View style={styles.dividerRow}>
+                <View style={styles.line} />
+
+                <Text style={styles.orText}>or</Text>
+
+                <View style={styles.line} />
+              </View>
+
+
+              <TouchableOpacity
+                activeOpacity={0.9}
+                style={styles.guestButton}
+              >
+                <Text style={styles.guestButtonText}>
+                  Continue as Guest
+                </Text>
+              </TouchableOpacity>
+
+          
+
+              <View style={styles.socialRow}>
+                <TouchableOpacity
+                  activeOpacity={0.9}
+                  style={styles.socialButton}
+                >
+                  <Text style={styles.socialIcon}>G</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  activeOpacity={0.9}
+                  style={styles.socialButton}
+                >
+                  <Text style={styles.appleIcon}></Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-
-          {/* Input */}
-          <View style={styles.inputContainer}>
-            <Text style={styles.dialCode}>+91</Text>
-            <View style={styles.divider} />
-            <TextInput
-              style={styles.input}
-              placeholder="Enter mobile number"
-              placeholderTextColor={theme.colors.textMuted}
-              keyboardType="phone-pad"
-              maxLength={10}
-              value={mobile}
-              onChangeText={setMobile}
-            />
-          </View>
-
-          <Text style={styles.secureNote}>
-            🔒 Secure OTP Verification. Your data is protected.
-          </Text>
-
-          <AppButton
-            title="Send OTP"
-            onPress={handleSendOTP}
-            loading={loading}
-            disabled={mobile.length !== 10}
-          />
-
-          <View style={styles.dividerRow}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.orText}>or</Text>
-            <View style={styles.dividerLine} />
-          </View>
-
-          <AppButton
-            title="Continue as Guest"
-            onPress={continueAsGuest}
-            variant="outline"
-          />
-
-          <TouchableOpacity style={styles.createAccount}>
-            <Text style={styles.createAccountText}>
-              New here?{' '}
-              <Text style={styles.createAccountLink}>Create Account</Text>
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          </ScrollView>
+        </LinearGradient>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
+const CIRCLE_SIZE = width * 0.72;
+
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#2B0008',
+  },
+
   container: {
     flex: 1,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: '#2B0008',
   },
-  scroll: {
-    flexGrow: 1,
-    justifyContent: 'flex-end',
-  },
-  header: {
-    alignItems: 'center',
-    paddingVertical: theme.spacing.xxxl,
-    paddingTop: theme.spacing.xxxl + theme.spacing.xl,
-  },
-  logoEmoji: {
-    fontSize: 48,
-    marginBottom: theme.spacing.sm,
-  },
-  appName: {
-    ...theme.typography.displayLg,
-    color: theme.colors.gold,
-    marginBottom: theme.spacing.xs,
-  },
-  tagline: {
-    ...theme.typography.bodyMd,
-    color: 'rgba(255,255,255,0.8)',
-  },
-  card: {
-    backgroundColor: theme.colors.surface,
-    borderTopLeftRadius: theme.radii.xxl,
-    borderTopRightRadius: theme.radii.xxl,
-    padding: theme.spacing.xl,
-    paddingBottom: theme.spacing.xxxl,
-    gap: theme.spacing.md,
-  },
-  title: {
-    ...theme.typography.h1,
-    color: theme.colors.textPrimary,
-    textAlign: 'center',
-  },
-  subtitle: {
-    ...theme.typography.bodyMd,
-    color: theme.colors.textSecondary,
-    textAlign: 'center',
-  },
-  tabs: {
-    flexDirection: 'row',
-    backgroundColor: theme.colors.surfaceElevated,
-    borderRadius: theme.radii.sm,
-    padding: 4,
-  },
-  tab: {
+
+  headerGradient: {
     flex: 1,
-    paddingVertical: theme.spacing.sm,
+  },
+
+  scrollContent: {
+    flexGrow: 1,
+  },
+
+
+
+  circle: {
+    position: 'absolute',
+    width: CIRCLE_SIZE,
+    height: CIRCLE_SIZE,
+    borderRadius: CIRCLE_SIZE / 2,
+    borderWidth: 28,
+    borderColor: 'rgba(221,171,44,0.12)',
+  },
+
+  circleTopLeft: {
+    top: -75,
+    left: -197,
+  },
+
+  circleTopRight: {
+    top: -185,
+    right: -118,
+  },
+
+  circleMiddleRight: {
+    top: 130,
+    right: -122,
+  },
+
+
+  logoContainer: {
     alignItems: 'center',
-    borderRadius: theme.radii.sm - 2,
+    justifyContent: 'center',
+    paddingTop: height * 0.035,
+    paddingBottom: height * 0.03,
   },
-  tabActive: {
-    backgroundColor: theme.colors.surface,
-    ...theme.shadows.sm,
+
+  logo: {
+    width: width * 0.52,
+    height: width * 0.45,
   },
-  tabActiveText: {
-    ...theme.typography.labelMd,
-    color: theme.colors.primary,
+
+ 
+
+  card: {
+    flex: 1,
+    backgroundColor: '#F5F5F5',
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingHorizontal: 20,
+    paddingTop: 34,
+    paddingBottom: Platform.OS === 'ios' ? 34 : 28,
+    minHeight: height * 0.68,
+  },
+
+  title: {
+    fontSize: 28,
+    lineHeight: 36,
     fontWeight: '700',
+    color: '#000000',
+    marginBottom: 12,
   },
-  tabText: {
-    ...theme.typography.labelMd,
-    color: theme.colors.textMuted,
+
+  subtitle: {
+    width: '86%',
+    fontSize: 14,
+    lineHeight: 22,
+    fontWeight: '400',
+    color: '#4B4B4B',
+    marginBottom: 28,
   },
-  inputContainer: {
+
+
+
+  segmentContainer: {
+    width: '100%',
+    height: 32,
+    borderRadius: 100,
+    backgroundColor: 'rgba(118,118,128,0.12)',
+    flexDirection: 'row',
+    padding: 2,
+    marginBottom: 26,
+  },
+
+  segmentButton: {
+    flex: 1,
+    borderRadius: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  segmentActive: {
+    backgroundColor: '#2B000A',
+  },
+
+  segmentText: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: '#757575',
+  },
+
+  segmentTextActive: {
+    color: '#FFFFFF',
+  },
+
+
+
+  inputWrapper: {
+    width: '100%',
+    height: 52,
+    borderRadius: 35,
+    borderWidth: 1,
+    borderColor: '#D9D9D9',
+    backgroundColor: '#F9F9F9',
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1.5,
-    borderColor: theme.colors.border,
-    borderRadius: theme.radii.md,
-    paddingHorizontal: theme.spacing.md,
-    height: 52,
+    paddingHorizontal: 12,
   },
-  dialCode: {
-    ...theme.typography.bodyMd,
-    color: theme.colors.textPrimary,
-    fontWeight: '600',
+
+  countrySection: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  divider: {
+
+  flag: {
+    fontSize: 16,
+    marginRight: 6,
+  },
+
+  countryCode: {
+    fontSize: 14,
+    color: '#000000',
+    fontWeight: '500',
+  },
+
+  inputDivider: {
     width: 1,
-    height: 20,
-    backgroundColor: theme.colors.border,
-    marginHorizontal: theme.spacing.md,
+    height: 22,
+    backgroundColor: '#D9D9D9',
+    marginHorizontal: 12,
   },
+
   input: {
     flex: 1,
-    ...theme.typography.bodyMd,
-    color: theme.colors.textPrimary,
+    height: '100%',
+    fontSize: 14,
+    color: '#000000',
+    paddingTop: 0,
+    paddingBottom: 0,
   },
-  secureNote: {
-    ...theme.typography.caption,
-    color: theme.colors.textMuted,
+
+ 
+
+  helperRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+    marginBottom: 18,
+  },
+
+  helperIcon: {
+    fontSize: 11,
+    marginRight: 4,
+  },
+
+  helperText: {
+    fontSize: 11,
+    color: '#757575',
+    lineHeight: 14,
+  },
+
+
+
+  otpButton: {
+    width: '100%',
+    height: 42,
+    borderRadius: 12,
+    backgroundColor: '#A7A7A7',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  otpButtonActive: {
+    backgroundColor: '#727272',
+  },
+
+  otpButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#FFFFFF',
+  },
+
+
+
+  createAccountText: {
     textAlign: 'center',
+    marginTop: 18,
+    fontSize: 12,
+    color: '#757575',
+    lineHeight: 18,
   },
+
+  createAccountLink: {
+    fontSize: 14,
+    color: '#2B000A',
+    fontWeight: '500',
+  },
+
+
+
   dividerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.md,
+    marginTop: 24,
+    marginBottom: 24,
   },
-  dividerLine: {
+
+  line: {
     flex: 1,
     height: 1,
-    backgroundColor: theme.colors.border,
+    backgroundColor: '#C7C7C7',
   },
+
   orText: {
-    ...theme.typography.caption,
-    color: theme.colors.textMuted,
+    marginHorizontal: 12,
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#727272',
   },
-  createAccount: {
+
+
+
+  guestButton: {
+    width: '100%',
+    height: 42,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#2B000A',
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
-  createAccountText: {
-    ...theme.typography.bodyMd,
-    color: theme.colors.textSecondary,
+
+  guestButtonText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#2B000A',
   },
-  createAccountLink: {
-    color: theme.colors.primary,
+
+
+
+  socialRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 14,
+  },
+
+  socialButton: {
+    width: '48%',
+    height: 42,
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  socialIcon: {
+    fontSize: 18,
     fontWeight: '700',
+    color: '#000000',
+  },
+
+  appleIcon: {
+    fontSize: 22,
+    color: '#000000',
   },
 });
