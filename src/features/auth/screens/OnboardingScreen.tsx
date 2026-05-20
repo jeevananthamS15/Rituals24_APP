@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -7,26 +7,22 @@ import {
   StyleSheet,
   Dimensions,
   Image,
-  ListRenderItemInfo,
   StatusBar,
   Platform,
 } from 'react-native';
 
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '../../../app/navigation/types';
+import LinearGradient from 'react-native-linear-gradient';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
-  Dimensions.get('window');
+const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
 
-interface Slide {
-  id: string;
-  title: string;
-  subtitle: string;
-  image: any;
-}
+const BASE_WIDTH = 393;
+const BASE_HEIGHT = 852;
 
-const SLIDES: Slide[] = [
+const scaleW = (size: number) => (SCREEN_WIDTH / BASE_WIDTH) * size;
+const scaleH = (size: number) => (SCREEN_HEIGHT / BASE_HEIGHT) * size;
+
+const SLIDES = [
   {
     id: '1',
     title: 'Verified Pandits',
@@ -60,18 +56,15 @@ const SLIDES: Slide[] = [
   },
 ];
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'Onboarding'>;
-
-export const OnboardingScreen = ({ navigation }: Props) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
+export const OnboardingScreen = ({navigation}: any) => {
   const flatListRef = useRef<FlatList>(null);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleNext = () => {
     if (currentIndex < SLIDES.length - 1) {
       flatListRef.current?.scrollToIndex({
         index: currentIndex + 1,
-        animated: true,
       });
 
       setCurrentIndex(prev => prev + 1);
@@ -84,39 +77,59 @@ export const OnboardingScreen = ({ navigation }: Props) => {
     navigation.replace('Login');
   };
 
-  const renderSlide = ({ item }: ListRenderItemInfo<Slide>) => {
+  const renderItem = ({item}: any) => {
     return (
       <View style={styles.slide}>
-  
-        {/* <View style={styles.topEllipse} /> */}
-
-    
-        <View style={styles.bottomEllipse} />
+        <View style={styles.card}>
+          
+          <LinearGradient
+            colors={[
+              'rgba(43,0,10,0.10)',
+              'rgba(255,255,255,0.03)',
+              'rgba(255,255,255,0)',
+            ]}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 1}}
+            style={styles.topEllipse}
+          />
 
       
-        <View style={styles.rightCurve} />
-
-    
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>{item.title}</Text>
-
-          <Text style={styles.subtitle}>{item.subtitle}</Text>
-        </View>
-
-        
-        <View style={styles.imageContainer}>
-          <Image
-            source={item.image}
-            resizeMode="contain"
-            style={styles.image}
+          <LinearGradient
+            colors={[
+              'rgba(43,0,10,0.08)',
+              'rgba(255,255,255,0.02)',
+              'rgba(255,255,255,0)',
+            ]}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 1}}
+            style={styles.bottomEllipse}
           />
+
+      
+          <View style={styles.softCircle} />
+
+
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>{item.title}</Text>
+
+            <Text style={styles.subtitle}>{item.subtitle}</Text>
+          </View>
+
+      
+          <View style={styles.imageContainer}>
+            <Image
+              source={item.image}
+              resizeMode="contain"
+              style={styles.image}
+            />
+          </View>
         </View>
       </View>
     );
   };
 
   return (
-    <SafeAreaView edges={['top', 'bottom']} style={styles.container}>
+    <SafeAreaView edges={['top']} style={styles.container}>
       <StatusBar
         translucent
         backgroundColor="transparent"
@@ -126,50 +139,43 @@ export const OnboardingScreen = ({ navigation }: Props) => {
       <FlatList
         ref={flatListRef}
         data={SLIDES}
-        renderItem={renderSlide}
-        keyExtractor={item => item.id}
+        renderItem={renderItem}
         horizontal
         pagingEnabled
-        bounces={false}
         scrollEnabled={false}
         showsHorizontalScrollIndicator={false}
+        keyExtractor={item => item.id}
       />
 
-   
-      <View style={styles.bottomContainer}>
-     
+  
+      <View style={styles.bottomWrapper}>
+  
         <View style={styles.pagination}>
-          {SLIDES.map((_, index) => (
-            <View
-              key={index}
-              style={[
-                styles.dot,
-                currentIndex === index && styles.activeDot,
-              ]}
-            />
-          ))}
+          {SLIDES.map((_, index) => {
+            const active = index === currentIndex;
+
+            return (
+              <View
+                key={index}
+                style={[styles.dot, active && styles.activeDot]}
+              />
+            );
+          })}
         </View>
 
+       
         <View style={styles.buttonRow}>
-          {currentIndex !== SLIDES.length - 1 && (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.skipButton}
-              onPress={handleSkip}
-            >
-              <Text style={styles.skipText}>Skip</Text>
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={handleSkip}
+            style={styles.skipButton}>
+            <Text style={styles.skipText}>Skip</Text>
+          </TouchableOpacity>
 
           <TouchableOpacity
             activeOpacity={0.9}
-            style={[
-              styles.nextButton,
-              currentIndex === SLIDES.length - 1 &&
-                styles.fullWidthButton,
-            ]}
             onPress={handleNext}
-          >
+            style={styles.nextButton}>
             <Text style={styles.nextText}>Next</Text>
           </TouchableOpacity>
         </View>
@@ -181,140 +187,128 @@ export const OnboardingScreen = ({ navigation }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFA',
+    backgroundColor: '#F4F4F4',
   },
 
   slide: {
     width: SCREEN_WIDTH,
+  },
+
+  card: {
     flex: 1,
     backgroundColor: '#FAFAFA',
     overflow: 'hidden',
+    borderBottomRightRadius: scaleW(260),
   },
-
-
 
   topEllipse: {
     position: 'absolute',
 
-    width: 383.57,
-    height: 383.57,
+    width: scaleW(620),
+    height: scaleW(620),
 
-    top: 62,
-    left: -6,
+    borderRadius: scaleW(620),
 
-    borderRadius: 999,
+    top: scaleH(110),
+    left: scaleW(-210),
 
-    backgroundColor: 'rgba(43,0,10,0.05)',
+    opacity: 0.55,
+
+    transform: [{rotate: '12deg'}],
   },
 
   bottomEllipse: {
     position: 'absolute',
 
-    width: 383.57,
-    height: 383.57,
+    width: scaleW(520),
+    height: scaleW(520),
 
-    top: SCREEN_HEIGHT * 0.53,
-    left: -168,
+    borderRadius: scaleW(520),
 
-    borderRadius: 999,
+    left: scaleW(-250),
+    bottom: scaleH(-160),
 
-    backgroundColor: 'rgba(43,0,10,0.04)',
+    opacity: 0.45,
+
+    transform: [{rotate: '-8deg'}],
   },
 
-  rightCurve: {
+  softCircle: {
     position: 'absolute',
 
-    width: SCREEN_WIDTH * 1.15,
-    height: SCREEN_WIDTH * 1.15,
+    width: scaleW(420),
+    height: scaleW(420),
 
-    borderRadius: 999,
+    borderRadius: scaleW(420),
 
-    right: -SCREEN_WIDTH * 0.58,
-    bottom: SCREEN_HEIGHT * 0.19,
+    backgroundColor: 'rgba(0,0,0,0.015)',
 
-    backgroundColor: 'rgba(43,0,10,0.05)',
+    right: scaleW(-180),
+    top: scaleH(180),
   },
 
- 
-
   textContainer: {
-    marginTop:
-      Platform.OS === 'ios'
-        ? SCREEN_HEIGHT * 0.07
-        : SCREEN_HEIGHT * 0.06,
-
-    paddingHorizontal: 16,
-    zIndex: 10,
+    marginTop: scaleH(110),
+    paddingHorizontal: scaleW(20),
+    zIndex: 20,
   },
 
   title: {
-    fontSize: 22,
-    lineHeight: 30,
+    fontSize: scaleW(28),
+    lineHeight: scaleW(36),
     fontWeight: '700',
     color: '#111111',
-    marginBottom: 10,
+    marginBottom: scaleH(10),
   },
 
   subtitle: {
-    width: '92%',
-    fontSize: 14,
-    lineHeight: 22,
+    width: scaleW(300),
+    fontSize: scaleW(14),
+    lineHeight: scaleW(22),
+    color: '#3A3A3A',
     fontWeight: '400',
-    color: '#222222',
   },
-
-
 
   imageContainer: {
     position: 'absolute',
-
-    right: -35,
-    bottom: 92,
-
-    zIndex: 5,
+    width: scaleW(450),
+    height: scaleH(450),
+    right: scaleW(-70),
+    bottom: scaleH(-20),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   image: {
-    width: SCREEN_WIDTH * 0.86,
-    height: SCREEN_HEIGHT * 0.42,
+    width: '100%',
+    height: '100%',
   },
 
-
-
-  bottomContainer: {
-    position: 'absolute',
-
-    bottom: Platform.OS === 'ios' ? 24 : 18,
-
-    width: '100%',
-
-    paddingHorizontal: 16,
+  bottomWrapper: {
+    paddingHorizontal: scaleW(20),
+    paddingBottom: Platform.OS === 'ios' ? scaleH(26) : scaleH(18),
+    paddingTop: scaleH(12),
+    backgroundColor: '#FAFAFA',
   },
 
   pagination: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-
-    marginBottom: 26,
+    marginBottom: scaleH(22),
   },
 
   dot: {
-    width: 6,
-    height: 6,
-    borderRadius: 99,
-
-    backgroundColor: '#D9D9D9',
-
-    marginHorizontal: 4,
+    width: scaleW(6),
+    height: scaleW(6),
+    borderRadius: scaleW(10),
+    backgroundColor: '#D4D4D4',
+    marginHorizontal: scaleW(4),
   },
 
   activeDot: {
-    width: 20,
-    height: 6,
-    borderRadius: 99,
-
-    backgroundColor: '#4B0013',
+    width: scaleW(22),
+    backgroundColor: '#2B000A',
   },
 
   buttonRow: {
@@ -323,47 +317,35 @@ const styles = StyleSheet.create({
   },
 
   skipButton: {
-    width: 62,
-    height: 38,
-
-    borderRadius: 10,
-
+    width: scaleW(62),
+    height: scaleH(42),
+    borderRadius: scaleW(12),
     borderWidth: 1,
-    borderColor: '#4B0013',
-
+    borderColor: '#2B000A',
     justifyContent: 'center',
     alignItems: 'center',
-
-    marginRight: 10,
-
-    backgroundColor: '#FFFFFF',
+    marginRight: scaleW(10),
+    backgroundColor: '#FAFAFA',
   },
 
   skipText: {
-    fontSize: 13,
+    color: '#2B000A',
+    fontSize: scaleW(14),
     fontWeight: '500',
-    color: '#4B0013',
   },
 
   nextButton: {
     flex: 1,
-    height: 38,
-
-    borderRadius: 10,
-
-    backgroundColor: '#4B0013',
-
+    height: scaleH(42),
+    borderRadius: scaleW(12),
+    backgroundColor: '#2B000A',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
-  fullWidthButton: {
-    width: '100%',
-  },
-
   nextText: {
-    fontSize: 13,
-    fontWeight: '500',
     color: '#FFFFFF',
+    fontSize: scaleW(14),
+    fontWeight: '500',
   },
 });

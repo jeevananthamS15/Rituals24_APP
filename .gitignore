@@ -64,3 +64,6 @@ yarn-error.log
 
 # testing
 /coverage
+
+Testing.tsx
+src/features/home/screens/verify.tsx

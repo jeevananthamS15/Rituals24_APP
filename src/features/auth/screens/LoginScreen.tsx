@@ -17,14 +17,21 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../../app/navigation/types';
 
+
 const { width, height } = Dimensions.get('window');
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
+type Props = NativeStackScreenProps<
+  AuthStackParamList,
+  'Login'
+> & {
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-export const LoginScreen: React.FC<Props> = () => {
+export const LoginScreen  = ({navigation,setIsAuthenticated,}:Props) => {
   const [mobile, setMobile] = useState('');
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'mobile' | 'email'>('mobile');
+
 
   const handleSendOTP = async () => {
     if (mobile.length !== 10) return;
@@ -36,6 +43,10 @@ export const LoginScreen: React.FC<Props> = () => {
       console.log('OTP Sent');
     }, 1500);
   };
+
+  const homeNavigate = () => {
+  setIsAuthenticated(true);
+};
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -196,6 +207,7 @@ export const LoginScreen: React.FC<Props> = () => {
               <TouchableOpacity
                 activeOpacity={0.9}
                 style={styles.guestButton}
+                onPress={homeNavigate}
               >
                 <Text style={styles.guestButtonText}>
                   Continue as Guest
@@ -208,6 +220,7 @@ export const LoginScreen: React.FC<Props> = () => {
                 <TouchableOpacity
                   activeOpacity={0.9}
                   style={styles.socialButton}
+
                 >
                   <Text style={styles.socialIcon}>G</Text>
                 </TouchableOpacity>

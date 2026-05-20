@@ -18,9 +18,14 @@ import {RootStackParamList} from '../../../app/navigation/types';
 
 const {width, height} = Dimensions.get('window');
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Splash'>;
+type Props = NativeStackScreenProps<
+  RootStackParamList,
+  'Splash'
+> & {
+  onFinish: () => void;
+};
 
-export const SplashScreen = ({navigation}: Props) => {
+export const SplashScreen = ({onFinish}: Props) => {
   const logoOpacity = useRef(new Animated.Value(0)).current;
   const logoScale = useRef(new Animated.Value(0.92)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
@@ -60,10 +65,8 @@ export const SplashScreen = ({navigation}: Props) => {
   }, []);
 
   const checkAuthAndNavigate = async () => {
-    navigation.replace('Auth', {
-      screen: 'Onboarding',
-    });
-  };
+  onFinish();
+};
 
   //   const checkAuthAndNavigate = async () => {
   //     try {

@@ -2,10 +2,10 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MainTabParamList } from './types';
 import { HomeNavigator } from './HomeNavigator';
-// import { ExploreScreen } from '../../features/home/screens/ExploreScreen';
+import { ExploreScreen } from '../../features/home/screens/ExploreScreen';
 // import { StoreNavigator } from './StoreNavigator';
 // import { MyBookingsScreen } from '../../features/bookings/screens/MyBookingsScreen';
-// import { ProfileScreen } from '../../features/profile/screens/ProfileScreen';
+import { ProfileScreen } from '../../features/profile/screens/ProfileScreen';
 import { BottomTabBar } from '../../components/layout/BottomTabBar';
 
 
@@ -17,9 +17,9 @@ export const MainNavigator: React.FC = () => (
     screenOptions={{ headerShown: false }}
   >
     <Tab.Screen name="Home" component={HomeNavigator} />
-    <Tab.Screen name="Explore" component={null} />
-    <Tab.Screen name="Store" component={null} />
-    <Tab.Screen name="Booking" component={null} />
-    <Tab.Screen name="Profile" component={null} />
+    <Tab.Screen name="Explore" component={ExploreScreen} />
+    <Tab.Screen name="Store" component={()=>""} />
+    <Tab.Screen name="Booking" component={()=>""} />
+    <Tab.Screen name="Profile" component={ProfileScreen} />
   </Tab.Navigator>
 );
