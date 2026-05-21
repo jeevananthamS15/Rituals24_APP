@@ -10,7 +10,7 @@ export const colors = {
   goldDark: '#9A6E0F',
 
 
-  background: '#FFF8F0',
+  background: '#FFFFFF',
   surface: '#FFFFFF',
   surfaceElevated: '#FFF3E8',
   surfaceDark: '#1A0A00',

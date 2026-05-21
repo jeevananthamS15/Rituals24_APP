@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
 import {RootStackParamList} from './types';
-
 import {SplashScreen} from '../../features/auth/screens/SplashScreen';
 import {AuthNavigator} from './AuthNavigator';
 import {MainNavigator} from './MainNavigator';
+import { MuhuratCalendarScreen } from '../../features/muhurat/screens/MuhuratCalendarScreen';
+//import { BookingNavigator } from './BookingNavigator';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -44,11 +44,11 @@ export const RootNavigator = () => {
               />
             )}
           </Stack.Screen>
-        ) : (
-          <Stack.Screen
-            name="Main"
-            component={MainNavigator}
-          />
+        ) : (<>
+          <Stack.Screen name="Main" component={MainNavigator}/>
+          <Stack.Screen name="MuhuratCalendar" component={MuhuratCalendarScreen}/>
+          
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>
@@ -57,19 +57,7 @@ export const RootNavigator = () => {
 
 
 
+// <Stack.Screen name="Checkout" component={BookingNavigator} options={{presentation: 'card',}}/>
 
 
-
-  {/* <Stack.Screen
-            name="Checkout"
-            component={CheckoutNavigator}
-            options={{
-              presentation: 'card',
-            }}
-          />
-        
-          <Stack.Screen
-            name="MuhuratCalendar"
-            component={MuhuratCalendarScreen}
-          />
-        </> */}
+ 

@@ -5,14 +5,14 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  Dimensions,
 } from 'react-native';
 import { theme } from '../../../theme';
 import { RatingBadge } from '../../../components/ui/RatingBadge';
 import { PriceDisplay } from '../../../components/ui/PriceDisplay';
 import { Puja } from '../../../types';
 
-const CARD_WIDTH = Dimensions.get('window').width * 0.44;
+
+const CARD_WIDTH = 130;
 
 interface Props {
   item: Puja;
@@ -31,13 +31,25 @@ export const PujaCard: React.FC<Props> = ({ item, onPress }) => (
       resizeMode="cover"
     />
     <View style={styles.body}>
-      <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
-      <RatingBadge rating={item.rating} reviewCount={item.reviewCount} />
-      <PriceDisplay price={item.price} originalPrice={item.originalPrice} size="sm" />
-      <View style={styles.meta}>
+      {/* Title */}
+      <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
+
+      {/* Meta: duration + pandits count */}
+      <View style={styles.metaRow}>
         <Text style={styles.metaText}>⏱ {item.duration}</Text>
+        <Text style={styles.metaDot}>·</Text>
         <Text style={styles.metaText}>👤 {item.panditsCount} pandits</Text>
       </View>
+
+      {/* Rating */}
+      <RatingBadge rating={item.rating} reviewCount={item.reviewCount} />
+
+      {/* Price */}
+      <PriceDisplay
+        price={item.price}
+        originalPrice={item.originalPrice}
+        size="sm"
+      />
     </View>
   </TouchableOpacity>
 );
@@ -46,31 +58,46 @@ const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
     backgroundColor: theme.colors.surface,
-    borderRadius: theme.radii.md,
-    marginRight: theme.spacing.md,
+    borderRadius: 16,
+    marginRight: 12,
     overflow: 'hidden',
-    ...theme.shadows.card,
+    // Figma: Soft Card Shadow: 0px 4px 20px rgba(0,0,0,0.06)
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 20,
+    elevation: 3,
   },
   image: {
-    width: '100%',
-    height: CARD_WIDTH * 0.65,
+    width: CARD_WIDTH,
+    height: 160,
     backgroundColor: theme.colors.surfaceElevated,
   },
   body: {
-    padding: theme.spacing.cardPadding,
-    gap: theme.spacing.xs,
+    padding: 8,
+    gap: 4,
   },
   title: {
-    ...theme.typography.labelLg,
-    color: theme.colors.textPrimary,
+    // BODY: Lato Bold 14px / 22px, color #281518
+    fontFamily: 'Lato-Bold',
+    fontSize: 14,
+    lineHeight: 22,
+    color: '#281518',
   },
-  meta: {
+  metaRow: {
     flexDirection: 'row',
-    gap: theme.spacing.sm,
-    marginTop: theme.spacing.xs,
+    alignItems: 'center',
+    gap: 4,
   },
   metaText: {
-    ...theme.typography.caption,
-    color: theme.colors.textMuted,
+    // small caption: Inter Regular 10px / 12px, #757575
+    fontFamily: 'Inter',
+    fontSize: 10,
+    lineHeight: 12,
+    color: '#757575',
+  },
+  metaDot: {
+    fontSize: 10,
+    color: '#757575',
   },
 });

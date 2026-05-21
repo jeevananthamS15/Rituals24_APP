@@ -7,12 +7,19 @@ interface Props {
   onViewAll?: () => void;
 }
 
-export const SectionHeader: React.FC<Props> = ({ title, onViewAll }) => (
+export const SectionHeader= ({ title, onViewAll }:Props) => (
   <View style={styles.container}>
     <Text style={styles.title}>{title}</Text>
     {onViewAll && (
-      <TouchableOpacity onPress={onViewAll} activeOpacity={0.7}>
+      <TouchableOpacity
+        onPress={onViewAll}
+        activeOpacity={0.7}
+        style={styles.viewAllRow}
+      >
         <Text style={styles.viewAll}>View All</Text>
+        <View style={styles.chevronWrapper}>
+          <Text style={styles.chevron}>›</Text>
+        </View>
       </TouchableOpacity>
     )}
   </View>
@@ -27,11 +34,33 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
   },
   title: {
-    ...theme.typography.h3,
-    color: theme.colors.textPrimary,
+    fontFamily: 'Lato-Bold',
+    fontSize: 20,
+    lineHeight: 28,
+    color: '#000000',
+  },
+  viewAllRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
   },
   viewAll: {
-    ...theme.typography.labelMd,
+    fontFamily: 'Lato-Medium',
+    fontSize: 14,
+    lineHeight: 17,
     color: theme.colors.primary,
+  },
+  chevronWrapper: {
+    width: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  chevron: {
+    fontSize: 18,
+    lineHeight: 20,
+    color: theme.colors.primary,
+    fontWeight: '500',
+    marginTop: -1,
   },
 });

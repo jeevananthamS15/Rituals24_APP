@@ -5,14 +5,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  Dimensions,
 } from 'react-native';
 import { theme } from '../../../theme';
 import { RatingBadge } from '../../../components/ui/RatingBadge';
 import { PriceDisplay } from '../../../components/ui/PriceDisplay';
 import { Product } from '../../../types';
 
-const CARD_WIDTH = Dimensions.get('window').width * 0.42;
+
+
+const CARD_WIDTH = 130;
 
 interface Props {
   item: Product;
@@ -20,7 +21,7 @@ interface Props {
   onAdd: (id: string) => void;
 }
 
-export const ProductCard: React.FC<Props> = ({ item, onPress, onAdd }) => (
+export const ProductCard = ({ item, onPress, onAdd }:Props) => (
   <TouchableOpacity
     style={styles.card}
     onPress={() => onPress(item.id)}
@@ -31,20 +32,33 @@ export const ProductCard: React.FC<Props> = ({ item, onPress, onAdd }) => (
       style={styles.image}
       resizeMode="cover"
     />
+
     <View style={styles.body}>
+      
       <Text style={styles.title} numberOfLines={2}>{item.name}</Text>
+
+   
       <Text style={styles.itemCount}>{item.itemCount} items included</Text>
+
+      
       <RatingBadge rating={item.rating} reviewCount={item.reviewCount} />
-      <View style={styles.footer}>
-        <PriceDisplay price={item.price} originalPrice={item.originalPrice} size="sm" />
-        <TouchableOpacity
-          style={styles.addBtn}
-          onPress={() => onAdd(item.id)}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.addText}>Add</Text>
-        </TouchableOpacity>
-      </View>
+
+     
+      <PriceDisplay
+        price={item.price}
+        originalPrice={item.originalPrice}
+        size="sm"
+      />
+
+    
+      <TouchableOpacity
+        style={styles.addBtn}
+        onPress={() => onAdd(item.id)}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.addIcon}>+</Text>
+        <Text style={styles.addText}>Add</Text>
+      </TouchableOpacity>
     </View>
   </TouchableOpacity>
 );
@@ -53,42 +67,60 @@ const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
     backgroundColor: theme.colors.surface,
-    borderRadius: theme.radii.md,
-    marginRight: theme.spacing.md,
+    borderRadius: 16,
+    marginRight: 12,
     overflow: 'hidden',
-    ...theme.shadows.card,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 20,
+    elevation: 3,
   },
   image: {
-    width: '100%',
-    height: CARD_WIDTH * 0.75,
+    width: CARD_WIDTH,
+    height: 160,
     backgroundColor: theme.colors.surfaceElevated,
   },
   body: {
-    padding: theme.spacing.cardPadding,
-    gap: theme.spacing.xs,
+    padding: 8,
+    gap: 4,
   },
   title: {
-    ...theme.typography.labelLg,
-    color: theme.colors.textPrimary,
+    fontFamily: 'Lato-Bold',
+    fontSize: 14,
+    lineHeight: 22,
+    color: '#281518',
   },
   itemCount: {
-    ...theme.typography.caption,
-    color: theme.colors.textMuted,
+    fontFamily: 'Inter',
+    fontSize: 10,
+    lineHeight: 12,
+    color: '#757575',
   },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: theme.spacing.xs,
-  },
+  // Figma: Component 4 — full width, bg #2B000A, borderRadius 12, height 40
   addBtn: {
-    backgroundColor: theme.colors.primary,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.xs,
-    borderRadius: theme.radii.full,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#2B000A',
+    borderRadius: 12,
+    height: 40,
+    marginTop: 4,
+    gap: 4,
+  },
+  addIcon: {
+    // lucide:plus icon — using text as placeholder
+    fontSize: 18,
+    color: '#FFFFFF',
+    lineHeight: 20,
+    fontWeight: '400',
   },
   addText: {
-    ...theme.typography.labelSm,
-    color: theme.colors.textInverse,
+    // M3/title/medium: Roboto 500 16px / 24px, color #FFFAF0
+    fontFamily: 'Roboto-Medium',
+    fontSize: 16,
+    lineHeight: 24,
+    letterSpacing: 0.15,
+    color: '#FFFAF0',
   },
 });

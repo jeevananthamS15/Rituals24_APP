@@ -30,7 +30,7 @@ const TRENDING = [
   'Griha Pravesh', 'Navratri', 'Pandits',
 ];
 
-export const ExploreScreen: React.FC = () => {
+export const ExploreScreen = () => {
   const [query, setQuery] = useState('');
   const [activeTab, setActiveTab] = useState<string>('All');
 

@@ -3,80 +3,122 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { theme } from '../../../theme';
 
 const MUHURATS = [
-  { id: '1', name: 'Braham Muhurat', time: '5:40 AM - 7:30 AM', type: 'auspicious' },
-  { id: '2', name: 'Abhijit Muhurat', time: '9:00 AM - 10:30 AM', type: 'auspicious' },
-  { id: '3', name: 'Rahu Kalam', time: '12:00 PM - 1:00 PM', type: 'rahu' },
+  {
+    id: '1',
+    name: 'Braham Muhurat',
+    time: '5:40 AM - 7:30 AM',
+    icon: '☀️',
+  },
+  {
+    id: '2',
+    name: 'Abhijit Muhurat',
+    time: '9:00 AM - 10:30 AM',
+    icon: '📿',
+  },
+  {
+    id: '3',
+    name: 'Rahu Kalam',
+    time: '12:00 PM - 1:00 PM',
+    icon: '⌛',
+  },
 ];
 
 interface Props {
   onViewAll?: () => void;
 }
 
-export const MuhuratStrip: React.FC<Props> = ({ onViewAll }) => (
+export const MuhuratStrip = ({ onViewAll }:Props) => (
   <View style={styles.container}>
     <View style={styles.header}>
-      <Text style={styles.title}>Today's Muhurat</Text>
-      <TouchableOpacity onPress={onViewAll}>
-        <Text style={styles.viewAll}>View Full Calendar</Text>
-      </TouchableOpacity>
+      <Text style={styles.headerIcon}>📅</Text>
+      <Text style={styles.headerTitle}>Today's Muhurat</Text>
     </View>
+
     {MUHURATS.map(m => (
       <View key={m.id} style={styles.row}>
-        <View style={[styles.dot, m.type === 'rahu' && styles.dotRahu]} />
-        <Text style={styles.time}>{m.time}</Text>
-        <Text style={styles.name}>{m.name}</Text>
+        <View style={styles.rowLeft}>
+          <Text style={styles.rowTime}>{m.time}</Text>
+          <Text style={styles.rowName}>{m.name}</Text>
+        </View>
+        <Text style={styles.rowIcon}>{m.icon}</Text>
       </View>
     ))}
+
+    <TouchableOpacity
+      style={styles.calendarBtn}
+      onPress={onViewAll}
+      activeOpacity={0.8}
+    >
+      <Text style={styles.calendarBtnText}>View Full Calendar</Text>
+    </TouchableOpacity>
   </View>
 );
 
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: theme.spacing.screenPadding,
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.radii.lg,
-    padding: theme.spacing.md,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    gap: theme.spacing.sm,
-    ...theme.shadows.sm,
+    backgroundColor: '#2B000A',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 16,
+    gap: 8,
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    gap: 4,
+    marginBottom: 4,
   },
-  title: {
-    ...theme.typography.h3,
-    color: theme.colors.textPrimary,
+  headerIcon: {
+    fontSize: 18,
   },
-  viewAll: {
-    ...theme.typography.labelSm,
-    color: theme.colors.primary,
+  headerTitle: {
+    fontFamily: 'Lato-Bold',
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#F3B416',
   },
   row: {
+    backgroundColor: '#540B1C',
+    borderRadius: 12,
+    height: 75,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: theme.spacing.sm,
-    paddingVertical: theme.spacing.xs,
+    justifyContent: 'space-between',
   },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: theme.radii.full,
-    backgroundColor: theme.colors.success,
+  rowLeft: {
+    gap: 4,
   },
-  dotRahu: {
-    backgroundColor: theme.colors.error,
+  rowTime: {
+    fontFamily: 'Lato-Bold',
+    fontSize: 14,
+    lineHeight: 17,
+    color: '#FFFFFF',
   },
-  time: {
-    ...theme.typography.labelMd,
-    color: theme.colors.textPrimary,
-    width: 130,
+  rowName: {
+    fontFamily: 'Lato-Regular',
+    fontSize: 14,
+    lineHeight: 22,
+    color: 'rgba(255, 255, 255, 0.75)',
   },
-  name: {
-    ...theme.typography.bodyMd,
-    color: theme.colors.textSecondary,
-    flex: 1,
+  rowIcon: {
+    fontSize: 36,
+  },
+  calendarBtn: {
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+    borderRadius: 12,
+    height: 42,
+    marginTop: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  calendarBtnText: {
+    fontFamily: 'Lato-Medium',
+    fontSize: 14,
+    lineHeight: 17,
+    color: '#FFFFFF',
   },
 });

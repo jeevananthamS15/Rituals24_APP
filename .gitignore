@@ -67,3 +67,4 @@ yarn-error.log
 
 Testing.tsx
 src/features/home/screens/verify.tsx
+src/features/checkout

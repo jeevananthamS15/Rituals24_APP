@@ -1,16 +1,16 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { theme } from '../../../theme';
 
 const SERVICES = [
-  { id: 'book_puja', label: 'Book Puja', emoji: '🪔' },
-  { id: 'pandits', label: 'Book Pandits', emoji: '👳' },
-  { id: 'online', label: 'Online Pooja', emoji: '📱' },
-  { id: 'darshan', label: 'Temple Darshan', emoji: '🛕' },
-  { id: 'bhajan', label: 'Bhajan Service', emoji: '🎵' },
-  { id: 'store', label: 'Puja Store', emoji: '🛒' },
-  { id: 'muhurat', label: 'Muhurat', emoji: '📅' },
-  { id: 'offer', label: 'Festival Offer', emoji: '🎁' },
+  { id: 'book_puja',    label: 'Book puja',       emoji: '🪔' },
+  { id: 'pandits',      label: 'Book Pandits',    emoji: '🙏' },
+  { id: 'online',       label: 'Online Pooja',    emoji: '📱' },
+  { id: 'darshan',      label: 'Temple Darshan',  emoji: '🛕' },
+  { id: 'store',        label: 'Puja Store',      emoji: '🛒' },
+  { id: 'bhajan',       label: 'Bhajan service',  emoji: '🎵' },
+  { id: 'muhurat',      label: 'Muhurat',         emoji: '📅' },
+  { id: 'festival',     label: 'Festival Specials', emoji: '🎁' },
 ];
 
 interface Props {
@@ -18,11 +18,7 @@ interface Props {
 }
 
 export const ServiceGrid: React.FC<Props> = ({ onServicePress }) => (
-  <ScrollView
-    horizontal
-    showsHorizontalScrollIndicator={false}
-    contentContainerStyle={styles.container}
-  >
+  <View style={styles.grid}>
     {SERVICES.map(service => (
       <TouchableOpacity
         key={service.id}
@@ -30,42 +26,43 @@ export const ServiceGrid: React.FC<Props> = ({ onServicePress }) => (
         onPress={() => onServicePress?.(service.id)}
         activeOpacity={0.7}
       >
-        <View style={styles.iconCircle}>
+        <View style={styles.iconBox}>
           <Text style={styles.emoji}>{service.emoji}</Text>
         </View>
-        <Text style={styles.label}>{service.label}</Text>
+        <Text style={styles.label} numberOfLines={2}>{service.label}</Text>
       </TouchableOpacity>
     ))}
-  </ScrollView>
+  </View>
 );
 
 const styles = StyleSheet.create({
-  container: {
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     paddingHorizontal: theme.spacing.screenPadding,
-    gap: theme.spacing.md,
+    gap: 15,
   },
   item: {
+    width: '22%',
     alignItems: 'center',
-    width: 64,
+    gap: 8,
   },
-  iconCircle: {
-    width: 56,
-    height: 56,
-    borderRadius: theme.radii.full,
-    backgroundColor: theme.colors.surface,
+  iconBox: {
+    width: 77,
+    height: 77,
+    borderRadius: 28,
+    backgroundColor: '#FAFAFA',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    marginBottom: theme.spacing.xs,
-    ...theme.shadows.sm,
   },
   emoji: {
-    fontSize: 24,
+    fontSize: 32,
   },
   label: {
-    ...theme.typography.caption,
-    color: theme.colors.textSecondary,
+    fontFamily: 'Lato-Medium',
+    fontSize: 14,
+    lineHeight: 17,
+    color: '#000000',
     textAlign: 'center',
   },
 });

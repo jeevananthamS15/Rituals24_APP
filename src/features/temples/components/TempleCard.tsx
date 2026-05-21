@@ -5,13 +5,12 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  Dimensions,
 } from 'react-native';
 import { theme } from '../../../theme';
 import { RatingBadge } from '../../../components/ui/RatingBadge';
 import { Temple } from '../../../types';
 
-const CARD_WIDTH = Dimensions.get('window').width * 0.56;
+const CARD_WIDTH = 130;
 
 interface Props {
   item: Temple;
@@ -29,13 +28,18 @@ export const TempleCard: React.FC<Props> = ({ item, onPress }) => (
       style={styles.image}
       resizeMode="cover"
     />
-    <View style={styles.overlay}>
+
+    <View style={styles.body}>
       <Text style={styles.name} numberOfLines={1}>{item.name}</Text>
-      <Text style={styles.subtitle} numberOfLines={1}>{item.subtitle}</Text>
-      <View style={styles.footer}>
-        <Text style={styles.location}>📍 {item.location}</Text>
-        <RatingBadge rating={item.rating} />
+
+      <Text style={styles.subtitle} numberOfLines={2}>{item.subtitle}</Text>
+
+      <View style={styles.locationRow}>
+        <Text style={styles.locationPin}>📍</Text>
+        <Text style={styles.locationText} numberOfLines={1}>{item.location}</Text>
       </View>
+
+      <RatingBadge rating={item.rating} reviewCount={item.reviewCount} />
     </View>
   </TouchableOpacity>
 );
@@ -43,39 +47,50 @@ export const TempleCard: React.FC<Props> = ({ item, onPress }) => (
 const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
-    height: CARD_WIDTH * 0.85,
-    borderRadius: theme.radii.md,
-    marginRight: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
+    borderRadius: 16,
+    marginRight: 12,
     overflow: 'hidden',
-    ...theme.shadows.card,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 20,
+    elevation: 3,
   },
   image: {
-    ...StyleSheet.absoluteFillObject,
+    width: CARD_WIDTH,
+    height: 160,
     backgroundColor: theme.colors.surfaceElevated,
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: theme.colors.overlay,
-    padding: theme.spacing.cardPadding,
-    justifyContent: 'flex-end',
+  body: {
+    padding: 8,
+    gap: 4,
   },
   name: {
-    ...theme.typography.h4,
-    color: theme.colors.textInverse,
+    fontFamily: 'Lato-Bold',
+    fontSize: 14,
+    lineHeight: 22,
+    color: '#281518',
   },
   subtitle: {
-    ...theme.typography.caption,
-    color: 'rgba(255,255,255,0.8)',
-    marginTop: 2,
+    fontFamily: 'Lato-Regular',
+    fontSize: 12,
+    lineHeight: 18,
+    color: '#000000',
   },
-  footer: {
+  locationRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: theme.spacing.xs,
+    gap: 2,
   },
-  location: {
-    ...theme.typography.caption,
-    color: 'rgba(255,255,255,0.9)',
+  locationPin: {
+    fontSize: 10,
+  },
+  locationText: {
+    fontFamily: 'Inter',
+    fontSize: 10,
+    lineHeight: 12,
+    color: '#757575',
+    flex: 1,
   },
 });
