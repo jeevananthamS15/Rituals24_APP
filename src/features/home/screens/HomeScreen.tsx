@@ -8,7 +8,6 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { theme } from '../../../theme';
 import { ScreenWrapper } from '../../../components/layout/ScreenWrapper';
 import { SectionHeader } from '../components/SectionHeader';
 import { ServiceGrid } from '../components/ServiceGrid';
@@ -19,6 +18,7 @@ import { PanditCard } from '../../pandits/components/PanditCard';
 import { TempleCard } from '../../temples/components/TempleCard';
 import { ProductCard } from '../../puja-store/components/ProductCard';
 import { BhajanCard } from '../../bhajan/components/BhajanCard';
+import { HomeFooterOval } from '../components/Homefooteroval';
 
 import {
   MOCK_PUJAS,
@@ -33,20 +33,25 @@ export const HomeScreen = () => {
   const userName = 'Amit';
 
   return (
-    <ScreenWrapper scrollable backgroundColor={theme.colors.background}>
+
+    <ScreenWrapper scrollable backgroundColor="#FFFFFF">
+
       <View style={styles.topBar}>
         <View style={styles.greetingBlock}>
+   
           <Text style={styles.greeting}>🙏 Jai Shri Ram</Text>
+
           <Text style={styles.userName}>{userName ?? 'Devotee'}</Text>
         </View>
+   
         <View style={styles.topActions}>
-          <TouchableOpacity style={styles.iconBtn}>
+          <TouchableOpacity style={styles.iconBtn} activeOpacity={0.7}>
             <Text style={styles.iconEmoji}>🔔</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconBtn}>
+          <TouchableOpacity style={styles.iconBtn} activeOpacity={0.7}>
             <Text style={styles.iconEmoji}>🤍</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconBtn}>
+          <TouchableOpacity style={styles.iconBtn} activeOpacity={0.7}>
             <Text style={styles.iconEmoji}>🛒</Text>
           </TouchableOpacity>
         </View>
@@ -58,26 +63,32 @@ export const HomeScreen = () => {
         activeOpacity={0.8}
       >
         <View style={styles.searchLeft}>
-          <Text style={styles.searchIcon}>🔍</Text>
+          <Text style={styles.searchIconText}>🔍</Text>
           <Text style={styles.searchPlaceholder}>
             Search poojas, pandits, temples...
           </Text>
         </View>
         <View style={styles.micBtn}>
-          <Text style={{ fontSize: 12 }}>🎤</Text>
+          <Text style={styles.micIcon}>🎤</Text>
         </View>
       </TouchableOpacity>
 
+
       <View style={styles.divider} />
 
+
       <View style={styles.section}>
-        <SectionHeader title="Our Services" />
+
+        <Text style={styles.sectionTitleOnly}>Our Services</Text>
+        <View style={{ height: 16 }} />
         <ServiceGrid />
       </View>
 
+  
       <View style={styles.bannerSection}>
         <FestivalBanner />
       </View>
+
 
       <View style={styles.section}>
         <SectionHeader
@@ -99,6 +110,7 @@ export const HomeScreen = () => {
         />
       </View>
 
+   
       <View style={styles.section}>
         <MuhuratStrip
           onViewAll={() => navigation.navigate('MuhuratCalendar')}
@@ -118,6 +130,7 @@ export const HomeScreen = () => {
           contentContainerStyle={styles.hList}
         />
       </View>
+
 
       <View style={styles.section}>
         <SectionHeader title="Our Pandits" onViewAll={() => {}} />
@@ -150,7 +163,8 @@ export const HomeScreen = () => {
         />
       </View>
 
-      <View style={[styles.section, styles.lastSection]}>
+
+      <View style={styles.section}>
         <SectionHeader title="Book a Bhajan" onViewAll={() => {}} />
         <FlatList
           data={MOCK_BHAJANS}
@@ -164,41 +178,50 @@ export const HomeScreen = () => {
         />
       </View>
 
+
+      <HomeFooterOval />
+
     </ScreenWrapper>
   );
 };
 
 const styles = StyleSheet.create({
+
   topBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: theme.spacing.screenPadding,
-    paddingTop: theme.spacing.md,
-    paddingBottom: theme.spacing.sm,
+    paddingHorizontal: 20,
+    paddingTop: 18,  
+    paddingBottom: 8,
   },
   greetingBlock: {
     gap: 2,
   },
+
   greeting: {
     fontFamily: 'Inter',
+    fontWeight: '400',
     fontSize: 10,
     lineHeight: 12,
     color: '#000000',
   },
+
   userName: {
     fontFamily: 'Lato-Bold',
     fontSize: 28,
     lineHeight: 36,
     color: '#2B000A',
   },
+
   topActions: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   iconBtn: {
-    width: 24,
-    height: 24,
+    width: 22,
+    height: 22,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -211,9 +234,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: '#F9F9F9',
-    marginHorizontal: theme.spacing.screenPadding,
-    marginTop: theme.spacing.sm,
-    marginBottom: 0,
+    marginHorizontal: 20,
+    marginTop: 10,
     borderRadius: 35,
     paddingHorizontal: 12,
     height: 44,
@@ -226,16 +248,19 @@ const styles = StyleSheet.create({
     gap: 8,
     flex: 1,
   },
-  searchIcon: {
-    fontSize: 16,
+  searchIconText: {
+    fontSize: 14,
     color: '#757575',
   },
+
   searchPlaceholder: {
     fontFamily: 'Lato-Regular',
     fontSize: 14,
     lineHeight: 22,
     color: '#757575',
+    flex: 1,
   },
+
   micBtn: {
     width: 24,
     height: 24,
@@ -244,27 +269,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  micIcon: {
+    fontSize: 12,
+  },
+
 
   divider: {
-    height: 1,
-    backgroundColor: theme.colors.border,
-    marginHorizontal: theme.spacing.screenPadding,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#E0E0E0',
+    marginHorizontal: 20,
     marginTop: 10,
-    marginBottom: 0,
   },
+
 
   section: {
     marginTop: 20,
   },
   bannerSection: {
-    paddingHorizontal: theme.spacing.screenPadding,
     marginTop: 20,
+    paddingHorizontal: 20,
   },
+
+  sectionTitleOnly: {
+    fontFamily: 'Lato-Bold',
+    fontSize: 20,
+    lineHeight: 28,
+    color: '#000000',
+    paddingHorizontal: 20,
+  },
+
   hList: {
-    paddingHorizontal: theme.spacing.screenPadding,
-    paddingBottom: theme.spacing.sm,
-  },
-  lastSection: {
-    marginBottom: 32,
+    paddingHorizontal: 20,
+    paddingBottom: 4,
   },
 });

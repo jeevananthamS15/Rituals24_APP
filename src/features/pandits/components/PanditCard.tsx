@@ -6,17 +6,16 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-import { theme } from '../../../theme';
-import { RatingBadge } from '../../../components/ui/RatingBadge';
-import { PriceDisplay } from '../../../components/ui/PriceDisplay';
 import { Pandit } from '../../../types';
+
+
 
 const CARD_WIDTH = 130;
 
-const TIER_STYLES: Record<string, { bg: string; text: string; label: string }> = {
-  gold:   { bg: '#DDAB2C', text: '#FFFFFF', label: 'Gold' },
-  bronze: { bg: '#B87333', text: '#FFFFFF', label: 'Bronze' },
-  silver: { bg: '#D9D9D9', text: '#1A1A1A', label: 'Silver' },
+const TIER_CONFIG: Record<string, { bg: string; textColor: string; badgeBg: string; badgeName: string }> = {
+  gold:   { bg: '#DDAB2C', textColor: '#FFFFFF', badgeBg: '#DDAB2C', badgeName: 'Gold' },
+  bronze: { bg: '#B87333', textColor: '#FFFFFF', badgeBg: '#B87333', badgeName: 'Bronze' },
+  silver: { bg: '#D9D9D9', textColor: '#1A1A1A', badgeBg: '#D9D9D9', badgeName: 'Silver' },
 };
 
 interface Props {
@@ -25,9 +24,8 @@ interface Props {
 }
 
 export const PanditCard: React.FC<Props> = ({ item, onPress }) => {
-  const tierStyle = TIER_STYLES[item.tier?.toLowerCase() ?? 'silver'];
-  const pujaCountBg = tierStyle?.bg ?? '#D9D9D9';
-  const pujaCountText = tierStyle?.text ?? '#1A1A1A';
+  const tierKey = (item.tier || 'silver').toLowerCase();
+  const tier = TIER_CONFIG[tierKey] ?? TIER_CONFIG.silver;
 
   return (
     <TouchableOpacity
@@ -35,6 +33,7 @@ export const PanditCard: React.FC<Props> = ({ item, onPress }) => {
       onPress={() => onPress(item.id)}
       activeOpacity={0.85}
     >
+
       <View style={styles.imageContainer}>
         <Image
           source={{ uri: item.imageUrl }}
@@ -42,38 +41,43 @@ export const PanditCard: React.FC<Props> = ({ item, onPress }) => {
           resizeMode="cover"
         />
 
-        <View style={[styles.pujaCountBadge, { backgroundColor: pujaCountBg }]}>
-          <Text style={[styles.pujaCountText, { color: pujaCountText }]}>
-            {item.pujaCount}+ Pujas
+        <View style={[styles.pujasBadge, { backgroundColor: tier.bg }]}>
+          <Text style={[styles.pujasBadgeText, { color: tier.textColor }]}>
+            ✓ {item.pujaCount}+ Pujas
           </Text>
         </View>
       </View>
 
+
       <View style={styles.body}>
-        <View style={styles.nameRow}>
-          <Text style={styles.name} numberOfLines={1}>{item.name}</Text>
-          {tierStyle && (
-            <View style={[styles.tierBadge, { backgroundColor: tierStyle.bg }]}>
-              <Text style={[styles.tierText, { color: tierStyle.text }]}>
-                {tierStyle.label}
-              </Text>
-            </View>
-          )}
-        </View>
+ 
+        <Text style={styles.name} numberOfLines={1}>{item.name}</Text>
+
 
         <View style={styles.metaRow}>
           <Text style={styles.metaText}>{item.years} Years</Text>
-          <Text style={styles.metaDot}>·</Text>
-          <Text style={styles.metaText}>{item.languages?.join(', ')}</Text>
+          <Text style={styles.bullet}> • </Text>
+          <Text style={styles.metaText} numberOfLines={1}>{item.languages?.join(', ')}</Text>
         </View>
 
-        <RatingBadge rating={item.rating} reviewCount={item.reviewCount} />
 
-        <PriceDisplay
-          price={item.price}
-          originalPrice={item.originalPrice}
-          size="sm"
-        />
+        <View style={styles.ratingRow}>
+          <Text style={styles.star}>⭐</Text>
+          <Text style={styles.ratingVal}>{item.rating}</Text>
+          <Text style={styles.reviewCount}>({item.reviewCount})</Text>
+
+          <View style={[styles.tierPill, { backgroundColor: tier.badgeBg }]}>
+            <Text style={[styles.tierText, { color: tier.textColor }]}>
+              {tier.badgeName}
+            </Text>
+          </View>
+        </View>
+
+
+        <View style={styles.priceRow}>
+          <Text style={styles.price}>₹{item.price?.toLocaleString('en-IN')}</Text>
+          <Text style={styles.originalPrice}>₹{item.originalPrice?.toLocaleString('en-IN')}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -82,11 +86,11 @@ export const PanditCard: React.FC<Props> = ({ item, onPress }) => {
 const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     marginRight: 12,
     overflow: 'hidden',
-    shadowColor: '#000',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 20,
@@ -100,19 +104,21 @@ const styles = StyleSheet.create({
   image: {
     width: CARD_WIDTH,
     height: 160,
-    backgroundColor: theme.colors.surfaceElevated,
+    backgroundColor: '#E0E0E0',
   },
-  pujaCountBadge: {
+
+  pujasBadge: {
     position: 'absolute',
     left: 4,
-    bottom: 4,
+    top: 136,
+    height: 20,
     borderRadius: 30,
     paddingHorizontal: 4,
     paddingVertical: 2,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  pujaCountText: {
+  pujasBadgeText: {
     fontFamily: 'Inter',
     fontWeight: '600',
     fontSize: 12,
@@ -122,42 +128,81 @@ const styles = StyleSheet.create({
     padding: 8,
     gap: 4,
   },
-  nameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 4,
-  },
   name: {
     fontFamily: 'Lato-Bold',
     fontSize: 14,
     lineHeight: 22,
     color: '#281518',
-    flex: 1,
   },
-  tierBadge: {
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  metaText: {
+    fontFamily: 'Inter',
+    fontWeight: '400',
+    fontSize: 10,
+    lineHeight: 12,
+    color: '#757575',
+  },
+  bullet: {
+    fontFamily: 'Inter',
+    fontSize: 10,
+    lineHeight: 12,
+    color: '#757575',
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    flexWrap: 'wrap',
+  },
+  star: {
+    fontSize: 11,
+    lineHeight: 14,
+  },
+  ratingVal: {
+    fontFamily: 'Lato-Bold',
+    fontSize: 12,
+    lineHeight: 18,
+    color: '#281518',
+  },
+  reviewCount: {
+    fontFamily: 'Inter',
+    fontWeight: '400',
+    fontSize: 10,
+    lineHeight: 12,
+    color: '#666666',
+  },
+
+  tierPill: {
     borderRadius: 16,
     paddingHorizontal: 4,
     paddingVertical: 2,
   },
   tierText: {
     fontFamily: 'Inter',
+    fontWeight: '400',
     fontSize: 10,
     lineHeight: 12,
   },
-  metaRow: {
+  priceRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
   },
-  metaText: { 
+  price: {
+    fontFamily: 'Lato-Bold',
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#281518',
+  },
+  originalPrice: {
     fontFamily: 'Inter',
+    fontWeight: '400',
     fontSize: 10,
     lineHeight: 12,
     color: '#757575',
-  },
-  metaDot: {
-    fontSize: 10,
-    color: '#757575',
+    textDecorationLine: 'line-through',
   },
 });

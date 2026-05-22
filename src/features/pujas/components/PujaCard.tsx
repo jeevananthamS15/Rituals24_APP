@@ -6,9 +6,6 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-import { theme } from '../../../theme';
-import { RatingBadge } from '../../../components/ui/RatingBadge';
-import { PriceDisplay } from '../../../components/ui/PriceDisplay';
 import { Puja } from '../../../types';
 
 
@@ -31,25 +28,27 @@ export const PujaCard: React.FC<Props> = ({ item, onPress }) => (
       resizeMode="cover"
     />
     <View style={styles.body}>
-      {/* Title */}
+
       <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
 
-      {/* Meta: duration + pandits count */}
       <View style={styles.metaRow}>
-        <Text style={styles.metaText}>⏱ {item.duration}</Text>
-        <Text style={styles.metaDot}>·</Text>
-        <Text style={styles.metaText}>👤 {item.panditsCount} pandits</Text>
+        <Text style={styles.metaText}>{item.duration}</Text>
+        <Text style={styles.bullet}> • </Text>
+        <Text style={styles.metaText}>{item.panditsCount} pandits</Text>
       </View>
 
-      {/* Rating */}
-      <RatingBadge rating={item.rating} reviewCount={item.reviewCount} />
 
-      {/* Price */}
-      <PriceDisplay
-        price={item.price}
-        originalPrice={item.originalPrice}
-        size="sm"
-      />
+      <View style={styles.ratingRow}>
+        <Text style={styles.star}>⭐</Text>
+        <Text style={styles.ratingVal}>{item.rating}</Text>
+        <Text style={styles.reviewCount}>({item.reviewCount})</Text>
+      </View>
+
+
+      <View style={styles.priceRow}>
+        <Text style={styles.price}>₹{item.price?.toLocaleString('en-IN')}</Text>
+        <Text style={styles.originalPrice}>₹{item.originalPrice?.toLocaleString('en-IN')}</Text>
+      </View>
     </View>
   </TouchableOpacity>
 );
@@ -57,12 +56,11 @@ export const PujaCard: React.FC<Props> = ({ item, onPress }) => (
 const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     marginRight: 12,
     overflow: 'hidden',
-    // Figma: Soft Card Shadow: 0px 4px 20px rgba(0,0,0,0.06)
-    shadowColor: '#000',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 20,
@@ -71,14 +69,13 @@ const styles = StyleSheet.create({
   image: {
     width: CARD_WIDTH,
     height: 160,
-    backgroundColor: theme.colors.surfaceElevated,
+    backgroundColor: '#E0E0E0',
   },
   body: {
     padding: 8,
     gap: 4,
   },
   title: {
-    // BODY: Lato Bold 14px / 22px, color #281518
     fontFamily: 'Lato-Bold',
     fontSize: 14,
     lineHeight: 22,
@@ -87,17 +84,63 @@ const styles = StyleSheet.create({
   metaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
   },
   metaText: {
-    // small caption: Inter Regular 10px / 12px, #757575
+    fontFamily: 'Inter',
+    fontWeight: '400',
+    fontSize: 10,
+    lineHeight: 12,
+    color: '#757575',
+  },
+  bullet: {
     fontFamily: 'Inter',
     fontSize: 10,
     lineHeight: 12,
     color: '#757575',
   },
-  metaDot: {
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
+  star: {
+    fontSize: 11,
+    lineHeight: 14,
+  },
+  ratingVal: {
+
+    fontFamily: 'Lato-Bold',
+    fontSize: 12,
+    lineHeight: 18,
+    color: '#281518',
+  },
+  reviewCount: {
+
+    fontFamily: 'Inter',
+    fontWeight: '400',
     fontSize: 10,
+    lineHeight: 12,
+    color: '#666666',
+  },
+  priceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  price: {
+
+    fontFamily: 'Lato-Bold',
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#281518',
+  },
+  originalPrice: {
+
+    fontFamily: 'Inter',
+    fontWeight: '400',
+    fontSize: 10,
+    lineHeight: 12,
     color: '#757575',
+    textDecorationLine: 'line-through',
   },
 });

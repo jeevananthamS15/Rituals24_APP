@@ -1,28 +1,61 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { theme } from '../../../theme';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from 'react-native';
 
-export const FestivalBanner = () => (
-  <View style={styles.card}>
-    <View style={styles.badge}>
-      <Text style={styles.badgeText}>Festival Offer</Text>
+
+
+export const FestivalBanner: React.FC = () => (
+  <View style={styles.wrapper}>
+
+    <View style={styles.card}>
+  
+      <View style={styles.ellipse1} />
+      <View style={styles.ellipse2} />
+      <View style={styles.ellipse3} />
+
+    
+      <View style={styles.templeImagePlaceholder}>
+        <Text style={styles.templeEmoji}>🛕</Text>
+      </View>
+
+
+      <View style={styles.badge}>
+        <Text style={styles.badgeText}>Festival Offer</Text>
+      </View>
+
+
+      <View style={styles.textBlock}>
+        <Text style={styles.title}>Navratri Special</Text>
+        <Text style={styles.subtitle}>Book Durga Puja with verfied pandits</Text>
+      </View>
+
+   
+      <TouchableOpacity style={styles.bookBtn} activeOpacity={0.8}>
+        <Text style={styles.bookBtnText}>Book Now</Text>
+      </TouchableOpacity>
     </View>
 
-    <View style={styles.textBlock}>
-      <Text style={styles.title}>Navratri Special</Text>
-      <Text style={styles.subtitle}>Book Durga Puja with verified pandits</Text>
+
+    <View style={styles.dotsRow}>
+      <View style={styles.dotInactive} />
+
+      <View style={styles.dotActive} />
+      <View style={styles.dotInactive} />
     </View>
-
-    <TouchableOpacity style={styles.bookBtn} activeOpacity={0.8}>
-      <Text style={styles.bookBtnText}>Book Now</Text>
-    </TouchableOpacity>
-
-    <View style={styles.ellipse1} pointerEvents="none" />
-    <View style={styles.ellipse2} pointerEvents="none" />
   </View>
 );
 
 const styles = StyleSheet.create({
+  wrapper: {
+    width: '100%',
+    gap: 12,
+  },
+
   card: {
     width: '100%',
     height: 145,
@@ -31,10 +64,58 @@ const styles = StyleSheet.create({
     borderColor: '#D9D9D9',
     borderRadius: 24,
     overflow: 'hidden',
-    paddingHorizontal: 16,
-    paddingVertical: 0,
+    position: 'relative',
+  },
+
+
+  ellipse1: {
+    position: 'absolute',
+    width: 131,
+    height: 131,
+    borderRadius: 66,
+    left: 140,
+    top: -28,
+    backgroundColor: 'rgba(43, 0, 10, 0.06)',
+    transform: [{ rotate: '-153.16deg' }],
+  },
+
+  ellipse2: {
+    position: 'absolute',
+    width: 131,
+    height: 131,
+    borderRadius: 66,
+    left: -60,
+    top: -102,
+    backgroundColor: 'rgba(43, 0, 10, 0.05)',
+    transform: [{ rotate: '-153.16deg' }],
+  },
+
+  ellipse3: {
+    position: 'absolute',
+    width: 131,
+    height: 131,
+    borderRadius: 66,
+    left: 85,
+    top: 97,
+    backgroundColor: 'rgba(43, 0, 10, 0.04)',
+    transform: [{ rotate: '-3deg' }],
+  },
+
+
+  templeImagePlaceholder: {
+    position: 'absolute',
+    width: 192,
+    height: 136,
+    right: -20,
+    bottom: -7,
+    alignItems: 'center',
     justifyContent: 'center',
   },
+  templeEmoji: {
+    fontSize: 90,
+  },
+
+
   badge: {
     position: 'absolute',
     left: 16,
@@ -51,12 +132,12 @@ const styles = StyleSheet.create({
     lineHeight: 12,
     color: '#FFFFFF',
   },
+
   textBlock: {
     position: 'absolute',
     left: 16,
     top: 42,
     width: 196,
-    gap: 2,
   },
   title: {
     fontFamily: 'Lato-Bold',
@@ -70,41 +151,46 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: '#000000',
   },
+
+
   bookBtn: {
     position: 'absolute',
     left: 16,
     top: 100,
+    width: 90,
+    height: 29,
     backgroundColor: '#FEB44B',
     borderRadius: 44,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 90,
-    height: 29,
   },
   bookBtnText: {
+
     fontFamily: 'Lato-Bold',
     fontSize: 14,
     lineHeight: 17,
     color: '#000000',
   },
-  ellipse1: {
-    position: 'absolute',
-    width: 131,
-    height: 131,
-    borderRadius: 66,
-    right: -20,
-    top: -28,
-    backgroundColor: 'rgba(43, 0, 10, 0.06)',
+
+
+  dotsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
   },
-  ellipse2: {
-    position: 'absolute',
-    width: 131,
-    height: 131,
-    borderRadius: 66,
-    right: 40,
-    bottom: -60,
-    backgroundColor: 'rgba(43, 0, 10, 0.04)',
+
+  dotInactive: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#D9D9D9',
+  },
+
+  dotActive: {
+    width: 16,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#2B000A',
   },
 });

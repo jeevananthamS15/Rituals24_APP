@@ -18,3 +18,7 @@ export const BookingNavigator: React.FC = () => (
     <Stack.Screen name="Payment" component={PaymentScreen} />
   </Stack.Navigator>
 );
+
+  
+
+

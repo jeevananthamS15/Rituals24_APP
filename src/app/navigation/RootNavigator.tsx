@@ -5,8 +5,7 @@ import {RootStackParamList} from './types';
 import {SplashScreen} from '../../features/auth/screens/SplashScreen';
 import {AuthNavigator} from './AuthNavigator';
 import {MainNavigator} from './MainNavigator';
-import { MuhuratCalendarScreen } from '../../features/muhurat/screens/MuhuratCalendarScreen';
-//import { BookingNavigator } from './BookingNavigator';
+import { BookingNavigator } from './BookingNavigator';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -46,8 +45,7 @@ export const RootNavigator = () => {
           </Stack.Screen>
         ) : (<>
           <Stack.Screen name="Main" component={MainNavigator}/>
-          <Stack.Screen name="MuhuratCalendar" component={MuhuratCalendarScreen}/>
-          
+          <Stack.Screen name="Checkout" component={BookingNavigator} options={{presentation: 'card',}}/>
           </>
         )}
       </Stack.Navigator>
@@ -57,7 +55,7 @@ export const RootNavigator = () => {
 
 
 
-// <Stack.Screen name="Checkout" component={BookingNavigator} options={{presentation: 'card',}}/>
+
 
 
  

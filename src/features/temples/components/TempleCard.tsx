@@ -6,9 +6,9 @@ import {
   StyleSheet,
   Image,
 } from 'react-native';
-import { theme } from '../../../theme';
-import { RatingBadge } from '../../../components/ui/RatingBadge';
 import { Temple } from '../../../types';
+
+
 
 const CARD_WIDTH = 130;
 
@@ -28,9 +28,10 @@ export const TempleCard: React.FC<Props> = ({ item, onPress }) => (
       style={styles.image}
       resizeMode="cover"
     />
-
     <View style={styles.body}>
+
       <Text style={styles.name} numberOfLines={1}>{item.name}</Text>
+
 
       <Text style={styles.subtitle} numberOfLines={2}>{item.subtitle}</Text>
 
@@ -39,7 +40,12 @@ export const TempleCard: React.FC<Props> = ({ item, onPress }) => (
         <Text style={styles.locationText} numberOfLines={1}>{item.location}</Text>
       </View>
 
-      <RatingBadge rating={item.rating} reviewCount={item.reviewCount} />
+      {/* Rating */}
+      <View style={styles.ratingRow}>
+        <Text style={styles.star}>⭐</Text>
+        <Text style={styles.ratingVal}>{item.rating}</Text>
+        <Text style={styles.reviewCount}>({item.reviewCount})</Text>
+      </View>
     </View>
   </TouchableOpacity>
 );
@@ -47,11 +53,11 @@ export const TempleCard: React.FC<Props> = ({ item, onPress }) => (
 const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
-    backgroundColor: theme.colors.surface,
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     marginRight: 12,
     overflow: 'hidden',
-    shadowColor: '#000',
+    shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.06,
     shadowRadius: 20,
@@ -60,18 +66,21 @@ const styles = StyleSheet.create({
   image: {
     width: CARD_WIDTH,
     height: 160,
-    backgroundColor: theme.colors.surfaceElevated,
+    backgroundColor: '#E0E0E0',
   },
+
   body: {
     padding: 8,
     gap: 4,
   },
+
   name: {
     fontFamily: 'Lato-Bold',
     fontSize: 14,
     lineHeight: 22,
     color: '#281518',
   },
+
   subtitle: {
     fontFamily: 'Lato-Regular',
     fontSize: 12,
@@ -88,9 +97,32 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontFamily: 'Inter',
+    fontWeight: '400',
     fontSize: 10,
     lineHeight: 12,
     color: '#757575',
     flex: 1,
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+  },
+  star: {
+    fontSize: 11,
+    lineHeight: 14,
+  },
+  ratingVal: {
+    fontFamily: 'Lato-Bold',
+    fontSize: 12,
+    lineHeight: 18,
+    color: '#281518',
+  },
+  reviewCount: {
+    fontFamily: 'Inter',
+    fontWeight: '400',
+    fontSize: 10,
+    lineHeight: 12,
+    color: '#666666',
   },
 });

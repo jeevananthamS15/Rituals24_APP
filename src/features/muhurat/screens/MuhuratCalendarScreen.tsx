@@ -25,46 +25,46 @@ const CALENDAR_ROWS: (string | null)[][] = [
   ['26', '27', '28', '29', '30', '1', '2'],
 ];
 
-const AUSPICIOUS_DAYS = ['12', '16', '26'];    // green dot  #34C759
-const FESTIVAL_DAYS   = ['15', '22'];           // orange dot #FF8D28
-const PITRA_DAYS      = ['7', '30'];            // purple dot #6155F5
-const NEXT_MONTH_DAYS = ['1', '2'];             // greyed out (last row)
+const AUSPICIOUS_DAYS = ['12', '16', '26'];    
+const FESTIVAL_DAYS   = ['15', '22'];          
+const PITRA_DAYS      = ['7', '30'];           
+const NEXT_MONTH_DAYS = ['1', '2'];            
 
-// ─── Timing data ──────────────────────────────────────────────────────────────
+
 const TIMINGS = [
   { id: '1', time: '5:40 AM -7:30 AM',  name: 'Braham Muhurat',  emoji: '☀️' },
   { id: '2', time: '9:00 AM -10:30 AM', name: 'Abhijit Muhurat', emoji: '📿' },
   { id: '3', time: '12:00 AM -1:00 AM', name: 'Rahu Kalam',      emoji: '⏳' },
 ];
 
-// ─── Upcoming muhurats ────────────────────────────────────────────────────────
+
 const UPCOMING = [
   { id: '1', day: '11', weekday: 'Mon', color: '#C0E1D2', desc: 'Auspicious for new\nbeginnings', nakshatra: 'Rohini' },
   { id: '2', day: '16', weekday: 'Thu', color: '#FFD6A6', desc: 'Guru Pushya Nakshatra',          nakshatra: 'Pushya' },
 ];
 
-// ─── Smart recommendations ────────────────────────────────────────────────────
+
 const SMART_RECS = [
   { id: '1', title: 'Griha Pravesh',    desc: 'Best Upcoming muhurat for housewarning', date: 'May12, 6-8 Am', rating: 4.9 },
   { id: '2', title: 'Business Launch',  desc: 'Highly auspicious for prosperity & growth', date: 'May12, 6-8 Am', rating: 4.9 },
   { id: '3', title: 'Marriage Rituals', desc: 'Shukra Pushya Yoga ideal for unions',     date: 'May12, 6-8 Am', rating: 4.9 },
 ];
 
-// ─── Recommended pujas ───────────────────────────────────────────────────────
+
 const REC_PUJAS = [
   { id: '1', title: 'Satyanarayan Katha',  duration: '2-3 hours', pandits: '12 pandits', price: '₹2,100', orig: '₹2,100', rating: 4.9, count: 234 },
   { id: '2', title: 'Griha Pravesh Puja',  duration: '2-3 hours', pandits: '12 pandits', price: '₹2,100', orig: '₹2,100', rating: 4.9, count: 234 },
   { id: '3', title: 'Navratri Puja',       duration: '2-3 hours', pandits: '12 pandits', price: '₹2,100', orig: '₹2,100', rating: 4.9, count: 234 },
 ];
 
-// ─── Temple events ────────────────────────────────────────────────────────────
+
 const TEMPLES = [
   { id: '1', name: 'Tirupati Balaji',    sub: 'Abhishekam &\nVIP Darshan',        loc: 'Andhra Pradesh', rating: 4.9, count: 234 },
   { id: '2', name: 'Kashi Vishwanath',   sub: 'Rudrabhishek &\nGanga Aarti',      loc: 'Varanasi, UP',   rating: 4.9, count: 234 },
   { id: '3', name: 'Meenakshi Temple',   sub: 'Archana &\nSpecial Darshan',       loc: 'Madurai, TN',    rating: 4.9, count: 234 },
 ];
 
-// ─── Reusable: Section Header ─────────────────────────────────────────────────
+
 const SectionRow: React.FC<{ title: string; onViewAll?: () => void }> = ({ title, onViewAll }) => (
   <View style={styles.sectionRow}>
     <Text style={styles.sectionTitle}>{title}</Text>
@@ -77,7 +77,7 @@ const SectionRow: React.FC<{ title: string; onViewAll?: () => void }> = ({ title
   </View>
 );
 
-// ─── Dot indicator ────────────────────────────────────────────────────────────
+
 const getDotColor = (day: string): string | null => {
   if (AUSPICIOUS_DAYS.includes(day)) return '#34C759';
   if (FESTIVAL_DAYS.includes(day))   return '#FF8D28';
@@ -85,7 +85,7 @@ const getDotColor = (day: string): string | null => {
   return null;
 };
 
-// ─── Calendar day cell ────────────────────────────────────────────────────────
+
 const CalDay: React.FC<{
   day: string | null;
   isSelected: boolean;
@@ -118,7 +118,7 @@ const CalDay: React.FC<{
   );
 };
 
-// ─── Main Screen ──────────────────────────────────────────────────────────────
+
 export const MuhuratCalendarScreen: React.FC = () => {
   const navigation = useNavigation<any>();
   const insets    = useSafeAreaInsets();
@@ -133,7 +133,7 @@ export const MuhuratCalendarScreen: React.FC = () => {
       showsVerticalScrollIndicator={false}
     >
 
-      {/* ── TOP HEADER ─────────────────────────────────── */}
+
       <View style={styles.topBar}>
         <View style={styles.topBarLeft}>
           <Text style={styles.screenTitle}>Muhurat Calendar</Text>
@@ -157,9 +157,9 @@ export const MuhuratCalendarScreen: React.FC = () => {
         </View>
       </View>
 
-      {/* ── WHITE CALENDAR CARD ────────────────────────── */}
+
       <View style={styles.whiteCalCard}>
-        {/* Month/Year nav */}
+
         <View style={styles.calNavRow}>
           <TouchableOpacity style={styles.calNavBtn} activeOpacity={0.7}>
             <Text style={styles.calNavArrow}>‹</Text>
@@ -181,14 +181,14 @@ export const MuhuratCalendarScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Day headers */}
+
         <View style={styles.calDayHeaderRow}>
           {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(d => (
             <Text key={d} style={styles.calDayHeader}>{d}</Text>
           ))}
         </View>
 
-        {/* Calendar grid */}
+
         {CALENDAR_ROWS.map((row, ri) => (
           <View key={ri} style={styles.calWeekRow}>
             {row.map((day, di) => (
@@ -203,7 +203,7 @@ export const MuhuratCalendarScreen: React.FC = () => {
           </View>
         ))}
 
-        {/* Legend */}
+
         <View style={styles.legend}>
           <View style={styles.legendItem}>
             <View style={[styles.legendDot, { backgroundColor: '#34C759' }]} />
@@ -220,12 +220,12 @@ export const MuhuratCalendarScreen: React.FC = () => {
         </View>
       </View>
 
-      {/* ── DARK MUHURAT CARD ──────────────────────────── */}
+
       <View style={styles.darkCard}>
 
-        {/* Dark card header row */}
+
         <View style={styles.darkCardHeader}>
-          {/* Date badge */}
+
           <View style={styles.darkCardDateRow}>
             <View style={styles.dateBadge}>
               <Text style={styles.dateBadgeNum}>{selectedDay}</Text>
@@ -240,19 +240,19 @@ export const MuhuratCalendarScreen: React.FC = () => {
             </View>
           </View>
 
-          {/* Bookmark icon */}
+
           <TouchableOpacity style={styles.bookmarkBtn} activeOpacity={0.7}>
             <Text style={styles.bookmarkIcon}>🔖</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Divider */}
+
         <View style={styles.darkDivider} />
 
-        {/* Auspicious Timing Today label */}
+
         <Text style={styles.timingLabel}>Auspicious Timing Today</Text>
 
-        {/* 3 timing sub-cards */}
+  
         {TIMINGS.map(t => (
           <View key={t.id} style={styles.timingSubCard}>
             <View style={styles.timingSubCardLeft}>
@@ -331,7 +331,6 @@ export const MuhuratCalendarScreen: React.FC = () => {
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.hScroll}>
           {SMART_RECS.map(item => (
             <TouchableOpacity key={item.id} style={styles.smartCard} activeOpacity={0.85}>
-              {/* Image placeholder */}
               <View style={styles.smartCardImage} />
               <Text style={styles.smartCardTitle}>{item.title}</Text>
               <Text style={styles.smartCardDesc}>{item.desc}</Text>

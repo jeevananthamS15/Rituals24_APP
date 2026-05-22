@@ -12,6 +12,7 @@ import {
   Image,
   StatusBar,
 } from 'react-native';
+import { ShieldCheck } from 'lucide-react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -111,14 +112,14 @@ export const LoginScreen = ({ navigation, setIsAuthenticated }: Props) => {
                   style={[styles.segmentButton, activeTab === 'email' && styles.segmentActive]}
                 >
                   <Text style={[styles.segmentText, activeTab === 'email' && styles.segmentTextActive]}>
-                    EMail
+                    Email
                   </Text>
                 </TouchableOpacity>
               </View>
 
               <View style={styles.inputWrapper}>
                 <View style={styles.countrySection}>
-                  <Text style={styles.flag}>🇮🇳</Text>
+                <Image source={require('../../../../assets/Login/flag.png')}  style={styles.flag}/>
                   <Text style={styles.countryCode}>+91</Text>
                 </View>
 
@@ -136,7 +137,7 @@ export const LoginScreen = ({ navigation, setIsAuthenticated }: Props) => {
               </View>
 
               <View style={styles.helperRow}>
-                <Text style={styles.helperIcon}>🔒</Text>
+                <Image source={require('../../../../assets/Login/lock.png')} style={styles.helperIcon}/>
                 <Text style={styles.helperText}>
                   Secure OTP Verification. Your data is protected.
                 </Text>
@@ -173,14 +174,12 @@ export const LoginScreen = ({ navigation, setIsAuthenticated }: Props) => {
               >
                 <Text style={styles.guestButtonText}>Continue as Guest</Text>
               </TouchableOpacity>
-
               <View style={styles.socialRow}>
                 <TouchableOpacity activeOpacity={0.9} style={styles.socialButton}>
-                  <Text style={styles.googleIcon}>G</Text>
+                 <Image source={require('../../../../assets/Login/google.png')} style={styles.socialIcon}/>
                 </TouchableOpacity>
-
-                <TouchableOpacity activeOpacity={0.9} style={styles.socialButton}>
-                  <Text style={styles.appleIcon}></Text>
+             <TouchableOpacity activeOpacity={0.9} style={styles.socialButton}>
+              <Image source={require('../../../../assets/Login/apple.png')} style={styles.socialIcon}/>
                 </TouchableOpacity>
               </View>
             </View>
@@ -329,9 +328,10 @@ const styles = StyleSheet.create({
   },
 
   flag: {
-    fontSize: 14,
-    lineHeight: 18,
-  },
+  width: scale(16),
+  height: scale(16),
+  resizeMode: 'contain',
+},
 
   countryCode: {
     fontFamily: 'Lato',
@@ -366,10 +366,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
 
-  helperIcon: {
-    fontSize: 10,
-    lineHeight: 12,
-  },
+ helperIcon: {
+  width: scale(12),
+  height: scale(12),
+  resizeMode: 'contain',
+},
 
   helperText: {
     fontFamily: 'Inter',
@@ -474,16 +475,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  googleIcon: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#4285F4',
-    fontFamily: 'Lato-Bold',
-  },
-
-  appleIcon: {
-    fontSize: 22,
-    color: '#000000',
-    lineHeight: 26,
-  },
+socialIcon: {
+  width: scale(20),
+  height: scale(20),
+  resizeMode: 'contain',
+},
 });

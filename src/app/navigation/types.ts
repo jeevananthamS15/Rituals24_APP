@@ -36,6 +36,7 @@ export type MainTabParamList = {
   Store: NavigatorScreenParams<StoreStackParamList>;
   Booking: undefined;
   Profile: undefined;
+  MuhuratCalendar: undefined;
 };
 
 
@@ -44,5 +45,4 @@ export type RootStackParamList = {
   Auth: NavigatorScreenParams<AuthStackParamList>;
   Main: NavigatorScreenParams<MainTabParamList>;
   Checkout: NavigatorScreenParams<CheckoutStackParamList>;
-  MuhuratCalendar: undefined;
 };
