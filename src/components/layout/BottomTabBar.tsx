@@ -16,16 +16,19 @@ const {width: SCREEN_WIDTH} = Dimensions.get('window');
 
 
 const C = {
+  // more transparent glass effect
+  pill: 'rgba(255,255,255,0.78)',
 
-  pill: '#C8B4BC',
-
-  activeCircle: '#B8A0A8',
+  // slightly softer active tab background
+  activeCircle: 'rgba(74,16,32,0.08)',
 
   activeColor: '#4A1020',
 
-  inactiveColor: '#7A6670',
+  // lighter inactive icons/text
+  inactiveColor: '#8A8A8A',
 
-  shadow: '#1A0008',
+  // softer shadow
+  shadow: '#000000',
 };
 
 

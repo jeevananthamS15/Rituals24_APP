@@ -5,58 +5,55 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
 } from 'react-native';
+import {
+  Home,
+  Calendar,
+  Clock,
+  User,
+  CalendarDays,
+  Headphones,
+  Check,
+  Circle,
+  Truck,
+} from 'lucide-react-native';
 import { Booking } from '../../../types';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const CARD_WIDTH = SCREEN_WIDTH - 40; 
+const PRIMARY = '#2B000A';
+const CHIP_ICON_COLOR = '#505050';
+const MUTED = '#757575';
 
 interface Props {
   booking: Booking & { message?: string; otp?: string };
 }
 
-const HomeIcon = () => (
-  <View style={iconStyles.wrap}>
-    <View style={iconStyles.homeRoof} />
-    <View style={iconStyles.homeDoor} />
+const Chip = ({ icon, label }: { icon: React.ReactNode; label: string }) => (
+  <View style={chipStyles.chip}>
+    {icon}
+    <Text style={chipStyles.label}>{label}</Text>
   </View>
 );
 
-const CalendarIcon = () => (
-  <View style={iconStyles.wrap}>
-    <View style={iconStyles.calBody} />
-  </View>
-);
-
-const ClockIcon = () => (
-  <View style={iconStyles.wrap}>
-    <View style={iconStyles.clockCircle} />
-  </View>
-);
-
-const UserIcon = () => (
-  <View style={iconStyles.wrap}>
-    <View style={iconStyles.userHead} />
-    <View style={iconStyles.userBody} />
-  </View>
-);
-
-const RescheduleIcon = () => (
-  <View style={iconStyles.wrap}>
-    <View style={iconStyles.rescheduleBox} />
-  </View>
-);
-
-const HeadsetIcon = () => (
-  <View style={iconStyles.wrap}>
-    <View style={iconStyles.headsetArc} />
-  </View>
-);
-
-const CheckIcon = ({ filled }: { filled?: boolean }) => (
-  <View style={[iconStyles.checkCircle, filled && iconStyles.checkCircleFilled]}>
-    {filled && <View style={iconStyles.checkMark} />}
+const ProgressStep = ({
+  label,
+  done,
+  isFirst,
+}: {
+  label: string;
+  done: boolean;
+  isFirst?: boolean;
+}) => (
+  <View style={progStyles.step}>
+    <View style={progStyles.iconWrap}>
+      {done ? (
+        <View style={progStyles.filledCircle}>
+          <Check size={12} color="#FFF" strokeWidth={2.5} />
+        </View>
+      ) : (
+        <Circle size={24} color={MUTED} strokeWidth={2} />
+      )}
+    </View>
+    <Text style={progStyles.label}>{label}</Text>
   </View>
 );
 
@@ -65,24 +62,26 @@ export const BookingCard: React.FC<Props> = ({ booking }) => {
 
   return (
     <View style={styles.card}>
-      
       <Image
-        source={{ uri: booking.imageUrl }}
+        source={booking.imageUrl}
         style={styles.heroImage}
         resizeMode="cover"
       />
 
-      
       <View style={styles.titleRow}>
         <Text style={styles.pujaTitle}>{booking.pujaTitle}</Text>
-        <Text style={styles.price}>₹{booking.price.toLocaleString('en-IN')}</Text>
+        <Text style={styles.price}>
+          ₹{booking.price.toLocaleString('en-IN')}
+        </Text>
       </View>
+
 
       {!isActive && booking.message ? (
         <View style={styles.messagePill}>
           <Text style={styles.messageText}>{booking.message}</Text>
         </View>
       ) : null}
+
 
       {isActive && booking.otp ? (
         <View style={styles.otpBar}>
@@ -95,16 +94,37 @@ export const BookingCard: React.FC<Props> = ({ booking }) => {
         </View>
       ) : null}
 
+      
       {isActive && (
         <View style={styles.progressStrip}>
-          {(['Confirmed', 'Assigned', 'En Route', 'In Progress'] as const).map(
-            (label, i) => (
-              <View key={label} style={styles.progStep}>
-                <CheckIcon filled={i === 0} />
-                <Text style={styles.progLabel}>{label}</Text>
+          {(
+            [
+              { label: 'Confirmed', done: true },
+              { label: 'Assigned', done: false },
+              { label: 'En Route', done: false },
+              { label: 'In Progress', done: false },
+            ] as { label: string; done: boolean }[]
+          ).map((step, i, arr) => (
+            <React.Fragment key={step.label}>
+              <View style={progStyles.step}>
+                <View style={progStyles.iconWrap}>
+                  {step.done ? (
+                    <View style={progStyles.filledCircle}>
+                      <Check size={12} color="#FFF" strokeWidth={2.5} />
+                    </View>
+                  ) : (
+                    <View style={progStyles.emptyCircle}>
+                      <Check size={12} color={MUTED} strokeWidth={2} />
+                    </View>
+                  )}
+                </View>
+                <Text style={progStyles.label}>{step.label}</Text>
               </View>
-            ),
-          )}
+              {i < arr.length - 1 && (
+                <View style={progStyles.connector} />
+              )}
+            </React.Fragment>
+          ))}
         </View>
       )}
 
@@ -112,26 +132,43 @@ export const BookingCard: React.FC<Props> = ({ booking }) => {
 
       <View style={styles.chipsWrap}>
         <View style={styles.chipsRow}>
-          <Chip icon={<HomeIcon />} label="Home Visit" />
-          <Chip icon={<CalendarIcon />} label={booking.date} />
-          <Chip icon={<ClockIcon />} label={booking.time} />
+          <Chip
+            icon={<Home size={16} color={CHIP_ICON_COLOR} strokeWidth={1.5} />}
+            label="Home Visit"
+          />
+          <Chip
+            icon={
+              <Calendar size={16} color={CHIP_ICON_COLOR} strokeWidth={1.5} />
+            }
+            label={booking.date}
+          />
+          <Chip
+            icon={
+              <Clock size={16} color={MUTED} strokeWidth={1.5} />
+            }
+            label={booking.time}
+          />
         </View>
         <View style={styles.chipsRow}>
-          <Chip icon={<UserIcon />} label={booking.panditName} />
+          <Chip
+            icon={<User size={16} color={MUTED} strokeWidth={1.5} />}
+            label={booking.panditName}
+          />
         </View>
       </View>
 
+  
       <View style={styles.actionsRow}>
         <TouchableOpacity style={styles.actionHalf} activeOpacity={0.7}>
           <View style={styles.actionInner}>
-            <RescheduleIcon />
+            <CalendarDays size={20} color={PRIMARY} strokeWidth={1.5} />
             <Text style={styles.actionText}>Reschedule</Text>
           </View>
         </TouchableOpacity>
         <View style={styles.actionDividerV} />
         <TouchableOpacity style={styles.actionHalf} activeOpacity={0.7}>
           <View style={styles.actionInner}>
-            <HeadsetIcon />
+            <Headphones size={20} color={PRIMARY} strokeWidth={1.5} />
             <Text style={styles.actionText}>Support</Text>
           </View>
         </TouchableOpacity>
@@ -139,16 +176,6 @@ export const BookingCard: React.FC<Props> = ({ booking }) => {
     </View>
   );
 };
-
-const Chip: React.FC<{ icon: React.ReactNode; label: string }> = ({
-  icon,
-  label,
-}) => (
-  <View style={chipStyles.chip}>
-    {icon}
-    <Text style={chipStyles.label}>{label}</Text>
-  </View>
-);
 
 const styles = StyleSheet.create({
   card: {
@@ -163,21 +190,18 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     elevation: 3,
   },
-
   heroImage: {
     width: '100%',
     height: 161,
     backgroundColor: '#EEE',
   },
-
-  
   titleRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 12,
     paddingTop: 12,
-    paddingBottom: 4,
+    paddingBottom: 6,
   },
   pujaTitle: {
     fontFamily: 'Lato-Bold',
@@ -193,8 +217,6 @@ const styles = StyleSheet.create({
     color: '#281518',
     fontWeight: '700',
   },
-
-  
   messagePill: {
     marginHorizontal: 12,
     marginBottom: 8,
@@ -208,18 +230,17 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontSize: 10,
     lineHeight: 12,
-    color: '#2B000A',
+    color: PRIMARY,
   },
-
- 
+  
   otpBar: {
     marginHorizontal: 12,
-    marginBottom: 8,
-    backgroundColor: '#2B000A',
+    marginBottom: 0,
+    backgroundColor: PRIMARY,
     borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     paddingVertical: 9,
     gap: 4,
   },
@@ -243,39 +264,21 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Bold',
     fontSize: 12,
     lineHeight: 18,
-    color: '#2B000A',
+    color: PRIMARY,
     fontWeight: '700',
   },
-
-
   progressStrip: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
     backgroundColor: '#FFF7F9',
-    paddingVertical: 11,
-    paddingHorizontal: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
   },
-  progStep: {
-    alignItems: 'center',
-    gap: 4,
-  },
-  progLabel: {
-    fontFamily: 'Lato-Bold',
-    fontSize: 12,
-    lineHeight: 18,
-    color: '#000000',
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-
- 
   divider: {
     height: 0.75,
     backgroundColor: '#D9D9D9',
-    marginTop: 8,
   },
-
-
   chipsWrap: {
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -283,11 +286,9 @@ const styles = StyleSheet.create({
   },
   chipsRow: {
     flexDirection: 'row',
-    gap: 8,
     flexWrap: 'wrap',
+    gap: 8,
   },
-
-
   actionsRow: {
     flexDirection: 'row',
     borderTopWidth: 0.75,
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato',
     fontSize: 14,
     lineHeight: 17,
-    color: '#2B000A',
+    color: PRIMARY,
     fontWeight: '500',
   },
 });
@@ -339,108 +340,49 @@ const chipStyles = StyleSheet.create({
   },
 });
 
-
-const iconStyles = StyleSheet.create({
-  wrap: { width: 16, height: 16, alignItems: 'center', justifyContent: 'center' },
-
-  // Home
-  homeRoof: {
-    position: 'absolute',
-    width: 11,
-    height: 11,
-    borderWidth: 1.5,
-    borderColor: '#505050',
-    borderRadius: 1,
-    top: 1,
+const progStyles = StyleSheet.create({
+  step: {
+    alignItems: 'center',
+    gap: 4,
+    flex: 1,
   },
-  homeDoor: {
-    position: 'absolute',
-    width: 4,
-    height: 5,
-    borderWidth: 1.5,
-    borderColor: '#505050',
-    bottom: 1,
+  iconWrap: {
+    width: 24,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-
-  // Calendar
-  calBody: {
-    width: 12,
-    height: 13,
-    borderWidth: 1.5,
-    borderColor: '#757575',
-    borderRadius: 1,
+  filledCircle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: PRIMARY,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-
-  // Clock
-  clockCircle: {
-    width: 13,
-    height: 13,
-    borderRadius: 6.5,
-    borderWidth: 1.5,
-    borderColor: '#757575',
-  },
-
-  // User
-  userHead: {
-    position: 'absolute',
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    borderWidth: 1.5,
-    borderColor: '#757575',
-    top: 1,
-  },
-  userBody: {
-    position: 'absolute',
-    width: 10,
-    height: 6,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
-    borderWidth: 1.5,
-    borderColor: '#757575',
-    bottom: 0,
-  },
-
-  // Reschedule (calendar-sync placeholder)
-  rescheduleBox: {
-    width: 12,
-    height: 12,
-    borderWidth: 1.5,
-    borderColor: '#2B000A',
-    borderRadius: 2,
-  },
-
-  // Headset
-  headsetArc: {
-    width: 12,
-    height: 8,
-    borderTopLeftRadius: 6,
-    borderTopRightRadius: 6,
-    borderWidth: 1.5,
-    borderColor: '#2B000A',
-    borderBottomWidth: 0,
-  },
-
-  // Check circle
-  checkCircle: {
+  emptyCircle: {
     width: 24,
     height: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#757575',
+    borderColor: MUTED,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  checkCircleFilled: {
-    backgroundColor: '#2B000A',
-    borderColor: '#2B000A',
+  connector: {
+    height: 2,
+    backgroundColor: '#D9D9D9',
+    alignSelf: 'flex-start',
+    marginTop: 11, // vertically center with the circle (24/2 - 1)
+    width: 12,
+    flexShrink: 0,
   },
-  checkMark: {
-    width: 10,
-    height: 7,
-    borderLeftWidth: 2,
-    borderBottomWidth: 2,
-    borderColor: '#FFFFFF',
-    transform: [{ rotate: '-45deg' }, { translateY: -1 }],
+  label: {
+    fontFamily: 'Lato-Bold',
+    fontSize: 11,
+    lineHeight: 16,
+    color: '#000000',
+    fontWeight: '700',
+    textAlign: 'center',
   },
 });

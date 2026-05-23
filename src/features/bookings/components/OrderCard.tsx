@@ -1,5 +1,10 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
+import { Truck } from 'lucide-react-native';
+
+
+
+import { ImageSourcePropType } from 'react-native';
 
 interface Order {
   id: string;
@@ -8,7 +13,7 @@ interface Order {
   price: number;
   status: string;
   expectedDelivery: string;
-  imageUrl?: string;
+  imageUrl?: ImageSourcePropType;
 }
 
 interface Props {
@@ -19,14 +24,15 @@ export const OrderCard = ({ order }:Props) => (
   <View style={styles.card}>
    
     <Image
-      source={{
-        uri:
-          order.imageUrl ||
-          'https://picsum.photos/seed/order1/400/200',
-      }}
-      style={styles.heroImage}
-      resizeMode="cover"
-    />
+  source={
+    order.imageUrl || {
+      uri:
+        'https://i.pinimg.com/736x/0e/e9/58/0ee9587a49c9e811c91f337fd68eae74.jpg',
+    }
+  }
+  style={styles.heroImage}
+  resizeMode="cover"
+/>
 
     <View style={styles.infoRow}>
       <View style={styles.leftCol}>
@@ -47,10 +53,7 @@ export const OrderCard = ({ order }:Props) => (
 
     <View style={styles.deliveryChip}>
       <View style={styles.truckIconWrap}>
-        <View style={styles.truckBox} />
-        <View style={styles.truckCabin} />
-        <View style={styles.wheelL} />
-        <View style={styles.wheelR} />
+       <Truck size={16} color="#505050" strokeWidth={1.5} />
       </View>
       <Text style={styles.deliveryText}>
         Expected Delivery • <Text style={styles.deliveryBold}>{order.expectedDelivery}</Text>

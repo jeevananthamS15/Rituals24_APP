@@ -1,94 +1,301 @@
-import { Puja, Pandit, Temple, Product, BhajanService } from '../types';
+import {
+  Puja,
+  Pandit,
+  Temple,
+  Product,
+  BhajanService,
+} from '../types';
 
-const IMAGE = (seed: number) =>
-  `https://picsum.photos/seed/ritual${seed}/300/200`;
+/* -------------------------------------------------------------------------- */
+/*                                  PUJAS                                     */
+/* -------------------------------------------------------------------------- */
 
 export const MOCK_PUJAS: Puja[] = [
   {
-    id: 'p1', title: 'Satyanarayan Katha', imageUrl: IMAGE(1),
-    price: 2100, originalPrice: 2100, rating: 4.9, reviewCount: 234,
-    duration: '2-3 hours', panditsCount: 12, category: 'vaishnava',
+    id: 'p1',
+    title: 'Satyanarayan Katha',
+
+    imageUrl: require('../../assets/HomeScreen/Puja/puja1.png'),
+
+    price: 2100,
+    originalPrice: 2500,
+    rating: 4.9,
+    reviewCount: 234,
+
+    duration: '2-3 hours',
+    panditsCount: 12,
+    category: 'vaishnava',
   },
+
   {
-    id: 'p2', title: 'Griha Pravesh Puja', imageUrl: IMAGE(2),
-    price: 2100, originalPrice: 2100, rating: 4.9, reviewCount: 234,
-    duration: '2-3 hours', panditsCount: 12, category: 'home',
+    id: 'p2',
+    title: 'Griha Pravesh Puja',
+
+    imageUrl: require('../../assets/HomeScreen/Puja/pooja5.png'),
+
+    price: 3100,
+    originalPrice: 3600,
+    rating: 4.8,
+    reviewCount: 190,
+
+    duration: '3-4 hours',
+    panditsCount: 10,
+    category: 'home',
   },
+
   {
-    id: 'p3', title: 'Navratri Puja', imageUrl: IMAGE(3),
-    price: 2100, originalPrice: 2100, rating: 4.9, reviewCount: 234,
-    duration: '2-3 hours', panditsCount: 12, category: 'festival',
+    id: 'p3',
+    title: 'Navratri Special Puja',
+
+        imageUrl: require('../../assets/HomeScreen/Puja/pooja6.png'),
+
+    price: 4100,
+    originalPrice: 4700,
+    rating: 4.9,
+    reviewCount: 321,
+
+    duration: '4-5 hours',
+    panditsCount: 18,
+    category: 'festival',
   },
 ];
+
+/* -------------------------------------------------------------------------- */
+/*                                  PANDITS                                   */
+/* -------------------------------------------------------------------------- */
 
 export const MOCK_PANDITS: Pandit[] = [
   {
-    id: 'pt1', name: 'Pt. Acharya Vivek', imageUrl: IMAGE(10),
-    tier: 'gold', rating: 4.9, reviewCount: 234, price: 2100, originalPrice: 2100,
-    years: 15, languages: ['Hindi', 'Sanskrit'], pujaCount: 300,
-    completedCount: 1200, specializations: ['Satyanarayan', 'Muhurat'],
+    id: 'pt1',
+    name: 'Pt. Acharya Vivek',
+
+    imageUrl: require('../../assets/HomeScreen/pandit/pandit1.png'),
+
+    tier: 'gold',
+
+    rating: 4.9,
+    reviewCount: 234,
+
+    price: 2100,
+    originalPrice: 2500,
+
+    years: 15,
+
+    languages: ['Hindi', 'Sanskrit'],
+
+    pujaCount: 300,
+    completedCount: 1200,
+
+    specializations: ['Satyanarayan', 'Muhurat'],
   },
+
   {
-    id: 'pt2', name: 'Pt. Suresh Dikshit', imageUrl: IMAGE(11),
-    tier: 'bronze', rating: 4.9, reviewCount: 234, price: 2100, originalPrice: 2100,
-    years: 15, languages: ['Hindi', 'Sanskrit'], pujaCount: 200,
-    completedCount: 800, specializations: ['Griha Pravesh'],
+    id: 'pt2',
+    name: 'Pt. Suresh Dikshit',
+
+ imageUrl: require('../../assets/HomeScreen/pandit/pandit2.png'),
+
+    tier: 'silver',
+
+    rating: 4.8,
+    reviewCount: 180,
+
+    price: 2500,
+    originalPrice: 3000,
+
+    years: 12,
+
+    languages: ['Hindi', 'Tamil'],
+
+    pujaCount: 220,
+    completedCount: 950,
+
+    specializations: ['Griha Pravesh'],
   },
+
   {
-    id: 'pt3', name: 'Pt. Ramesh Shastri', imageUrl: IMAGE(12),
-    tier: 'silver', rating: 4.9, reviewCount: 234, price: 2100, originalPrice: 2100,
-    years: 15, languages: ['Hindi', 'Sanskrit'], pujaCount: 100,
-    completedCount: 400, specializations: ['Navratri'],
+    id: 'pt3',
+    name: 'Pt. Ramesh Shastri',
+
+   imageUrl: require('../../assets/HomeScreen/pandit/pandit3.png'),
+
+    tier: 'bronze',
+
+    rating: 4.7,
+    reviewCount: 142,
+
+    price: 1800,
+    originalPrice: 2200,
+
+    years: 10,
+
+    languages: ['Hindi', 'Telugu'],
+
+    pujaCount: 180,
+    completedCount: 700,
+
+    specializations: ['Navratri'],
   },
 ];
+
+/* -------------------------------------------------------------------------- */
+/*                                  TEMPLES                                   */
+/* -------------------------------------------------------------------------- */
 
 export const MOCK_TEMPLES: Temple[] = [
   {
-    id: 't1', name: 'Tirupati Balaji', subtitle: 'Abhishekam & VIP Darshan',
-    location: 'Andhra Pradesh', imageUrl: IMAGE(20),
-    rating: 4.9, reviewCount: 234,
+    id: 't1',
+
+    name: 'Tirupati Balaji',
+
+    subtitle: 'Abhishekam & VIP Darshan',
+
+    location: 'Andhra Pradesh',
+
+     imageUrl: require('../../assets/HomeScreen/Puja/puja1.png'),
+
+    rating: 4.9,
+    reviewCount: 234,
   },
+
   {
-    id: 't2', name: 'Kashi Vishwanath', subtitle: 'Rudrabhishek & Ganga Aarti',
-    location: 'Varanasi, UP', imageUrl: IMAGE(21),
-    rating: 4.9, reviewCount: 234,
+    id: 't2',
+
+    name: 'Kashi Vishwanath',
+
+    subtitle: 'Rudrabhishek & Ganga Aarti',
+
+    location: 'Varanasi, UP',
+
+   imageUrl: require('../../assets/HomeScreen/Puja/puja2.png'),
+
+    rating: 4.8,
+    reviewCount: 190,
   },
+
   {
-    id: 't3', name: 'Meenakshi Temple', subtitle: 'Archana & Special Darshan',
-    location: 'Madurai, TN', imageUrl: IMAGE(22),
-    rating: 4.9, reviewCount: 234,
+    id: 't3',
+
+    name: 'Meenakshi Temple',
+
+    subtitle: 'Archana & Special Darshan',
+
+    location: 'Madurai, TN',
+
+   imageUrl: require('../../assets/HomeScreen/Puja/puja3.png'),
+
+    rating: 4.9,
+    reviewCount: 278,
   },
 ];
+
+/* -------------------------------------------------------------------------- */
+/*                                  PRODUCTS                                  */
+/* -------------------------------------------------------------------------- */
 
 export const MOCK_PRODUCTS: Product[] = [
   {
-    id: 'pr1', name: 'Satyanarayan Puja Kit', itemCount: 21,
-    imageUrl: IMAGE(30), price: 2100, originalPrice: 2100,
-    rating: 4.9, reviewCount: 234,
+    id: 'pr1',
+
+    name: 'Satyanarayan Puja Kit',
+
+    itemCount: 21,
+
+     imageUrl: require('../../assets/HomeScreen/StoreKit/pr1.png'),
+
+    price: 2100,
+    originalPrice: 2600,
+
+    rating: 4.9,
+    reviewCount: 234,
   },
+
   {
-    id: 'pr2', name: 'Griha Pravesh Essentials', itemCount: 35,
-    imageUrl: IMAGE(31), price: 2100, originalPrice: 2100,
-    rating: 4.9, reviewCount: 234,
+    id: 'pr2',
+
+    name: 'Griha Pravesh Essentials',
+
+    itemCount: 35,
+
+     imageUrl: require('../../assets/HomeScreen/StoreKit/pr2.png'),
+
+    price: 3100,
+    originalPrice: 3600,
+
+    rating: 4.8,
+    reviewCount: 182,
   },
+
   {
-    id: 'pr3', name: 'Navratri Special Kit', itemCount: 18,
-    imageUrl: IMAGE(32), price: 2100, originalPrice: 2100,
-    rating: 4.9, reviewCount: 234,
+    id: 'pr3',
+
+    name: 'Navratri Special Kit',
+
+    itemCount: 18,
+
+ imageUrl: require('../../assets/HomeScreen/StoreKit/pr3.png'),
+
+    price: 1800,
+    originalPrice: 2400,
+
+    rating: 4.9,
+    reviewCount: 321,
   },
 ];
 
+/* -------------------------------------------------------------------------- */
+/*                                  BHAJANS                                   */
+/* -------------------------------------------------------------------------- */
+
 export const MOCK_BHAJANS: BhajanService[] = [
   {
-    id: 'b1', title: 'Traditional Bhajan',
-    description: 'Classical devotional songs with traditional ragas',
-    imageUrl: IMAGE(40), price: 2100, originalPrice: 2100,
-    rating: 4.9, reviewCount: 234,
+    id: 'b1',
+
+    title: 'Traditional Bhajan',
+
+    description:
+      'Classical devotional songs with traditional ragas',
+
+   imageUrl: require('../../assets/HomeScreen/Puja/puja3.png'),
+
+    price: 2100,
+    originalPrice: 2600,
+
+    rating: 4.9,
+    reviewCount: 234,
   },
+
   {
-    id: 'b2', title: 'Devotional Night',
-    description: 'Extended evening kirtan & bhajan experience',
-    imageUrl: IMAGE(41), price: 2100, originalPrice: 2100,
-    rating: 4.9, reviewCount: 234,
+    id: 'b2',
+
+    title: 'Devotional Night',
+
+    description:
+      'Extended evening kirtan & bhajan experience',
+
+     imageUrl: require('../../assets/HomeScreen/Puja/puja3.png'),
+
+    price: 3100,
+    originalPrice: 3600,
+
+    rating: 4.8,
+    reviewCount: 198,
+  },
+
+  {
+    id: 'b3',
+
+    title: 'Morning Bhakti Session',
+
+    description:
+      'Peaceful devotional chanting and spiritual songs',
+
+     imageUrl: require('../../assets/HomeScreen/Puja/puja3.png'),
+
+    price: 1800,
+    originalPrice: 2200,
+
+    rating: 4.9,
+    reviewCount: 276,
   },
 ];

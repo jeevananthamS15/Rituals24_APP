@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,57 +7,100 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BookingCard } from '../components/BookingCard';
-import { OrderCard } from '../components/OrderCard';
-import { AppButton } from '../../../components/ui/AppButton';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {BookingCard} from '../components/BookingCard';
+import {OrderCard} from '../components/OrderCard';
+import {AppButton} from '../../../components/ui/AppButton';
+import {
+  Search,
+  Mic,
+  Bell,
+  Heart,
+  ShoppingCart,
+  TrendingUp,
+  ChevronRight,
+} from 'lucide-react-native';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
 const H_PAD = 20;
+const PRIMARY = '#2B000A';
 
-const TABS: { label: string; key: string; count: number }[] = [
-  { label: 'Upcoming', key: 'upcoming', count: 2 },
-  { label: 'Active',   key: 'active',   count: 1 },
-  { label: 'Completed', key: 'completed', count: 0 },
-  { label: 'Cancelled', key: 'cancelled', count: 0 },
+const TABS: {label: string; key: string; count: number}[] = [
+  {label: 'Upcoming', key: 'upcoming', count: 2},
+  {label: 'Active', key: 'active', count: 1},
+  {label: 'Completed', key: 'completed', count: 0},
+  {label: 'Cancelled', key: 'cancelled', count: 0},
 ];
 
 const MOCK_BOOKINGS = [
   {
     id: 'b1',
+
     pujaTitle: 'Navgraha Puja',
-    imageUrl: 'https://picsum.photos/seed/puja1/400/200',
+
+    imageUrl: {
+      uri: 'https://i.pinimg.com/736x/60/43/d3/6043d3cac1d9cacf1c10237d00a60bef.jpg',
+    },
+
     status: 'upcoming' as const,
+
     date: '20-05-2026',
     time: '9:00AM',
+
     panditName: 'Pt. Suresh Tiwari',
+
     price: 2100,
+
     mode: 'home_visit' as const,
+
     message: 'Your auspicious puja begins in 7 days',
   },
+
   {
     id: 'b2',
+
     pujaTitle: 'Navgraha Puja',
-    imageUrl: 'https://picsum.photos/seed/puja1/400/200',
+
+    imageUrl: {
+      uri: 'https://i.pinimg.com/736x/0e/e9/58/0ee9587a49c9e811c91f337fd68eae74.jpg',
+    },
+
     status: 'upcoming' as const,
+
     date: '20-05-2026',
     time: '9:00AM',
+
     panditName: 'Pt. Suresh Tiwari',
+
     price: 2100,
+
     mode: 'home_visit' as const,
+
     message: 'Your auspicious puja begins in 7 days',
   },
+
   {
     id: 'b3',
+
     pujaTitle: 'Satyanarayan Katha',
-    imageUrl: 'https://picsum.photos/seed/puja2/400/200',
+
+    imageUrl: {
+      uri: 'https://i.pinimg.com/736x/60/43/d3/6043d3cac1d9cacf1c10237d00a60bef.jpg',
+    },
+
     status: 'active' as const,
+
     date: '20-05-2026',
     time: '9:00AM',
+
     panditName: 'Pt. Suresh Tiwari',
+
     price: 2100,
+
     mode: 'home_visit' as const,
+
     otp: '2020',
+
     message: '',
   },
 ];
@@ -70,7 +113,10 @@ const MOCK_ORDERS = [
     price: 1247,
     status: 'shipped',
     expectedDelivery: '20 Apr 2026',
-    imageUrl: 'https://picsum.photos/seed/order1/400/200',
+
+    imageUrl: {
+      uri: 'https://i.pinimg.com/736x/60/43/d3/6043d3cac1d9cacf1c10237d00a60bef.jpg',
+    },
   },
 ];
 
@@ -81,7 +127,7 @@ export const MyBookingsScreen = () => {
   const visibleBookings = MOCK_BOOKINGS.filter(b => b.status === activeTab);
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top }]}>
+    <View style={[styles.root, {paddingTop: insets.top}]}>
       <View style={styles.staticTop}>
         <View style={styles.header}>
           <View style={styles.headerLeft}>
@@ -89,9 +135,9 @@ export const MyBookingsScreen = () => {
             <Text style={styles.subtitle}>3 Upcoming rituals</Text>
           </View>
           <View style={styles.headerIcons}>
-            <BellIcon />
-            <HeartIcon />
-            <CartIcon />
+            <Bell size={20} color={PRIMARY} strokeWidth={1.64} />
+            <Heart size={20} color={PRIMARY} strokeWidth={1.64} />
+            <ShoppingCart size={20} color={PRIMARY} strokeWidth={1.64} />
           </View>
         </View>
 
@@ -103,8 +149,7 @@ export const MyBookingsScreen = () => {
                 key={tab.key}
                 style={[styles.tab, active && styles.tabActive]}
                 onPress={() => setActiveTab(tab.key)}
-                activeOpacity={0.7}
-              >
+                activeOpacity={0.7}>
                 <Text style={[styles.tabText, active && styles.tabTextActive]}>
                   {tab.label}
                 </Text>
@@ -113,16 +158,14 @@ export const MyBookingsScreen = () => {
                     style={[
                       styles.badge,
                       active ? styles.badgeActive : styles.badgeInactive,
-                    ]}
-                  >
+                    ]}>
                     <Text
                       style={[
                         styles.badgeText,
                         active
                           ? styles.badgeTextActive
                           : styles.badgeTextInactive,
-                      ]}
-                    >
+                      ]}>
                       {tab.count}
                     </Text>
                   </View>
@@ -137,10 +180,9 @@ export const MyBookingsScreen = () => {
         style={styles.scroll}
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingBottom: insets.bottom + 24 },
+          {paddingBottom: insets.bottom + 120},
         ]}
-        showsVerticalScrollIndicator={false}
-      >
+        showsVerticalScrollIndicator={false}>
         {visibleBookings.length > 0 ? (
           <View style={styles.cardsList}>
             {visibleBookings.map(booking => (
@@ -195,7 +237,7 @@ const CartIcon = () => (
 );
 
 const headerIconStyles = StyleSheet.create({
-  wrap: { width: 20, height: 20, alignItems: 'center', justifyContent: 'center' },
+  wrap: {width: 20, height: 20, alignItems: 'center', justifyContent: 'center'},
   bellBody: {
     width: 14,
     height: 13,
@@ -296,13 +338,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.75,
     borderBottomColor: '#D9D9D9',
     paddingHorizontal: H_PAD,
+    justifyContent: 'space-between',
   },
   tab: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingBottom: 10,
     paddingTop: 10,
-    marginRight: 16,
     gap: 4,
     borderBottomWidth: 1.5,
     borderBottomColor: 'transparent',
@@ -328,17 +370,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  badgeActive: { backgroundColor: '#2B000A' },
-  badgeInactive: { backgroundColor: '#E4E4E4' },
+  badgeActive: {backgroundColor: '#2B000A'},
+  badgeInactive: {backgroundColor: '#E4E4E4'},
   badgeText: {
     fontFamily: 'Inter',
     fontSize: 10,
     lineHeight: 12,
   },
-  badgeTextActive: { color: '#FFFFFF' },
-  badgeTextInactive: { color: '#757575' },
+  badgeTextActive: {color: '#FFFFFF'},
+  badgeTextInactive: {color: '#757575'},
 
-  scroll: { flex: 1 },
+  scroll: {flex: 1},
   scrollContent: {
     paddingHorizontal: H_PAD,
     paddingTop: 16,

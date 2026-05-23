@@ -1,18 +1,57 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet,Image } from 'react-native';
 import { theme } from '../../../theme';
 
 
 
 const SERVICES = [
-  { id: 'book_puja',  label: 'Book puja',         emoji: '🪔' },
-  { id: 'pandits',    label: 'Book\nPandits',      emoji: '🙏' },
-  { id: 'online',     label: 'Online\nPooja',      emoji: '📱' },
-  { id: 'darshan',    label: 'Temple\nDarshan',    emoji: '🛕' },
-  { id: 'store',      label: 'Puja Store',         emoji: '🛒' },
-  { id: 'bhajan',     label: 'Bhajan\nservice',    emoji: '🎵' },
-  { id: 'muhurat',    label: 'Muhurat',            emoji: '📅' },
-  { id: 'festival',   label: 'Festival\nSpecials', emoji: '🔥' },
+  {
+    id: 'book_puja',
+    label: 'Book puja',
+    icon: require('../../../../assets/HomeScreen/ServiceGrid/yagna.png'),
+  },
+
+  {
+    id: 'pandits',
+    label: 'Book\nPandits',
+    icon: require('../../../../assets/HomeScreen/ServiceGrid/guru.png'),
+  },
+
+  {
+    id: 'online',
+    label: 'Online\nPooja',
+    icon: require('../../../../assets/HomeScreen/ServiceGrid/video-call.png'),
+  },
+
+  {
+    id: 'darshan',
+    label: 'Temple\nDarshan',
+    icon: require('../../../../assets/HomeScreen/ServiceGrid/temple.png'),
+  },
+
+  {
+    id: 'store',
+    label: 'Puja Store',
+    icon: require('../../../../assets/HomeScreen/ServiceGrid/app-store.png'),
+  },
+
+  {
+    id: 'bhajan',
+    label: 'Bhajan\nservice',
+    icon: require('../../../../assets/HomeScreen/ServiceGrid/tambourine.png'),
+  },
+
+  {
+    id: 'muhurat',
+    label: 'Muhurat',
+    icon: require('../../../../assets/HomeScreen/ServiceGrid/schedule.png'),
+  },
+
+  {
+    id: 'festival',
+    label: 'Festival\nSpecials',
+    icon: require('../../../../assets/HomeScreen/ServiceGrid/agni-pooja.png'),
+  },
 ];
 
 interface Props {
@@ -31,7 +70,7 @@ export const ServiceGrid: React.FC<Props> = ({ onServicePress }) => {
       activeOpacity={0.7}
     >
       <View style={styles.iconBox}>
-        <Text style={styles.emoji}>{service.emoji}</Text>
+        <Image source={service.icon} style={styles.icon}/>
       </View>
       <Text style={styles.label}>{service.label}</Text>
     </TouchableOpacity>
@@ -67,9 +106,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  emoji: {
-    fontSize: 32,
-  },
+icon: {
+  width: 36,
+  height: 36,
+  resizeMode: 'contain',
+},
   label: {
     fontFamily: 'Lato-Medium',
     fontSize: 14,

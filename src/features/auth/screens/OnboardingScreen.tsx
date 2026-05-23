@@ -11,7 +11,6 @@ import {
   Platform,
   ImageSourcePropType,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 
@@ -40,36 +39,36 @@ type SlideImageConfig = {
 
 
 const S1_CFG: SlideImageConfig = {
-  imgW: 578, imgH: 543,
+  imgW: 578, imgH: 700,
   left: -16,
-  bottom: -142,
+  bottom: -225,
   anchor: 'bottom',
-  textWidth: 299,
+  textWidth: 353,
 };
 
 
 const S2_CFG: SlideImageConfig = {
-  imgW: 527, imgH: 354,
-  left: -43,
-  top: 407.5,
+  imgW: 1000, imgH: 550,
+  left: -110,
+  top: 235,
   anchor: 'top',
-  textWidth: 286,
+  textWidth: 320,
 };
 
 
 const S3_CFG: SlideImageConfig = {
-  imgW: 508, imgH: 360,
-  left: 0,
-  bottom: -25,
+  imgW: 700, imgH: 600,
+  left: -98,
+  bottom: -140,
   anchor: 'bottom',
-  textWidth: 301,
+  textWidth: 310,
 };
 
 
 const S4_CFG: SlideImageConfig = {
-  imgW: 412.28, imgH: 412.28,
-  left: -16,
-  top: 327,
+  imgW: 450, imgH: 450,
+  left: 35,
+  top: 370,
   anchor: 'top',
   rotate: '-24.77deg',
   textWidth: 301,
@@ -140,7 +139,6 @@ export const OnboardingScreen = ({ navigation }: any) => {
   const renderItem = ({ item }: { item: Slide }) => {
     const cfg = item.config;
 
-
     const imagePositionStyle: any = {
       position: 'absolute' as const,
       width:  scaleW(cfg.imgW),
@@ -158,25 +156,26 @@ export const OnboardingScreen = ({ navigation }: any) => {
 
     return (
       <View style={styles.slide}>
-    
         <View style={styles.card}>
-          <LinearGradient
-            colors={['rgba(43,0,10,0.10)', 'rgba(255,255,255,0.10)']}
-            start={{ x: 0.5, y: 0 }}
-            end={{ x: 0.5, y: 0.601 }}
-            style={[styles.ellipse, styles.ellipse9]}
+
+      
+          <Image
+            source={require('../../../../assets/images/Onboard/Ellipse9.png')}
+            resizeMode="contain"
+            style={styles.ellipse9}
           />
-          <LinearGradient
-            colors={['rgba(43,0,10,0.10)', 'rgba(255,255,255,0.10)']}
-            start={{ x: 0.5, y: 0 }}
-            end={{ x: 0.5, y: 0.601 }}
-            style={[styles.ellipse, styles.ellipse10]}
+
+
+          <Image
+            source={require('../../../../assets/images/Onboard/Ellipse9.png')}
+            resizeMode="contain"
+            style={styles.ellipse10}
           />
+
           <View style={[styles.textContainer, { width: scaleW(cfg.textWidth) }]}>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.subtitle}>{item.subtitle}</Text>
           </View>
-
 
           <Image
             source={item.image}
@@ -209,7 +208,6 @@ export const OnboardingScreen = ({ navigation }: any) => {
         backgroundColor="transparent"
         barStyle="dark-content"
       />
-
 
       <FlatList
         ref={flatListRef}
@@ -280,30 +278,30 @@ const styles = StyleSheet.create({
     width: SW,
     height: CARD_H,
     backgroundColor: '#FAFAFA',
-
     borderBottomRightRadius: scaleW(264),
     overflow: 'hidden',
-  },
-  ellipse: {
-    position: 'absolute',
-    width:  EL_SIZE,
-    height: EL_SIZE,
-    borderRadius: EL_SIZE / 2,
   },
 
 
   ellipse9: {
-    left: scaleW(-6.2),
-    top:  scaleH(62),
-    transform: [{ rotate: '-153.16deg' }],
+    position: 'absolute',
+    width:  EL_SIZE,
+    height: EL_SIZE,
+    left:   scaleW(-6.2),
+    top:    scaleH(75),
+    transform: [{ rotate: '-1deg' }],
   },
 
 
   ellipse10: {
-    left: scaleW(-168),
-    top:  scaleH(427.77),
-    transform: [{ rotate: '-3deg' }],
+    position: 'absolute',
+    width:  EL_SIZE,
+    height: EL_SIZE,
+    left:   scaleW(-168),
+    top:    scaleH(400),
+    transform: [{ rotate: '-200deg' }],
   },
+
   textContainer: {
     position: 'absolute',
     left:  scaleW(20),
@@ -311,7 +309,6 @@ const styles = StyleSheet.create({
     gap:   scaleH(12),
     zIndex: 10,
   },
-
 
   title: {
     fontFamily: 'Lato-Bold',
@@ -338,14 +335,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
 
-
   pagination: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     height: scaleH(8),
     gap: scaleW(12),
-
     marginBottom: scaleH(20),
   },
 
@@ -368,7 +363,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: scaleW(7),
   },
-
 
   skipButton: {
     width:        scaleW(85),
@@ -399,7 +393,7 @@ const styles = StyleSheet.create({
   },
 
   nextButtonFull: {
-    flex: 1, 
+    flex: 1,
   },
 
   nextText: {

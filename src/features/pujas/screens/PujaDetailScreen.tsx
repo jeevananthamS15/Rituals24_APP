@@ -247,7 +247,7 @@ export const PujaDetailScreen: React.FC = ({navigation}: any) => {
         <View style={styles.heroContainer}>
           <ImageBackground
             source={{
-              uri: 'https://images.unsplash.com/photo-1621155346337-1d19476ba7d6?w=800',
+              uri: 'https://i.pinimg.com/736x/0e/e9/58/0ee9587a49c9e811c91f337fd68eae74.jpg',
             }}
             style={styles.heroImage}
             resizeMode="cover">

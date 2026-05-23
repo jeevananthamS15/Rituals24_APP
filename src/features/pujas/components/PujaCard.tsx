@@ -23,7 +23,7 @@ export const PujaCard: React.FC<Props> = ({ item, onPress }) => (
     activeOpacity={0.85}
   >
     <Image
-      source={{ uri: item.imageUrl }}
+      source={item.imageUrl }
       style={styles.image}
       resizeMode="cover"
     />

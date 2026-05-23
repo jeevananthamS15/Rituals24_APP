@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -9,22 +9,37 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {
+  Search,
+  Mic,
+  Bell,
+  Heart,
+  ShoppingCart,
+  TrendingUp,
+  ChevronRight,
+} from 'lucide-react-native';
 
-import Feather from 'react-native-vector-icons/Feather';
+import {ProductCard} from '../components/ProductCard';
+import {BhajanCard} from '../../bhajan/components/BhajanCard';
+import {STORE_TABS} from '../../../constants';
+import {MOCK_PRODUCTS, MOCK_BHAJANS} from '../../../constants/mockData';
 
-import { ProductCard } from '../components/ProductCard';
-import { BhajanCard } from '../../bhajan/components/BhajanCard';
-import { STORE_TABS } from '../../../constants';
-import { MOCK_PRODUCTS, MOCK_BHAJANS } from '../../../constants/mockData';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
 const HORIZONTAL_PADDING = 20;
 const CONTENT_WIDTH = SCREEN_WIDTH - HORIZONTAL_PADDING * 2;
 
-const STORE_FILTER_TABS = ['All', 'Puja Kits', 'Rituals Items', 'Festivals Specials', 'Best Seller', 'Bhajan Services'];
+const STORE_FILTER_TABS = [
+  'All',
+  'Puja Kits',
+  'Rituals Items',
+  'Festivals Specials',
+  'Best Seller',
+  'Bhajan Services',
+];
 
+const PRIMARY = '#2B000A';
 export const StoreScreen = () => {
   const navigation = useNavigation<any>();
   const [activeTab, setActiveTab] = useState('All');
@@ -34,9 +49,7 @@ export const StoreScreen = () => {
     <SafeAreaView style={styles.safe} edges={['top']}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
-
+        contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <Text style={styles.title}>Spiritual Store</Text>
@@ -44,22 +57,21 @@ export const StoreScreen = () => {
           </View>
           <View style={styles.headerIcons}>
             <TouchableOpacity activeOpacity={0.7} style={styles.iconBtn}>
-              <Feather name="bell" size={20} color="#2B000A" strokeWidth={1.64} />
+              <Bell size={20} color={PRIMARY} strokeWidth={1.64} />
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.7} style={styles.iconBtn}>
-              <Feather name="heart" size={20} color="#2B000A" strokeWidth={1.64} />
+              <Heart size={20} color={PRIMARY} strokeWidth={1.64} />
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={0.7} style={styles.iconBtn}>
-              <Feather name="shopping-cart" size={20} color="#2B000A" strokeWidth={1.64} />
+              <ShoppingCart size={20} color={PRIMARY} strokeWidth={1.64} />
             </TouchableOpacity>
           </View>
         </View>
 
-
         <View style={styles.searchWrapper}>
           <View style={styles.searchBar}>
             <View style={styles.searchLeft}>
-              <Feather name="search" size={16} color="rgba(60,60,67,0.6)" strokeWidth={2} />
+              <Search size={16} color="rgba(60,60,67,0.6)" strokeWidth={2} />
               <TextInput
                 style={styles.searchInput}
                 placeholder="Search poojas, pandits, temples..."
@@ -69,7 +81,7 @@ export const StoreScreen = () => {
               />
             </View>
             <View style={styles.micBtn}>
-              <Feather name="mic" size={16} color="#2B000A" strokeWidth={1.5} />
+              <Mic size={16} color={PRIMARY} strokeWidth={1.5} />
             </View>
           </View>
         </View>
@@ -78,46 +90,42 @@ export const StoreScreen = () => {
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.tabsContent}
-          style={styles.tabsScroll}
-        >
+          style={styles.tabsScroll}>
           {STORE_FILTER_TABS.map(tab => (
             <TouchableOpacity
               key={tab}
               style={[styles.tab, activeTab === tab && styles.tabActive]}
               onPress={() => setActiveTab(tab)}
-              activeOpacity={0.7}
-            >
-              <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>
+              activeOpacity={0.7}>
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === tab && styles.tabTextActive,
+                ]}>
                 {tab}
               </Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
 
-
         <View style={styles.divider} />
-
 
         {(activeTab === 'All' || activeTab === 'Bhajan Services') && (
           <View style={styles.bhajanSection}>
-      
             <View style={styles.bhajanContainer}>
-            
               <View style={styles.bhajanHeader}>
                 <Text style={styles.bhajanTitle}>Book a Bhajan</Text>
                 <TouchableOpacity style={styles.viewAllBtn} activeOpacity={0.7}>
                   <Text style={styles.viewAllText}>View All </Text>
-                  <Feather name="chevron-right" size={16} color="#FFFFFF" strokeWidth={1.5} />
+                  <ChevronRight size={16} color="#FFFFFF" strokeWidth={1.5} />
                 </TouchableOpacity>
               </View>
 
-      
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.bhajanCardsContent}
-                scrollEnabled={false}
-              >
+                scrollEnabled={false}>
                 {MOCK_BHAJANS.map(item => (
                   <BhajanCard key={item.id} item={item} onPress={() => {}} />
                 ))}
@@ -126,27 +134,24 @@ export const StoreScreen = () => {
           </View>
         )}
 
-  
         {(activeTab === 'All' || activeTab === 'Puja Kits') && (
           <View style={styles.pujaSection}>
-   
             <View style={styles.pujaHeader}>
               <View>
                 <Text style={styles.pujaTitle}>Puja kits &amp; Items</Text>
                 <Text style={styles.pujaSubtitle}>Delivered to your home</Text>
               </View>
-              <TouchableOpacity activeOpacity={0.7}>
-       
-              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.7}></TouchableOpacity>
             </View>
 
-        
             <View style={styles.productGrid}>
               {MOCK_PRODUCTS.map(item => (
                 <ProductCard
                   key={item.id}
                   item={item}
-                  onPress={id => navigation.navigate('ProductDetail', { productId: id })}
+                  onPress={id =>
+                    navigation.navigate('ProductDetail', {productId: id})
+                  }
                   onAdd={() => {}}
                 />
               ))}
@@ -165,9 +170,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: 32,
+    paddingBottom: 120,
   },
-
 
   header: {
     flexDirection: 'row',
@@ -209,10 +213,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-
   searchWrapper: {
     paddingHorizontal: HORIZONTAL_PADDING,
-    marginTop: 20, 
+    marginTop: 20,
     marginBottom: 0,
   },
   searchBar: {
@@ -240,7 +243,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 22,
     color: '#757575',
-    padding: 0, 
+    padding: 0,
     textAlign: 'center',
   },
   micBtn: {
@@ -251,7 +254,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
 
   tabsScroll: {
     marginTop: 12,
@@ -288,7 +290,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 
-
   divider: {
     height: 1,
     backgroundColor: 'transparent',
@@ -296,7 +297,6 @@ const styles = StyleSheet.create({
     marginHorizontal: HORIZONTAL_PADDING,
   },
 
-  
   bhajanSection: {
     paddingHorizontal: HORIZONTAL_PADDING,
     marginTop: 12,
@@ -339,7 +339,6 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 
-
   pujaSection: {
     paddingTop: 0,
   },
@@ -366,7 +365,6 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginTop: 3,
   },
-
 
   productGrid: {
     flexDirection: 'row',

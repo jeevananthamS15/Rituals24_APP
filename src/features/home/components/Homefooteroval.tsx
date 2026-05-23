@@ -1,23 +1,27 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Platform,
+} from 'react-native';
 
 export const HomeFooterOval: React.FC = () => (
   <View style={styles.ovalContainer}>
+    <View style={styles.logoContainer}>
 
-    <View style={styles.logoBlock}>
- 
-      <Text style={styles.logoPlaceholder}>🔔</Text>
-
-      <Text style={styles.brandName}>Rituals24</Text>
-
-      <Text style={styles.taglineSub}>Everything your Puja Needs</Text>
-
+      <Image
+        source={require('../../../../assets/images/logo.png')}
+        style={styles.logo}
+        resizeMode="contain"
+      />
 
       <View style={styles.divider} />
 
-
-      <Text style={styles.tagline}>Your Sacred Journey, Simplified</Text>
+      <Text style={styles.tagline}>
+        Your Sacred Journey, Simplified
+      </Text>
     </View>
   </View>
 );
@@ -31,49 +35,37 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 196.5,
     borderTopRightRadius: 196.5,
 
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-
     alignItems: 'center',
     justifyContent: 'flex-start',
 
-    paddingTop: 60,
+    paddingTop: 36,
   },
 
-  logoBlock: {
+  logoContainer: {
+    width: 245,
     alignItems: 'center',
-    gap: 5,
   },
 
-  logoPlaceholder: {
-    fontSize: 60,
-  },
-
-  brandName: {
-    fontFamily: 'Lato-Bold',
-    fontSize: 24,
-    color: '#FEB44B',
-    letterSpacing: 1,
-  },
-
-  taglineSub: {
-    fontFamily: 'Lato-Regular',
-    fontSize: 10,
-    color: 'rgba(255,255,255,0.6)',
+  logo: {
+    width: '100%',
+    height: 212,
   },
 
   divider: {
-    width: 127,
-    height: 1,
-    borderTopWidth: 0.7,
-    borderTopColor: '#F3B416',
+    width: 185,
+    borderTopWidth: 1,
+    borderColor: 'rgba(255,255,255,0.85)',
+    marginTop: -35,
+    marginBottom: 4,
   },
 
   tagline: {
-    fontFamily: 'Lato-Regular',
-    fontSize: 8.26,
-    lineHeight: 12,
-    color: '#F3B416',
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: '700',
+    color: '#FFFFFF',
     textAlign: 'center',
+    marginTop: 15,
+    fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',
   },
 });

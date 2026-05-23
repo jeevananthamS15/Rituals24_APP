@@ -36,7 +36,7 @@ export const PanditCard: React.FC<Props> = ({ item, onPress }) => {
 
       <View style={styles.imageContainer}>
         <Image
-          source={{ uri: item.imageUrl }}
+          source={ item.imageUrl}
           style={styles.image}
           resizeMode="cover"
         />

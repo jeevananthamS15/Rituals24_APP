@@ -107,7 +107,7 @@ const RelatedCard = ({
     <View style={[relStyles.card, { width: CARD_W }]}>
       <TouchableOpacity activeOpacity={0.85} onPress={() => onPress(item.id)}>
         <Image
-          source={{ uri: item.imageUrl }}
+          source={item.imageUrl}
           style={[relStyles.image, { width: CARD_W }]}
           resizeMode="cover"
         />
@@ -168,7 +168,7 @@ export const ProductDetailScreen = ({ route, navigation }: Props) => {
  
         <View style={[s.heroContainer, { height: IMAGE_HEIGHT }]}>
           <Image
-            source={{ uri: product.imageUrl }}
+            source={ product.imageUrl}
             style={StyleSheet.absoluteFillObject}
             resizeMode="cover"
           />

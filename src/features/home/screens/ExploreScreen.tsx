@@ -7,6 +7,7 @@ import {
   FlatList,
   StyleSheet,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import { theme } from '../../../theme';
 import { ScreenWrapper } from '../../../components/layout/ScreenWrapper';
@@ -25,68 +26,114 @@ import {
   MOCK_BHAJANS,
 } from '../../../constants/mockData';
 
+// lucide-react-native icons — run: npm install lucide-react-native
+import {
+  Search,
+  Mic,
+  Bell,
+  Heart,
+  ShoppingCart,
+  TrendingUp,
+  ChevronRight,
+} from 'lucide-react-native';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const H_PADDING = 20;
+const CONTENT_WIDTH = SCREEN_WIDTH - H_PADDING * 2;
+
+const PRIMARY = '#2B000A';
+const TEXT_SECONDARY = '#666666';
+const TEXT_MUTED = '#757575';
+const BORDER = '#D9D9D9';
+const SURFACE = '#F9F9F9';
+const STAR_COLOR = '#F3B416';
+
 const TRENDING = [
-  'Temple Darshan', 'Satyanarayan Puja', 'Puja Kit',
-  'Griha Pravesh', 'Navratri', 'Pandits',
+  { label: 'Pandits', icon: true },
+  { label: 'Temple Darshan', icon: true },
+  { label: 'Satyanarayan Puja', icon: true },
+  { label: 'Puja Kit', icon: true },
+  { label: 'Griha Pravesh', icon: true },
+  { label: 'Navratri', icon: true },
 ];
+
+const EXPLORE_TABS_LIST = ['All', 'Pandits', 'Poojas', 'Temples', 'Store', 'Bhajan'];
 
 export const ExploreScreen = () => {
   const [query, setQuery] = useState('');
-  const [activeTab, setActiveTab] = useState<string>('All');
+  const [activeTab, setActiveTab] = useState('All');
 
   return (
     <ScreenWrapper scrollable>
-   
+
+      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>Explore</Text>
+        <View style={styles.headerIcons}>
+          <TouchableOpacity style={styles.iconBtn} activeOpacity={0.7}>
+            <Bell size={20} color={PRIMARY} strokeWidth={1.64} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconBtn} activeOpacity={0.7}>
+            <Heart size={20} color={PRIMARY} strokeWidth={1.64} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconBtn} activeOpacity={0.7}>
+            <ShoppingCart size={20} color={PRIMARY} strokeWidth={1.64} />
+          </TouchableOpacity>
+        </View>
       </View>
 
-      
+      {/* Search Bar */}
       <View style={styles.searchRow}>
         <View style={styles.searchBar}>
-          <Text style={styles.searchIcon}>🔍</Text>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search poojas, pandits, temples..."
-            placeholderTextColor={theme.colors.textMuted}
-            value={query}
-            onChangeText={setQuery}
-          />
-          {query.length > 0 && (
-            <TouchableOpacity onPress={() => setQuery('')}>
-              <Text style={styles.clearIcon}>✕</Text>
-            </TouchableOpacity>
-          )}
+          <View style={styles.searchLeft}>
+            <Search size={16} color="rgba(60,60,67,0.6)" strokeWidth={2} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search poojas, pandits, temples..."
+              placeholderTextColor={TEXT_MUTED}
+              value={query}
+              onChangeText={setQuery}
+            />
+          </View>
+          <View style={styles.micWrapper}>
+            <Mic size={16} color={PRIMARY} strokeWidth={1.5} />
+          </View>
         </View>
       </View>
 
-
+      {/* Trending Searches */}
       {query.length === 0 && (
-        <View style={styles.trendingSection}>
-          <Text style={styles.trendingTitle}>Trending Searches</Text>
-          <View style={styles.tags}>
-            {TRENDING.map(tag => (
-              <TouchableOpacity
-                key={tag}
-                style={styles.tag}
-                onPress={() => setQuery(tag)}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.tagText}>{tag}</Text>
-              </TouchableOpacity>
-            ))}
+        <>
+          <View style={styles.trendingSection}>
+            <Text style={styles.trendingTitle}>Trending Searches</Text>
+            <View style={styles.trendingGrid}>
+              {TRENDING.map((item) => (
+                <TouchableOpacity
+                  key={item.label}
+                  style={styles.trendingItem}
+                  onPress={() => setQuery(item.label)}
+                  activeOpacity={0.7}
+                >
+                  <TrendingUp size={16} color={TEXT_SECONDARY} strokeWidth={1.5} />
+                  <Text style={styles.trendingText}>{item.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
-        </View>
+
+          {/* Divider */}
+          <View style={styles.divider} />
+        </>
       )}
 
-    
+      {/* Filter Tabs */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.tabs}
         style={styles.tabsContainer}
       >
-        {EXPLORE_TABS.map(tab => (
+        {EXPLORE_TABS_LIST.map((tab) => (
           <TouchableOpacity
             key={tab}
             style={[styles.tab, activeTab === tab && styles.tabActive]}
@@ -100,25 +147,22 @@ export const ExploreScreen = () => {
         ))}
       </ScrollView>
 
-    
+      {/* Puja Services */}
       {(activeTab === 'All' || activeTab === 'Poojas') && (
         <View style={styles.section}>
           <SectionHeader title="Our Puja Services" onViewAll={() => {}} />
           <FlatList
             data={MOCK_PUJAS}
-            renderItem={({ item }) => (
-              <PujaCard item={item} onPress={() => {}} />
-            )}
-            keyExtractor={item => item.id}
+            renderItem={({ item }) => <PujaCard item={item} onPress={() => {}} />}
+            keyExtractor={(item) => item.id}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.hList}
-            scrollEnabled={false}
           />
         </View>
       )}
 
- 
+      {/* Store */}
       {(activeTab === 'All' || activeTab === 'Store') && (
         <View style={styles.section}>
           <SectionHeader title="Our Store" onViewAll={() => {}} />
@@ -127,65 +171,55 @@ export const ExploreScreen = () => {
             renderItem={({ item }) => (
               <ProductCard item={item} onPress={() => {}} onAdd={() => {}} />
             )}
-            keyExtractor={item => item.id}
+            keyExtractor={(item) => item.id}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.hList}
-            scrollEnabled={false}
           />
         </View>
       )}
 
-  
+      {/* Pandits */}
       {(activeTab === 'All' || activeTab === 'Pandits') && (
         <View style={styles.section}>
           <SectionHeader title="Our Pandits" onViewAll={() => {}} />
           <FlatList
             data={MOCK_PANDITS}
-            renderItem={({ item }) => (
-              <PanditCard item={item} onPress={() => {}} />
-            )}
-            keyExtractor={item => item.id}
+            renderItem={({ item }) => <PanditCard item={item} onPress={() => {}} />}
+            keyExtractor={(item) => item.id}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.hList}
-            scrollEnabled={false}
           />
         </View>
       )}
 
-
+      {/* Temples */}
       {(activeTab === 'All' || activeTab === 'Temples') && (
         <View style={styles.section}>
           <SectionHeader title="Temple Pooja & Darshan" onViewAll={() => {}} />
           <FlatList
             data={MOCK_TEMPLES}
-            renderItem={({ item }) => (
-              <TempleCard item={item} onPress={() => {}} />
-            )}
-            keyExtractor={item => item.id}
+            renderItem={({ item }) => <TempleCard item={item} onPress={() => {}} />}
+            keyExtractor={(item) => item.id}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.hList}
-            scrollEnabled={false}
           />
         </View>
       )}
 
-   
+      {/* Bhajan */}
       {(activeTab === 'All' || activeTab === 'Bhajan') && (
         <View style={[styles.section, styles.lastSection]}>
           <SectionHeader title="Book a Bhajan" onViewAll={() => {}} />
           <FlatList
             data={MOCK_BHAJANS}
-            renderItem={({ item }) => (
-              <BhajanCard item={item} onPress={() => {}} />
-            )}
-            keyExtractor={item => item.id}
+            renderItem={({ item }) => <BhajanCard item={item} onPress={() => {}} />}
+            keyExtractor={(item) => item.id}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.hList}
-            scrollEnabled={false}
           />
         </View>
       )}
@@ -194,99 +228,158 @@ export const ExploreScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  /* ─── Header ─── */
   header: {
-    paddingHorizontal: theme.spacing.screenPadding,
-    paddingTop: theme.spacing.md,
-    paddingBottom: theme.spacing.sm,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: H_PADDING,
+    paddingTop: 12,
+    paddingBottom: 10,
   },
   title: {
-    ...theme.typography.h1,
-    color: theme.colors.textPrimary,
+    fontFamily: 'Lato-Bold',
+    fontSize: 28,
+    lineHeight: 36,
+    color: PRIMARY,
+    fontWeight: '700',
   },
+  headerIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  iconBtn: {
+    width: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  /* ─── Search ─── */
   searchRow: {
-    paddingHorizontal: theme.spacing.screenPadding,
-    marginBottom: theme.spacing.md,
+    paddingHorizontal: H_PADDING,
+    marginBottom: 14,
   },
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.radii.md,
-    paddingHorizontal: theme.spacing.md,
-    height: 48,
+    justifyContent: 'space-between',
+    backgroundColor: SURFACE,
+    borderRadius: 35,
+    paddingHorizontal: 12,
+    height: 44,
     borderWidth: 1,
-    borderColor: theme.colors.border,
-    gap: theme.spacing.sm,
+    borderColor: BORDER,
   },
-  searchIcon: { fontSize: 16 },
+  searchLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    flex: 1,
+  },
   searchInput: {
     flex: 1,
-    ...theme.typography.bodyMd,
-    color: theme.colors.textPrimary,
-  },
-  clearIcon: {
+    fontFamily: 'Lato-Regular',
     fontSize: 14,
-    color: theme.colors.textMuted,
+    lineHeight: 22,
+    color: TEXT_MUTED,
+    paddingVertical: 0,
+    textAlign: 'left',
   },
+  micWrapper: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: 'rgba(118,118,128,0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+
+  /* ─── Trending ─── */
   trendingSection: {
-    paddingHorizontal: theme.spacing.screenPadding,
-    marginBottom: theme.spacing.md,
+    paddingHorizontal: H_PADDING,
+    marginBottom: 14,
   },
   trendingTitle: {
-    ...theme.typography.h4,
-    color: theme.colors.textSecondary,
-    marginBottom: theme.spacing.sm,
+    fontFamily: 'Lato-Medium',
+    fontSize: 16,
+    lineHeight: 24,
+    fontWeight: '500',
+    color: '#000000',
+    marginBottom: 8,
   },
-  tags: {
+  trendingGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: theme.spacing.sm,
+    rowGap: 6,
+    columnGap: 0,
   },
-  tag: {
-    backgroundColor: theme.colors.surfaceElevated,
-    borderRadius: theme.radii.full,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.xs,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
+  trendingItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginRight: 20,
+    marginBottom: 4,
   },
-  tagText: {
-    ...theme.typography.labelMd,
-    color: theme.colors.textSecondary,
+  trendingText: {
+    fontFamily: 'Lato-Medium',
+    fontSize: 14,
+    lineHeight: 17,
+    fontWeight: '500',
+    color: TEXT_SECONDARY,
   },
+
+  divider: {
+    height: 1,
+    backgroundColor: BORDER,
+    marginHorizontal: H_PADDING,
+    marginBottom: 14,
+  },
+
+  /* ─── Tabs ─── */
   tabsContainer: {
-    marginBottom: theme.spacing.md,
+    marginBottom: 12,
   },
   tabs: {
-    paddingHorizontal: theme.spacing.screenPadding,
-    gap: theme.spacing.sm,
+    paddingHorizontal: H_PADDING,
+    gap: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   tab: {
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.sm,
-    borderRadius: theme.radii.full,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 35,
     borderWidth: 1,
-    borderColor: theme.colors.border,
-    backgroundColor: theme.colors.surface,
+    borderColor: PRIMARY,
+    backgroundColor: 'transparent',
   },
   tabActive: {
-    backgroundColor: theme.colors.primary,
-    borderColor: theme.colors.primary,
+    backgroundColor: PRIMARY,
   },
   tabText: {
-    ...theme.typography.labelMd,
-    color: theme.colors.textSecondary,
+    fontFamily: 'Lato-Medium',
+    fontSize: 14,
+    lineHeight: 17,
+    fontWeight: '500',
+    color: PRIMARY,
+    textAlign: 'center',
   },
   tabTextActive: {
-    color: theme.colors.textInverse,
+    color: '#FFFFFF',
   },
+
+  /* ─── Sections ─── */
   section: {
-    marginBottom: theme.spacing.sectionGap,
+    marginBottom: 24,
   },
   hList: {
-    paddingHorizontal: theme.spacing.screenPadding,
+    paddingHorizontal: H_PADDING,
+    gap: 12,
   },
   lastSection: {
-    marginBottom: theme.spacing.xl,
+    marginBottom: 120,
   },
 });
