@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -9,11 +8,13 @@ import {
   FlatList,
   Dimensions,
   Platform,
+  Image,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {useNavigation} from '@react-navigation/native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Bell, Heart, ShoppingCart} from 'lucide-react-native';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
 const CONTENT_PADDING = 20;
 const CARD_WIDTH = SCREEN_WIDTH - CONTENT_PADDING * 2;
 
@@ -25,51 +26,140 @@ const CALENDAR_ROWS: (string | null)[][] = [
   ['26', '27', '28', '29', '30', '1', '2'],
 ];
 
-const AUSPICIOUS_DAYS = ['12', '16', '26'];    
-const FESTIVAL_DAYS   = ['15', '22'];          
-const PITRA_DAYS      = ['7', '30'];           
-const NEXT_MONTH_DAYS = ['1', '2'];            
-
+const AUSPICIOUS_DAYS = ['12', '16', '26'];
+const FESTIVAL_DAYS = ['15', '22'];
+const PITRA_DAYS = ['7', '30'];
+const NEXT_MONTH_DAYS = ['1', '2'];
 
 const TIMINGS = [
-  { id: '1', time: '5:40 AM -7:30 AM',  name: 'Braham Muhurat',  emoji: '☀️' },
-  { id: '2', time: '9:00 AM -10:30 AM', name: 'Abhijit Muhurat', emoji: '📿' },
-  { id: '3', time: '12:00 AM -1:00 AM', name: 'Rahu Kalam',      emoji: '⏳' },
+  {id: '1', time: '5:40 AM -7:30 AM', name: 'Braham Muhurat', emoji: '☀️'},
+  {id: '2', time: '9:00 AM -10:30 AM', name: 'Abhijit Muhurat', emoji: '📿'},
+  {id: '3', time: '12:00 AM -1:00 AM', name: 'Rahu Kalam', emoji: '⏳'},
 ];
-
 
 const UPCOMING = [
-  { id: '1', day: '11', weekday: 'Mon', color: '#C0E1D2', desc: 'Auspicious for new\nbeginnings', nakshatra: 'Rohini' },
-  { id: '2', day: '16', weekday: 'Thu', color: '#FFD6A6', desc: 'Guru Pushya Nakshatra',          nakshatra: 'Pushya' },
+  {
+    id: '1',
+    day: '11',
+    weekday: 'Mon',
+    color: '#C0E1D2',
+    desc: 'Auspicious for new\nbeginnings',
+    nakshatra: 'Rohini',
+  },
+  {
+    id: '2',
+    day: '16',
+    weekday: 'Thu',
+    color: '#FFD6A6',
+    desc: 'Guru Pushya Nakshatra',
+    nakshatra: 'Pushya',
+  },
 ];
-
 
 const SMART_RECS = [
-  { id: '1', title: 'Griha Pravesh',    desc: 'Best Upcoming muhurat for housewarning', date: 'May12, 6-8 Am', rating: 4.9 },
-  { id: '2', title: 'Business Launch',  desc: 'Highly auspicious for prosperity & growth', date: 'May12, 6-8 Am', rating: 4.9 },
-  { id: '3', title: 'Marriage Rituals', desc: 'Shukra Pushya Yoga ideal for unions',     date: 'May12, 6-8 Am', rating: 4.9 },
+  {
+    id: '1',
+    title: 'Griha Pravesh',
+    desc: 'Best Upcoming muhurat for housewarning',
+    date: 'May12, 6-8 Am',
+    rating: 4.9,
+    image: require('../../../../assets/HomeScreen/Puja/pooja5.png'),
+  },
+  {
+    id: '2',
+    title: 'Business Launch',
+    desc: 'Highly auspicious for prosperity & growth',
+    date: 'May12, 6-8 Am',
+    rating: 4.9,
+    image: require('../../../../assets/HomeScreen/Puja/pooja6.png'),
+  },
+  {
+    id: '3',
+    title: 'Marriage Rituals',
+    desc: 'Shukra Pushya Yoga ideal for unions',
+    date: 'May12, 6-8 Am',
+    rating: 4.9,
+    image: require('../../../../assets/HomeScreen/Puja/pooja8.png'),
+  },
 ];
-
 
 const REC_PUJAS = [
-  { id: '1', title: 'Satyanarayan Katha',  duration: '2-3 hours', pandits: '12 pandits', price: '₹2,100', orig: '₹2,100', rating: 4.9, count: 234 },
-  { id: '2', title: 'Griha Pravesh Puja',  duration: '2-3 hours', pandits: '12 pandits', price: '₹2,100', orig: '₹2,100', rating: 4.9, count: 234 },
-  { id: '3', title: 'Navratri Puja',       duration: '2-3 hours', pandits: '12 pandits', price: '₹2,100', orig: '₹2,100', rating: 4.9, count: 234 },
+  {
+    id: '1',
+    title: 'Satyanarayan Katha',
+    duration: '2-3 hours',
+    pandits: '12 pandits',
+    price: '₹2,100',
+    orig: '₹2,100',
+    rating: 4.9,
+    count: 234,
+    image: require('../../../../assets/HomeScreen/Puja/pooja6.png'),
+  },
+  {
+    id: '2',
+    title: 'Griha Pravesh Puja',
+    duration: '2-3 hours',
+    pandits: '12 pandits',
+    price: '₹2,100',
+    orig: '₹2,100',
+    rating: 4.9,
+    count: 234,
+    image: require('../../../../assets/HomeScreen/Puja/pooja5.png'),
+  },
+  {
+    id: '3',
+    title: 'Navratri Puja',
+    duration: '2-3 hours',
+    pandits: '12 pandits',
+    price: '₹2,100',
+    orig: '₹2,100',
+    rating: 4.9,
+    count: 234,
+    image: require('../../../../assets/HomeScreen/Puja/pooja8.png'),
+  },
 ];
-
 
 const TEMPLES = [
-  { id: '1', name: 'Tirupati Balaji',    sub: 'Abhishekam &\nVIP Darshan',        loc: 'Andhra Pradesh', rating: 4.9, count: 234 },
-  { id: '2', name: 'Kashi Vishwanath',   sub: 'Rudrabhishek &\nGanga Aarti',      loc: 'Varanasi, UP',   rating: 4.9, count: 234 },
-  { id: '3', name: 'Meenakshi Temple',   sub: 'Archana &\nSpecial Darshan',       loc: 'Madurai, TN',    rating: 4.9, count: 234 },
+  {
+    id: '1',
+    name: 'Tirupati Balaji',
+    sub: 'Abhishekam &\nVIP Darshan',
+    loc: 'Andhra Pradesh',
+    rating: 4.9,
+    count: 234,
+    image: require('../../../../assets/HomeScreen/temples/tm3.jpg'),
+  },
+  {
+    id: '2',
+    name: 'Kashi Vishwanath',
+    sub: 'Rudrabhishek &\nGanga Aarti',
+    loc: 'Varanasi, UP',
+    rating: 4.9,
+    count: 234,
+    image: require('../../../../assets/HomeScreen/temples/tm2.jpg'),
+  },
+  {
+    id: '3',
+    name: 'Meenakshi Temple',
+    sub: 'Archana &\nSpecial Darshan',
+    loc: 'Madurai, TN',
+    rating: 4.9,
+    count: 234,
+    image: require('../../../../assets/HomeScreen/temples/tm1.jpg'),
+  },
 ];
 
-
-const SectionRow: React.FC<{ title: string; onViewAll?: () => void }> = ({ title, onViewAll }) => (
+const SectionRow: React.FC<{title: string; onViewAll?: () => void}> = ({
+  title,
+  onViewAll,
+}) => (
   <View style={styles.sectionRow}>
     <Text style={styles.sectionTitle}>{title}</Text>
     {onViewAll && (
-      <TouchableOpacity style={styles.viewAllRow} onPress={onViewAll} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.viewAllRow}
+        onPress={onViewAll}
+        activeOpacity={0.7}>
         <Text style={styles.viewAllText}>View All</Text>
         <Text style={styles.viewAllChevron}>›</Text>
       </TouchableOpacity>
@@ -77,63 +167,54 @@ const SectionRow: React.FC<{ title: string; onViewAll?: () => void }> = ({ title
   </View>
 );
 
-
 const getDotColor = (day: string): string | null => {
   if (AUSPICIOUS_DAYS.includes(day)) return '#34C759';
-  if (FESTIVAL_DAYS.includes(day))   return '#FF8D28';
-  if (PITRA_DAYS.includes(day))      return '#6155F5';
+  if (FESTIVAL_DAYS.includes(day)) return '#FF8D28';
+  if (PITRA_DAYS.includes(day)) return '#6155F5';
   return null;
 };
-
 
 const CalDay: React.FC<{
   day: string | null;
   isSelected: boolean;
   isNextMonth: boolean;
   onPress: (day: string) => void;
-}> = ({ day, isSelected, isNextMonth, onPress }) => {
+}> = ({day, isSelected, isNextMonth, onPress}) => {
   if (!day) return <View style={styles.calCell} />;
   const dotColor = getDotColor(day);
 
   return (
     <TouchableOpacity
-      style={[
-        styles.calCell,
-        isSelected && styles.calCellSelected,
-      ]}
+      style={[styles.calCell, isSelected && styles.calCellSelected]}
       onPress={() => onPress(day)}
-      activeOpacity={0.7}
-    >
-      <Text style={[
-        styles.calDayText,
-        isSelected && styles.calDayTextSelected,
-        isNextMonth && styles.calDayTextNextMonth,
-      ]}>
+      activeOpacity={0.7}>
+      <Text
+        style={[
+          styles.calDayText,
+          isSelected && styles.calDayTextSelected,
+          isNextMonth && styles.calDayTextNextMonth,
+        ]}>
         {day}
       </Text>
       {dotColor && !isSelected && (
-        <View style={[styles.calDot, { backgroundColor: dotColor }]} />
+        <View style={[styles.calDot, {backgroundColor: dotColor}]} />
       )}
     </TouchableOpacity>
   );
 };
 
-
 export const MuhuratCalendarScreen: React.FC = () => {
   const navigation = useNavigation<any>();
-  const insets    = useSafeAreaInsets();
+  const insets = useSafeAreaInsets();
   const [selectedDay, setSelectedDay] = useState<string>('11');
-  const [month, setMonth]             = useState('May');
-  const [year, setYear]               = useState(2026);
+  const [month, setMonth] = useState('May');
+  const [year, setYear] = useState(2026);
 
   return (
     <ScrollView
-      style={[styles.screen, { paddingTop: insets.top }]}
+      style={[styles.screen, {paddingTop: insets.top}]}
       contentContainerStyle={styles.scrollContent}
-      showsVerticalScrollIndicator={false}
-    >
-
-
+      showsVerticalScrollIndicator={false}>
       <View style={styles.topBar}>
         <View style={styles.topBarLeft}>
           <Text style={styles.screenTitle}>Muhurat Calendar</Text>
@@ -146,20 +227,20 @@ export const MuhuratCalendarScreen: React.FC = () => {
         </View>
         <View style={styles.topBarRight}>
           <TouchableOpacity style={styles.iconBtn} activeOpacity={0.7}>
-            <Text style={styles.iconEmoji}>🔔</Text>
+            <Bell size={20} color={FIGMA_PRIMARY} strokeWidth={1.64} />
           </TouchableOpacity>
+
           <TouchableOpacity style={styles.iconBtn} activeOpacity={0.7}>
-            <Text style={styles.iconEmoji}>♡</Text>
+            <Heart size={20} color={FIGMA_PRIMARY} strokeWidth={1.64} />
           </TouchableOpacity>
+
           <TouchableOpacity style={styles.iconBtn} activeOpacity={0.7}>
-            <Text style={styles.iconEmoji}>🛒</Text>
+            <ShoppingCart size={20} color={FIGMA_PRIMARY} strokeWidth={1.64} />
           </TouchableOpacity>
         </View>
       </View>
 
-
       <View style={styles.whiteCalCard}>
-
         <View style={styles.calNavRow}>
           <TouchableOpacity style={styles.calNavBtn} activeOpacity={0.7}>
             <Text style={styles.calNavArrow}>‹</Text>
@@ -181,13 +262,13 @@ export const MuhuratCalendarScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-
         <View style={styles.calDayHeaderRow}>
           {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(d => (
-            <Text key={d} style={styles.calDayHeader}>{d}</Text>
+            <Text key={d} style={styles.calDayHeader}>
+              {d}
+            </Text>
           ))}
         </View>
-
 
         {CALENDAR_ROWS.map((row, ri) => (
           <View key={ri} style={styles.calWeekRow}>
@@ -196,36 +277,35 @@ export const MuhuratCalendarScreen: React.FC = () => {
                 key={`${ri}-${di}`}
                 day={day}
                 isSelected={day === selectedDay}
-                isNextMonth={ri === 4 && day !== null && NEXT_MONTH_DAYS.includes(day ?? '')}
+                isNextMonth={
+                  ri === 4 &&
+                  day !== null &&
+                  NEXT_MONTH_DAYS.includes(day ?? '')
+                }
                 onPress={setSelectedDay}
               />
             ))}
           </View>
         ))}
 
-
         <View style={styles.legend}>
           <View style={styles.legendItem}>
-            <View style={[styles.legendDot, { backgroundColor: '#34C759' }]} />
+            <View style={[styles.legendDot, {backgroundColor: '#34C759'}]} />
             <Text style={styles.legendLabel}>Auspicious</Text>
           </View>
           <View style={styles.legendItem}>
-            <View style={[styles.legendDot, { backgroundColor: '#FF8D28' }]} />
+            <View style={[styles.legendDot, {backgroundColor: '#FF8D28'}]} />
             <Text style={styles.legendLabel}>Festival</Text>
           </View>
           <View style={styles.legendItem}>
-            <View style={[styles.legendDot, { backgroundColor: '#6155F5' }]} />
+            <View style={[styles.legendDot, {backgroundColor: '#6155F5'}]} />
             <Text style={styles.legendLabel}>Pitra</Text>
           </View>
         </View>
       </View>
 
-
       <View style={styles.darkCard}>
-
-
         <View style={styles.darkCardHeader}>
-
           <View style={styles.darkCardDateRow}>
             <View style={styles.dateBadge}>
               <Text style={styles.dateBadgeNum}>{selectedDay}</Text>
@@ -240,19 +320,15 @@ export const MuhuratCalendarScreen: React.FC = () => {
             </View>
           </View>
 
-
           <TouchableOpacity style={styles.bookmarkBtn} activeOpacity={0.7}>
             <Text style={styles.bookmarkIcon}>🔖</Text>
           </TouchableOpacity>
         </View>
 
-
         <View style={styles.darkDivider} />
-
 
         <Text style={styles.timingLabel}>Auspicious Timing Today</Text>
 
-  
         {TIMINGS.map(t => (
           <View key={t.id} style={styles.timingSubCard}>
             <View style={styles.timingSubCardLeft}>
@@ -263,10 +339,8 @@ export const MuhuratCalendarScreen: React.FC = () => {
           </View>
         ))}
 
-     
         <View style={styles.darkDivider} />
 
-       
         <View style={styles.panchaGrid}>
           <View style={styles.panchaVertDivider} />
 
@@ -293,7 +367,6 @@ export const MuhuratCalendarScreen: React.FC = () => {
           </View>
         </View>
 
-      
         <View style={styles.darkCardButtons}>
           <TouchableOpacity style={styles.bookPujaBtn} activeOpacity={0.85}>
             <Text style={styles.bookPujaText}>Book Puja</Text>
@@ -304,14 +377,19 @@ export const MuhuratCalendarScreen: React.FC = () => {
         </View>
       </View>
 
-
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { marginBottom: 12 }]}>Upcoming Muhurats</Text>
+        <Text style={[styles.sectionTitle, {marginBottom: 12}]}>
+          Upcoming Muhurats
+        </Text>
         <View style={styles.upcomingRow}>
           {UPCOMING.map(u => (
-            <TouchableOpacity key={u.id} style={styles.upcomingCard} activeOpacity={0.85}>
+            <TouchableOpacity
+              key={u.id}
+              style={styles.upcomingCard}
+              activeOpacity={0.85}>
               <View style={styles.upcomingInner}>
-                <View style={[styles.upcomingBadge, { backgroundColor: u.color }]}>
+                <View
+                  style={[styles.upcomingBadge, {backgroundColor: u.color}]}>
                   <Text style={styles.upcomingBadgeNum}>{u.day}</Text>
                   <Text style={styles.upcomingBadgeDay}>{u.weekday}</Text>
                 </View>
@@ -325,13 +403,22 @@ export const MuhuratCalendarScreen: React.FC = () => {
         </View>
       </View>
 
-
       <View style={styles.section}>
         <SectionRow title="Smart recommendation" onViewAll={() => {}} />
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.hScroll}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.hScroll}>
           {SMART_RECS.map(item => (
-            <TouchableOpacity key={item.id} style={styles.smartCard} activeOpacity={0.85}>
-              <View style={styles.smartCardImage} />
+            <TouchableOpacity
+              key={item.id}
+              style={styles.smartCard}
+              activeOpacity={0.85}>
+              <Image
+                source={item.image}
+                style={styles.smartCardImage}
+                resizeMode="cover"
+              />
               <Text style={styles.smartCardTitle}>{item.title}</Text>
               <Text style={styles.smartCardDesc}>{item.desc}</Text>
               <View style={styles.smartDateRow}>
@@ -348,13 +435,22 @@ export const MuhuratCalendarScreen: React.FC = () => {
         </ScrollView>
       </View>
 
-
       <View style={styles.section}>
         <SectionRow title="Recommended pujas" onViewAll={() => {}} />
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.hScroll}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.hScroll}>
           {REC_PUJAS.map(item => (
-            <TouchableOpacity key={item.id} style={styles.pujaCard} activeOpacity={0.85}>
-              <View style={styles.pujaCardImage} />
+            <TouchableOpacity
+              key={item.id}
+              style={styles.pujaCard}
+              activeOpacity={0.85}>
+              <Image
+                source={item.image}
+                style={styles.pujaCardImage}
+                resizeMode="cover"
+              />
               <Text style={styles.pujaCardTitle}>{item.title}</Text>
               <View style={styles.pujaMeta}>
                 <Text style={styles.pujaMetaText}>⏱ {item.duration}</Text>
@@ -375,13 +471,22 @@ export const MuhuratCalendarScreen: React.FC = () => {
         </ScrollView>
       </View>
 
-
-      <View style={[styles.section, { marginBottom: 32 }]}>
+      <View style={[styles.section, {marginBottom: 32}]}>
         <SectionRow title="Temples Events" onViewAll={() => {}} />
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.hScroll}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.hScroll}>
           {TEMPLES.map(item => (
-            <TouchableOpacity key={item.id} style={styles.templeCard} activeOpacity={0.85}>
-              <View style={styles.templeCardImage} />
+            <TouchableOpacity
+              key={item.id}
+              style={styles.templeCard}
+              activeOpacity={0.85}>
+              <Image
+                source={item.image}
+                style={styles.templeCardImage}
+                resizeMode="cover"
+              />
               <Text style={styles.templeCardTitle}>{item.name}</Text>
               <Text style={styles.templeCardSub}>{item.sub}</Text>
               <View style={styles.templeLoc}>
@@ -397,34 +502,31 @@ export const MuhuratCalendarScreen: React.FC = () => {
           ))}
         </ScrollView>
       </View>
-
     </ScrollView>
   );
 };
 
-const FIGMA_PRIMARY   = '#2B000A';
-const FIGMA_GOLD      = '#F3B416';
+const FIGMA_PRIMARY = '#2B000A';
+const FIGMA_GOLD = '#F3B416';
 const FIGMA_GOLD_DARK = '#DDAB2C';
-const FIGMA_CARD_BG   = '#2B000A';
+const FIGMA_CARD_BG = '#2B000A';
 const FIGMA_TIMING_BG = '#540B1C';
-const FIGMA_GONDOLA   = '#281518';
-const FIGMA_GRAY      = '#757575';
-const FIGMA_BORDER    = '#D9D9D9';
+const FIGMA_GONDOLA = '#281518';
+const FIGMA_GRAY = '#757575';
+const FIGMA_BORDER = '#D9D9D9';
 
-
-const CAL_CELL_SIZE = Math.floor((SCREEN_WIDTH - CONTENT_PADDING * 2 - 32 - 6 * 6.5) / 7);
+const CAL_CELL_SIZE = Math.floor(
+  (SCREEN_WIDTH - CONTENT_PADDING * 2 - 32 - 6 * 6.5) / 7,
+);
 
 const styles = StyleSheet.create({
-
-
   screen: {
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
   scrollContent: {
-    paddingBottom: 20,
+    paddingBottom: 100,
   },
-
 
   topBar: {
     flexDirection: 'row',
@@ -480,17 +582,13 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingTop: 4,
   },
+
   iconBtn: {
     width: 24,
     height: 24,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  iconEmoji: {
-    fontSize: 18,
-    color: FIGMA_PRIMARY,
-  },
-
 
   whiteCalCard: {
     marginHorizontal: CONTENT_PADDING,
@@ -505,14 +603,12 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: {width: 0, height: 4},
         shadowOpacity: 0.06,
         shadowRadius: 20,
-      },
-      android: { elevation: 3 },
+      }
     }),
   },
-
 
   calNavRow: {
     flexDirection: 'row',
@@ -563,7 +659,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
- 
   calDayHeaderRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -579,13 +674,11 @@ const styles = StyleSheet.create({
     color: FIGMA_GRAY,
   },
 
-
   calWeekRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginBottom: 2,
   },
-
 
   calCell: {
     width: CAL_CELL_SIZE,
@@ -699,7 +792,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 
-
   nakshatraPill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -735,13 +827,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 
-
   darkDivider: {
     height: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
     marginVertical: 12,
   },
-
 
   timingLabel: {
     fontFamily: Platform.OS === 'ios' ? 'Lato-Bold' : 'Lato_700Bold',
@@ -751,7 +841,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     marginBottom: 8,
   },
-
 
   timingSubCard: {
     backgroundColor: FIGMA_TIMING_BG,
@@ -783,7 +872,6 @@ const styles = StyleSheet.create({
   timingEmoji: {
     fontSize: 36,
   },
-
 
   panchaGrid: {
     flexDirection: 'row',
@@ -824,7 +912,6 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: '#FFFFFF',
   },
-
 
   darkCardButtons: {
     flexDirection: 'row',
@@ -927,11 +1014,11 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: {width: 0, height: 4},
         shadowOpacity: 0.06,
         shadowRadius: 20,
       },
-      android: { elevation: 2 },
+      android: {elevation: 2},
     }),
   },
   upcomingBadgeNum: {
@@ -985,15 +1072,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#727272',
     borderRadius: 16,
     marginBottom: 4,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.06,
-        shadowRadius: 20,
-      },
-      android: { elevation: 3 },
-    }),
   },
   smartCardTitle: {
     fontFamily: Platform.OS === 'ios' ? 'Lato-Bold' : 'Lato_700Bold',
@@ -1042,15 +1120,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#727272',
     borderRadius: 16,
     marginBottom: 4,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.06,
-        shadowRadius: 20,
-      },
-      android: { elevation: 3 },
-    }),
   },
   pujaCardTitle: {
     fontFamily: Platform.OS === 'ios' ? 'Lato-Bold' : 'Lato_700Bold',
@@ -1107,15 +1176,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#727272',
     borderRadius: 16,
     marginBottom: 4,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.06,
-        shadowRadius: 20,
-      },
-      android: { elevation: 3 },
-    }),
   },
   templeCardTitle: {
     fontFamily: Platform.OS === 'ios' ? 'Lato-Bold' : 'Lato_700Bold',

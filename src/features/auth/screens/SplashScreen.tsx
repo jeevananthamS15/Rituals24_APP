@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'; // ✅ added useEffect
+import React, {useEffect} from 'react'; 
 import {
   View,
   Text,
@@ -9,14 +9,12 @@ import {
   Platform,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackScreenProps} from '@react-navigation/native-stack'; // ✅ added
-import {RootStackParamList} from '../../../app/navigation/types'; // ✅ added
+import {NativeStackScreenProps} from '@react-navigation/native-stack'; 
+import {RootStackParamList} from '../../../app/navigation/types'; 
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Splash'> & {
   onFinish: () => void;
 };
-
-
 
 const {width, height} = Dimensions.get('window');
 
@@ -27,7 +25,6 @@ const scale = (size: number) => (width / guidelineBaseWidth) * size;
 const verticalScale = (size: number) => (height / guidelineBaseHeight) * size;
 const moderateScale = (size: number, factor = 0.5) =>
   size + (scale(size) - size) * factor;
-
 
 const BackgroundGlow = () => {
   const glowSize = Math.max(width, height) * 1.2;
@@ -47,7 +44,6 @@ const BackgroundGlow = () => {
     />
   );
 };
-
 
 const DecorativeEllipse = ({
   source,
@@ -84,7 +80,6 @@ const DecorativeEllipse = ({
   );
 };
 
-
 const SplashLogoSection = () => {
   return (
     <View style={styles.logoContainer}>
@@ -93,31 +88,27 @@ const SplashLogoSection = () => {
         style={styles.logo}
         resizeMode="contain"
       />
-
       <View style={styles.divider} />
-
-      <Text style={styles.tagline}>
-        Your Sacred Journey, Simplified
-      </Text>
+      <Text style={styles.tagline}>Your Sacred Journey, Simplified</Text>
     </View>
   );
 };
 
-
 export const SplashScreen = ({onFinish}: Props) => {
-
-
   useEffect(() => {
     const timer = setTimeout(() => {
       onFinish();
-    },5000);
-
+    }, 5000);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <View style={styles.container}>
-      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="light-content"
+      />
 
       <BackgroundGlow />
 
@@ -176,7 +167,6 @@ export const SplashScreen = ({onFinish}: Props) => {
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -206,10 +196,11 @@ const styles = StyleSheet.create({
   },
 
   divider: {
-    width: scale(185),
-    borderTopWidth: 1,
+    width: '75%', 
+    alignSelf: 'center',
+    borderTopWidth: moderateScale(1),
     borderColor: 'rgba(255,255,255,0.85)',
-    marginTop: moderateScale(6),
+    marginTop: verticalScale(-35),
     marginBottom: moderateScale(4),
   },
 
@@ -219,7 +210,9 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#FFFFFF',
     textAlign: 'center',
-    marginTop: moderateScale(2),
+
+    marginTop: verticalScale(15),
+    paddingHorizontal: scale(20), 
     fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',
   },
 

@@ -30,13 +30,8 @@ import {
 
 import { StoreStackParamList } from '../../../app/navigation/types';
 import { MOCK_PRODUCTS } from '../../../constants/mockData';
-
-
 const { width: SW } = Dimensions.get('window');
-
-
 const scale = (px: number) => (px / 393) * SW;
-
 const PRIMARY = '#2B000A';
 const GONDOLA = '#281518';
 const WHITE = '#FFFFFF';

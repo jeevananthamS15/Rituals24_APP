@@ -6,16 +6,14 @@ import {
   BhajanService,
 } from '../types';
 
-/* -------------------------------------------------------------------------- */
-/*                                  PUJAS                                     */
-/* -------------------------------------------------------------------------- */
+
 
 export const MOCK_PUJAS: Puja[] = [
   {
     id: 'p1',
     title: 'Satyanarayan Katha',
 
-    imageUrl: require('../../assets/HomeScreen/Puja/puja1.png'),
+    imageUrl: require('../../assets/HomeScreen/Puja/pooja8.png'),
 
     price: 2100,
     originalPrice: 2500,
@@ -60,16 +58,14 @@ export const MOCK_PUJAS: Puja[] = [
   },
 ];
 
-/* -------------------------------------------------------------------------- */
-/*                                  PANDITS                                   */
-/* -------------------------------------------------------------------------- */
+
 
 export const MOCK_PANDITS: Pandit[] = [
   {
     id: 'pt1',
     name: 'Pt. Acharya Vivek',
 
-    imageUrl: require('../../assets/HomeScreen/pandit/pandit1.png'),
+    imageUrl: require('../../assets/HomeScreen/pandit/pandit_1.png'),
 
     tier: 'gold',
 
@@ -93,7 +89,7 @@ export const MOCK_PANDITS: Pandit[] = [
     id: 'pt2',
     name: 'Pt. Suresh Dikshit',
 
- imageUrl: require('../../assets/HomeScreen/pandit/pandit2.png'),
+ imageUrl: require('../../assets/HomeScreen/pandit/pandit_2.png'),
 
     tier: 'silver',
 
@@ -117,7 +113,7 @@ export const MOCK_PANDITS: Pandit[] = [
     id: 'pt3',
     name: 'Pt. Ramesh Shastri',
 
-   imageUrl: require('../../assets/HomeScreen/pandit/pandit3.png'),
+   imageUrl: require('../../assets/HomeScreen/pandit/pandit_3.png'),
 
     tier: 'bronze',
 
@@ -138,9 +134,6 @@ export const MOCK_PANDITS: Pandit[] = [
   },
 ];
 
-/* -------------------------------------------------------------------------- */
-/*                                  TEMPLES                                   */
-/* -------------------------------------------------------------------------- */
 
 export const MOCK_TEMPLES: Temple[] = [
   {
@@ -152,7 +145,7 @@ export const MOCK_TEMPLES: Temple[] = [
 
     location: 'Andhra Pradesh',
 
-     imageUrl: require('../../assets/HomeScreen/Puja/puja1.png'),
+     imageUrl: require('../../assets/HomeScreen/temples/tm1.jpg'),
 
     rating: 4.9,
     reviewCount: 234,
@@ -167,7 +160,7 @@ export const MOCK_TEMPLES: Temple[] = [
 
     location: 'Varanasi, UP',
 
-   imageUrl: require('../../assets/HomeScreen/Puja/puja2.png'),
+   imageUrl: require('../../assets/HomeScreen/temples/tm2.jpg'),
 
     rating: 4.8,
     reviewCount: 190,
@@ -182,16 +175,14 @@ export const MOCK_TEMPLES: Temple[] = [
 
     location: 'Madurai, TN',
 
-   imageUrl: require('../../assets/HomeScreen/Puja/puja3.png'),
+   imageUrl: require('../../assets/HomeScreen/temples/tm3.jpg'),
 
     rating: 4.9,
     reviewCount: 278,
   },
 ];
 
-/* -------------------------------------------------------------------------- */
-/*                                  PRODUCTS                                  */
-/* -------------------------------------------------------------------------- */
+
 
 export const MOCK_PRODUCTS: Product[] = [
   {
@@ -201,7 +192,7 @@ export const MOCK_PRODUCTS: Product[] = [
 
     itemCount: 21,
 
-     imageUrl: require('../../assets/HomeScreen/StoreKit/pr1.png'),
+     imageUrl: require('../../assets/HomeScreen/StoreKit/pk1.jpg'),
 
     price: 2100,
     originalPrice: 2600,
@@ -217,7 +208,7 @@ export const MOCK_PRODUCTS: Product[] = [
 
     itemCount: 35,
 
-     imageUrl: require('../../assets/HomeScreen/StoreKit/pr2.png'),
+     imageUrl: require('../../assets/HomeScreen/StoreKit/pk2.jpg'),
 
     price: 3100,
     originalPrice: 3600,
@@ -233,7 +224,7 @@ export const MOCK_PRODUCTS: Product[] = [
 
     itemCount: 18,
 
- imageUrl: require('../../assets/HomeScreen/StoreKit/pr3.png'),
+ imageUrl: require('../../assets/HomeScreen/StoreKit/pk3.jpg'),
 
     price: 1800,
     originalPrice: 2400,
@@ -243,9 +234,7 @@ export const MOCK_PRODUCTS: Product[] = [
   },
 ];
 
-/* -------------------------------------------------------------------------- */
-/*                                  BHAJANS                                   */
-/* -------------------------------------------------------------------------- */
+
 
 export const MOCK_BHAJANS: BhajanService[] = [
   {
@@ -256,7 +245,7 @@ export const MOCK_BHAJANS: BhajanService[] = [
     description:
       'Classical devotional songs with traditional ragas',
 
-   imageUrl: require('../../assets/HomeScreen/Puja/puja3.png'),
+   imageUrl: require('../../assets/HomeScreen/Puja/pooja5.png'),
 
     price: 2100,
     originalPrice: 2600,
@@ -273,7 +262,7 @@ export const MOCK_BHAJANS: BhajanService[] = [
     description:
       'Extended evening kirtan & bhajan experience',
 
-     imageUrl: require('../../assets/HomeScreen/Puja/puja3.png'),
+     imageUrl: require('../../assets/HomeScreen/Puja/pooja6.png'),
 
     price: 3100,
     originalPrice: 3600,
@@ -290,7 +279,7 @@ export const MOCK_BHAJANS: BhajanService[] = [
     description:
       'Peaceful devotional chanting and spiritual songs',
 
-     imageUrl: require('../../assets/HomeScreen/Puja/puja3.png'),
+     imageUrl: require('../../assets/HomeScreen/StoreKit/pk3.jpg'),
 
     price: 1800,
     originalPrice: 2200,

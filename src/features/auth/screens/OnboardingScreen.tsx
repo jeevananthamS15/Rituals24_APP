@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontFamily: 'Lato-Bold',
+    fontFamily: 'Lato',
     fontSize:   scaleW(28),
     lineHeight: scaleW(36),
     fontWeight: '700',

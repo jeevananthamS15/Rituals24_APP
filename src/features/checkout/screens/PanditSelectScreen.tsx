@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -9,26 +9,24 @@ import {
   Platform,
   Image,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-const { width: SW } = Dimensions.get('window');
+const {width: SW} = Dimensions.get('window');
 const BASE = 393;
 const sc = (n: number) => (SW / BASE) * n;
 
-
-const PRIMARY    = '#2B000A';
+const PRIMARY = '#2B000A';
 const PRIMARY_DK = '#540B1C';
-const GOLD       = '#F3B416';
-const GOLD2      = '#DDAB2C';
-const WHITE      = '#FFFFFF';
-const SURFACE    = '#F9F9F9';
-const BORDER     = '#D9D9D9';
-const TEXT_PRI   = '#000000';
-const TEXT_DEEP  = '#281518';
-const TEXT_SEC   = '#757575';
-const TEXT_GREY  = '#666666';
+const GOLD = '#F3B416';
+const GOLD2 = '#DDAB2C';
+const WHITE = '#FFFFFF';
+const SURFACE = '#F9F9F9';
+const BORDER = '#D9D9D9';
+const TEXT_PRI = '#000000';
+const TEXT_DEEP = '#281518';
+const TEXT_SEC = '#757575';
+const TEXT_GREY = '#666666';
 const TEXT_ON_DK = 'rgba(255,255,255,0.75)';
-
 
 interface Pandit {
   id: string;
@@ -41,7 +39,7 @@ interface Pandit {
   price: string;
   rituals?: string;
   specialist?: string;
-  imageUri?: string;
+  image: any;
 }
 
 const PANDITS: Pandit[] = [
@@ -56,6 +54,7 @@ const PANDITS: Pandit[] = [
     price: '₹2,100',
     rituals: '1,200 Completed',
     specialist: 'Satyanarayan puja, Muhurat Selection',
+    image: require('../../../../assets/HomeScreen/pandit/pandit_1.png'),
   },
   {
     id: '2',
@@ -66,6 +65,7 @@ const PANDITS: Pandit[] = [
     years: '15 Years',
     languages: 'Hindi, Sanskrit',
     price: '₹2,100',
+    image: require('../../../../assets/HomeScreen/pandit/pandit_2.png'),
   },
   {
     id: '3',
@@ -76,36 +76,58 @@ const PANDITS: Pandit[] = [
     years: '15 Years',
     languages: 'Hindi, Sanskrit',
     price: '₹2,100',
+    image: require('../../../../assets/HomeScreen/pandit/pandit_3.png'),
   },
 ];
 
+const ProgressBar = ({
+  currentStep,
+  totalSteps = 5,
+}: {
+  currentStep: number;
+  totalSteps?: number;
+}) => (
+  <View style={hdr.progRow}>
+    {Array.from({length: totalSteps}).map((_, index) => {
+      const isActive = index + 1 <= currentStep;
 
-const Header: React.FC<{ step: number; filledCount: number; onBack: () => void }> = ({
-  step, filledCount, onBack,
-}) => {
+      return (
+        <View
+          key={`step-${index}`}
+          style={[hdr.seg, isActive ? hdr.activeSeg : hdr.inactiveSeg]}
+        />
+      );
+    })}
+  </View>
+);
+
+const Header: React.FC<{
+  step: number;
+  filledCount: number;
+  onBack: () => void;
+}> = ({step, filledCount, onBack}) => {
   const insets = useSafeAreaInsets();
-  const segColors = [
-    '#F3B416', '#DDAB2C', '#DDAB2C',
-    'rgba(255,255,255,0.2)', 'rgba(255,255,255,0.2)',
-  ];
+
   return (
-    <View style={[hdr.wrap, { paddingTop: insets.top + sc(8) }]}>
-      <TouchableOpacity style={hdr.backBtn} onPress={onBack} activeOpacity={0.8}>
+    <View style={[hdr.wrap, {paddingTop: insets.top + sc(8)}]}>
+      <TouchableOpacity
+        style={hdr.backBtn}
+        onPress={onBack}
+        activeOpacity={0.8}>
         <View style={hdr.circle}>
           <View style={hdr.chevron} />
         </View>
       </TouchableOpacity>
+
       <View style={hdr.titleBlock}>
         <Text style={hdr.title}>Satyanarayan puja</Text>
+
         <Text style={hdr.step}>
           Step <Text style={hdr.bold}>{step} / 5</Text> :{' '}
           <Text style={hdr.bold}>Service mode</Text>
         </Text>
-      </View>
-      <View style={hdr.progRow}>
-        {segColors.map((c, i) => (
-          <View key={i} style={[hdr.seg, { backgroundColor: c }]} />
-        ))}
+
+        <ProgressBar currentStep={filledCount} />
       </View>
     </View>
   );
@@ -119,27 +141,79 @@ const hdr = StyleSheet.create({
     paddingHorizontal: sc(20),
     paddingBottom: sc(20),
   },
-  backBtn: { position: 'absolute', left: sc(20), bottom: sc(46) },
-  circle: {
-    width: sc(32), height: sc(32), borderRadius: sc(16),
-    backgroundColor: WHITE, alignItems: 'center', justifyContent: 'center',
-  },
-  chevron: {
-    width: sc(8), height: sc(8),
-    borderLeftWidth: 2, borderBottomWidth: 2, borderColor: PRIMARY,
-    transform: [{ rotate: '45deg' }, { translateX: sc(2) }],
-  },
-  titleBlock: { marginLeft: sc(52), marginTop: sc(10) },
-  title: {
-    fontWeight: '700', fontSize: sc(28), lineHeight: sc(36), color: WHITE,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
-  },
-  step: { fontSize: sc(10), lineHeight: sc(12), color: WHITE, marginTop: sc(2) },
-  bold: { fontWeight: '700' },
-  progRow: { flexDirection: 'row', gap: sc(18), marginTop: sc(14) },
-  seg: { width: sc(40), height: 5, borderRadius: 100 },
-});
 
+  backBtn: {
+    position: 'absolute',
+    left: sc(20),
+    bottom: sc(46),
+  },
+
+  circle: {
+    width: sc(32),
+    height: sc(32),
+    borderRadius: sc(16),
+    backgroundColor: WHITE,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  chevron: {
+    width: sc(8),
+    height: sc(8),
+    borderLeftWidth: 2,
+    borderBottomWidth: 2,
+    borderColor: PRIMARY,
+    transform: [{rotate: '45deg'}, {translateX: sc(2)}],
+  },
+
+  titleBlock: {
+    marginLeft: sc(48),
+    marginTop: sc(6),
+    paddingRight: sc(8),
+  },
+
+  title: {
+    fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',
+    fontWeight: '700',
+    fontSize: sc(28),
+    lineHeight: sc(36),
+    color: WHITE,
+  },
+
+  step: {
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter',
+    fontSize: sc(10),
+    lineHeight: sc(12),
+    color: WHITE,
+    marginTop: sc(2),
+  },
+
+  bold: {
+    fontWeight: '700',
+  },
+
+  progRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: sc(14),
+    gap: sc(10),
+    width: '100%',
+  },
+
+  seg: {
+    flex: 1,
+    height: sc(4),
+    borderRadius: 100,
+  },
+
+  activeSeg: {
+    backgroundColor: '#F3B416',
+  },
+
+  inactiveSeg: {
+    backgroundColor: 'rgba(255,255,255,0.18)',
+  },
+});
 
 const SummaryBar: React.FC = () => (
   <View style={sb.wrap}>
@@ -161,15 +235,32 @@ const SummaryBar: React.FC = () => (
 
 const sb = StyleSheet.create({
   wrap: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: SURFACE, borderWidth: 1, borderColor: BORDER,
-    borderRadius: sc(12), paddingVertical: sc(8), paddingHorizontal: sc(16),
-    marginHorizontal: sc(20), marginTop: sc(12), marginBottom: sc(4),
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: SURFACE,
+    borderWidth: 1,
+    borderColor: BORDER,
+    borderRadius: sc(12),
+    paddingVertical: sc(8),
+    paddingHorizontal: sc(16),
+    marginHorizontal: sc(20),
+    marginTop: sc(12),
+    marginBottom: sc(4),
   },
-  cell: { flex: 1, alignItems: 'center', gap: sc(4) },
-  lbl: { fontSize: sc(10), color: TEXT_PRI, lineHeight: sc(12) },
-  val: { fontSize: sc(10), fontWeight: '700', color: TEXT_PRI, lineHeight: sc(12) },
-  div: { width: 1, height: sc(28), backgroundColor: BORDER, marginHorizontal: sc(4) },
+  cell: {flex: 1, alignItems: 'center', gap: sc(4)},
+  lbl: {fontSize: sc(10), color: TEXT_PRI, lineHeight: sc(12)},
+  val: {
+    fontSize: sc(10),
+    fontWeight: '700',
+    color: TEXT_PRI,
+    lineHeight: sc(12),
+  },
+  div: {
+    width: 1,
+    height: sc(28),
+    backgroundColor: BORDER,
+    marginHorizontal: sc(4),
+  },
 });
 
 // ─── Pandit Card ──────────────────────────────────────────────────────────────
@@ -177,27 +268,31 @@ const PanditCard: React.FC<{
   pandit: Pandit;
   selected: boolean;
   onSelect: () => void;
-}> = ({ pandit, selected, onSelect }) => {
+}> = ({pandit, selected, onSelect}) => {
   const isDark = selected;
-  const cardBg  = isDark ? PRIMARY : SURFACE;
+  const cardBg = isDark ? PRIMARY : SURFACE;
   const nameClr = isDark ? WHITE : TEXT_DEEP;
   const metaClr = isDark ? WHITE : TEXT_SEC;
-  const subClr  = isDark ? TEXT_ON_DK : TEXT_GREY;
+  const subClr = isDark ? TEXT_ON_DK : TEXT_GREY;
   const priceClr = isDark ? WHITE : TEXT_DEEP;
 
   return (
     <TouchableOpacity
-      style={[pc.card, { backgroundColor: cardBg, borderColor: isDark ? PRIMARY : BORDER }]}
+      style={[
+        pc.card,
+        {backgroundColor: cardBg, borderColor: isDark ? PRIMARY : BORDER},
+      ]}
       onPress={onSelect}
-      activeOpacity={0.85}
-    >
+      activeOpacity={0.85}>
       {/* Top row */}
       <View style={pc.topRow}>
         {/* Avatar placeholder */}
         <View style={pc.avatarWrap}>
-          <View style={pc.avatarPlaceholder}>
-            <Text style={pc.avatarEmoji}>🧘</Text>
-          </View>
+          <Image
+            source={pandit.image}
+            style={pc.avatarImage}
+            resizeMode="cover"
+          />
           {/* 300+ Pujas badge under avatar */}
           <View style={pc.pujasBadge}>
             <Text style={pc.pujasBadgeText}>300+ Pujas</Text>
@@ -206,13 +301,17 @@ const PanditCard: React.FC<{
 
         {/* Info */}
         <View style={pc.infoBlock}>
-          <Text style={[pc.name, { color: nameClr }]}>{pandit.name}</Text>
+          <Text style={[pc.name, {color: nameClr}]}>{pandit.name}</Text>
 
           {/* Rating row */}
           <View style={pc.ratingRow}>
             <Text style={pc.star}>★</Text>
-            <Text style={[pc.ratingNum, { color: nameClr }]}>{pandit.rating}</Text>
-            <Text style={[pc.reviews, { color: metaClr }]}>({pandit.reviews})</Text>
+            <Text style={[pc.ratingNum, {color: nameClr}]}>
+              {pandit.rating}
+            </Text>
+            <Text style={[pc.reviews, {color: metaClr}]}>
+              ({pandit.reviews})
+            </Text>
             <View style={pc.goldBadge}>
               <Text style={pc.goldText}>{pandit.tier}</Text>
             </View>
@@ -220,33 +319,44 @@ const PanditCard: React.FC<{
 
           {/* Years · Languages */}
           <View style={pc.metaRow}>
-            <Text style={[pc.metaTxt, { color: metaClr }]}>{pandit.years}</Text>
+            <Text style={[pc.metaTxt, {color: metaClr}]}>{pandit.years}</Text>
             <View style={pc.dot} />
-            <Text style={[pc.metaTxt, { color: metaClr }]}>{pandit.languages}</Text>
+            <Text style={[pc.metaTxt, {color: metaClr}]}>
+              {pandit.languages}
+            </Text>
           </View>
         </View>
 
         {/* Price */}
-        <Text style={[pc.price, { color: priceClr }]}>{pandit.price}</Text>
+        <Text style={[pc.price, {color: priceClr}]}>{pandit.price}</Text>
       </View>
 
       {/* Expanded info (only first / selected) */}
       {(pandit.rituals || pandit.specialist) && (
         <>
-          <View style={[pc.divider, { borderColor: isDark ? 'rgba(255,255,255,0.2)' : BORDER }]} />
+          <View
+            style={[
+              pc.divider,
+              {borderColor: isDark ? 'rgba(255,255,255,0.2)' : BORDER},
+            ]}
+          />
           <View style={pc.extraBlock}>
             {pandit.rituals && (
               <View style={pc.extraRow}>
-                <Text style={[pc.extraIcon, { color: subClr }]}>✓</Text>
-                <Text style={[pc.extraLbl, { color: subClr }]}>Riruals: </Text>
-                <Text style={[pc.extraVal, { color: subClr }]}>{pandit.rituals}</Text>
+                <Text style={[pc.extraIcon, {color: subClr}]}>✓</Text>
+                <Text style={[pc.extraLbl, {color: subClr}]}>Riruals: </Text>
+                <Text style={[pc.extraVal, {color: subClr}]}>
+                  {pandit.rituals}
+                </Text>
               </View>
             )}
             {pandit.specialist && (
               <View style={pc.extraRow}>
-                <Text style={[pc.extraIcon, { color: subClr }]}>👤</Text>
-                <Text style={[pc.extraLbl, { color: subClr }]}>Specilist: </Text>
-                <Text style={[pc.extraVal, { color: subClr }]}>{pandit.specialist}</Text>
+                <Text style={[pc.extraIcon, {color: subClr}]}>👤</Text>
+                <Text style={[pc.extraLbl, {color: subClr}]}>Specilist: </Text>
+                <Text style={[pc.extraVal, {color: subClr}]}>
+                  {pandit.specialist}
+                </Text>
               </View>
             )}
           </View>
@@ -258,55 +368,69 @@ const PanditCard: React.FC<{
 
 const pc = StyleSheet.create({
   card: {
-    borderRadius: sc(16), borderWidth: 1,
-    padding: sc(16), gap: sc(10),
+    borderRadius: sc(16),
+    borderWidth: 1,
+    padding: sc(16),
+    gap: sc(10),
   },
-  topRow: { flexDirection: 'row', alignItems: 'center', gap: sc(8) },
-  avatarWrap: { alignItems: 'center', gap: sc(4) },
-  avatarPlaceholder: {
-    width: sc(77), height: sc(76), borderRadius: sc(16),
-    backgroundColor: 'rgba(120,120,128,0.15)',
-    alignItems: 'center', justifyContent: 'center',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06, shadowRadius: 20, elevation: 2,
+  topRow: {flexDirection: 'row', alignItems: 'center', gap: sc(8)},
+  avatarWrap: {alignItems: 'center', gap: sc(4)},
+  avatarImage: {
+    width: sc(77),
+    height: sc(76),
+    borderRadius: sc(16),
+
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.06,
+    shadowRadius: 20,
   },
-  avatarEmoji: { fontSize: sc(32) },
   pujasBadge: {
-    backgroundColor: GOLD2, borderRadius: sc(30),
-    paddingHorizontal: sc(4), paddingVertical: sc(2),
+    backgroundColor: GOLD2,
+    borderRadius: sc(30),
+    paddingHorizontal: sc(4),
+    paddingVertical: sc(2),
   },
-  pujasBadgeText: { fontSize: sc(7), fontWeight: '700', color: WHITE },
-  infoBlock: { flex: 1, gap: sc(4) },
+  pujasBadgeText: {fontSize: sc(7), fontWeight: '700', color: WHITE},
+  infoBlock: {flex: 1, gap: sc(4)},
   name: {
-    fontWeight: '700', fontSize: sc(14), lineHeight: sc(22),
+    fontWeight: '700',
+    fontSize: sc(14),
+    lineHeight: sc(22),
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
-  ratingRow: { flexDirection: 'row', alignItems: 'center', gap: sc(2) },
-  star: { color: GOLD, fontSize: sc(14) },
-  ratingNum: { fontWeight: '700', fontSize: sc(12), lineHeight: sc(18) },
-  reviews: { fontSize: sc(10), lineHeight: sc(12) },
+  ratingRow: {flexDirection: 'row', alignItems: 'center', gap: sc(2)},
+  star: {color: GOLD, fontSize: sc(14)},
+  ratingNum: {fontWeight: '700', fontSize: sc(12), lineHeight: sc(18)},
+  reviews: {fontSize: sc(10), lineHeight: sc(12)},
   goldBadge: {
-    backgroundColor: GOLD2, borderRadius: sc(16),
-    paddingHorizontal: sc(4), paddingVertical: sc(2),
+    backgroundColor: GOLD2,
+    borderRadius: sc(16),
+    paddingHorizontal: sc(4),
+    paddingVertical: sc(2),
   },
-  goldText: { fontSize: sc(10), color: WHITE, lineHeight: sc(12) },
-  metaRow: { flexDirection: 'row', alignItems: 'center', gap: sc(4) },
-  metaTxt: { fontSize: sc(10), lineHeight: sc(12) },
-  dot: { width: 3, height: 3, borderRadius: 2, backgroundColor: TEXT_SEC },
+  goldText: {fontSize: sc(10), color: WHITE, lineHeight: sc(12)},
+  metaRow: {flexDirection: 'row', alignItems: 'center', gap: sc(4)},
+  metaTxt: {fontSize: sc(10), lineHeight: sc(12)},
+  dot: {width: 3, height: 3, borderRadius: 2, backgroundColor: TEXT_SEC},
   price: {
-    fontWeight: '700', fontSize: sc(24), lineHeight: sc(32),
+    fontWeight: '700',
+    fontSize: sc(24),
+    lineHeight: sc(32),
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
-  divider: { borderTopWidth: 0.75, marginVertical: sc(2) },
-  extraBlock: { gap: sc(4) },
-  extraRow: { flexDirection: 'row', alignItems: 'center', gap: sc(4) },
-  extraIcon: { fontSize: sc(12) },
-  extraLbl: { fontSize: sc(12), fontWeight: '700', lineHeight: sc(18) },
-  extraVal: { fontSize: sc(12), lineHeight: sc(18) },
+  divider: {borderTopWidth: 0.75, marginVertical: sc(2)},
+  extraBlock: {gap: sc(4)},
+  extraRow: {flexDirection: 'row', alignItems: 'center', gap: sc(4)},
+  extraIcon: {fontSize: sc(12)},
+  extraLbl: {fontSize: sc(12), fontWeight: '700', lineHeight: sc(18)},
+  extraVal: {fontSize: sc(12), lineHeight: sc(18)},
 });
 
 // ─── Main Screen ──────────────────────────────────────────────────────────────
-export const PanditSelectScreen: React.FC<{ navigation?: any }> = ({ navigation }) => {
+export const PanditSelectScreen: React.FC<{navigation?: any}> = ({
+  navigation,
+}) => {
   const [selectedId, setSelectedId] = useState<string>('1');
   const insets = useSafeAreaInsets();
 
@@ -315,7 +439,9 @@ export const PanditSelectScreen: React.FC<{ navigation?: any }> = ({ navigation 
       <Header step={3} filledCount={3} onBack={() => navigation?.goBack()} />
       <SummaryBar />
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={s.scroll}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={s.scroll}>
         <Text style={s.heading}>Matched Pandits</Text>
         <Text style={s.subheading}>
           Pandits selected based on your puja type, mode, and chosen date
@@ -332,13 +458,12 @@ export const PanditSelectScreen: React.FC<{ navigation?: any }> = ({ navigation 
       </ScrollView>
 
       {/* Footer */}
-      <View style={[s.footer, { paddingBottom: insets.bottom + sc(8) }]}>
+      <View style={[s.footer, {paddingBottom: insets.bottom + sc(8)}]}>
         <TouchableOpacity
           style={[s.cta, !selectedId && s.ctaDis]}
           onPress={() => navigation?.navigate('AddOns')}
           disabled={!selectedId}
-          activeOpacity={0.88}
-        >
+          activeOpacity={0.88}>
           <Text style={s.ctaTxt}>Continue Booking</Text>
           <Text style={s.ctaArrow}> →</Text>
         </TouchableOpacity>
@@ -348,27 +473,49 @@ export const PanditSelectScreen: React.FC<{ navigation?: any }> = ({ navigation 
 };
 
 const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: WHITE },
-  scroll: { paddingHorizontal: sc(20), paddingTop: sc(16), paddingBottom: sc(24), gap: sc(12) },
+  container: {flex: 1, backgroundColor: WHITE},
+  scroll: {
+    paddingHorizontal: sc(20),
+    paddingTop: sc(16),
+    paddingBottom: sc(24),
+    gap: sc(12),
+  },
   heading: {
-    fontWeight: '700', fontSize: sc(20), lineHeight: sc(28), color: TEXT_PRI,
+    fontWeight: '700',
+    fontSize: sc(20),
+    lineHeight: sc(28),
+    color: TEXT_PRI,
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
   subheading: {
-    fontSize: sc(14), lineHeight: sc(22), color: TEXT_SEC,
+    fontSize: sc(14),
+    lineHeight: sc(22),
+    color: TEXT_SEC,
     marginBottom: sc(4),
   },
   footer: {
-    backgroundColor: WHITE, borderTopWidth: 1, borderTopColor: BORDER,
-    paddingHorizontal: sc(20), paddingTop: sc(16),
+    backgroundColor: WHITE,
+    borderTopWidth: 1,
+    borderTopColor: BORDER,
+    paddingHorizontal: sc(20),
+    paddingTop: sc(16),
   },
   cta: {
-    backgroundColor: PRIMARY, borderRadius: sc(12), height: sc(52),
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    backgroundColor: PRIMARY,
+    borderRadius: sc(12),
+    height: sc(52),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  ctaDis: { opacity: 0.5 },
-  ctaTxt: { color: '#FFFAF0', fontWeight: '500', fontSize: sc(16), letterSpacing: 0.15 },
-  ctaArrow: { color: WHITE, fontSize: sc(18), fontWeight: '500' },
+  ctaDis: {opacity: 0.5},
+  ctaTxt: {
+    color: '#FFFAF0',
+    fontWeight: '500',
+    fontSize: sc(16),
+    letterSpacing: 0.15,
+  },
+  ctaArrow: {color: WHITE, fontSize: sc(18), fontWeight: '500'},
 });
 
 export default PanditSelectScreen;

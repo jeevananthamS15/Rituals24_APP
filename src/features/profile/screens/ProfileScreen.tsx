@@ -74,7 +74,7 @@ const MENU_SECTIONS = [
 ];
 
 export const ProfileScreen = () => {
-  const userName = 'Arjun Sharma';
+  const userName = 'Amit';
   const mobile = '9766776767';
 
   return (
