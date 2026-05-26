@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Platform,
 } from 'react-native';
-import { Temple } from '../../../types';
+import {MapPin} from 'lucide-react-native';
 
-
+import {Temple} from '../../../types';
 
 const CARD_WIDTH = 130;
 
@@ -17,34 +18,40 @@ interface Props {
   onPress: (id: string) => void;
 }
 
-export const TempleCard: React.FC<Props> = ({ item, onPress }) => (
+export const TempleCard: React.FC<Props> = ({item, onPress}) => (
   <TouchableOpacity
     style={styles.card}
     onPress={() => onPress(item.id)}
-    activeOpacity={0.85}
-  >
-    <Image
-      source={ item.imageUrl }
-      style={styles.image}
-      resizeMode="cover"
-    />
-    <View style={styles.body}>
+    activeOpacity={0.85}>
+    {/* IMAGE SECTION */}
+    <Image source={item.imageUrl} style={styles.image} resizeMode="cover" />
 
-      <Text style={styles.name} numberOfLines={1}>{item.name}</Text>
+    {/* INFO SECTION */}
+    <View style={styles.infoContainer}>
+      <View style={styles.topContent}>
+        <Text style={styles.name} numberOfLines={1}>
+          {item.name}
+        </Text>
 
+        <Text style={styles.subtitle} numberOfLines={2}>
+          {item.subtitle}
+        </Text>
 
-      <Text style={styles.subtitle} numberOfLines={2}>{item.subtitle}</Text>
+        <View style={styles.locationRow}>
+          <MapPin size={10} color="#757575" strokeWidth={2} />
 
-      <View style={styles.locationRow}>
-        <Text style={styles.locationPin}>📍</Text>
-        <Text style={styles.locationText} numberOfLines={1}>{item.location}</Text>
-      </View>
+          <Text style={styles.locationText} numberOfLines={1}>
+            {item.location}
+          </Text>
+        </View>
 
-      {/* Rating */}
-      <View style={styles.ratingRow}>
-        <Text style={styles.star}>⭐</Text>
-        <Text style={styles.ratingVal}>{item.rating}</Text>
-        <Text style={styles.reviewCount}>({item.reviewCount})</Text>
+        <View style={styles.ratingRow}>
+          <Text style={styles.star}>★</Text>
+
+          <Text style={styles.ratingVal}>{item.rating}</Text>
+
+          <Text style={styles.reviewCount}>({item.reviewCount})</Text>
+        </View>
       </View>
     </View>
   </TouchableOpacity>
@@ -53,76 +60,99 @@ export const TempleCard: React.FC<Props> = ({ item, onPress }) => (
 const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
     marginRight: 12,
-    overflow: 'hidden',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 20,
-    elevation: 3,
   },
+
   image: {
     width: CARD_WIDTH,
     height: 160,
+
+    borderRadius: 16,
+
     backgroundColor: '#E0E0E0',
+
+    marginBottom: 6,
   },
 
-  body: {
-    padding: 8,
+  infoContainer: {
+    paddingTop: 2,
+  },
+
+  topContent: {
     gap: 4,
   },
 
   name: {
-    fontFamily: 'Lato-Bold',
+    fontFamily: Platform.OS === 'ios' ? 'Lato-Bold' : 'Lato_700Bold',
+
     fontSize: 14,
     lineHeight: 22,
+
     color: '#281518',
+
+    minHeight: 22,
   },
 
   subtitle: {
-    fontFamily: 'Lato-Regular',
+    fontFamily: Platform.OS === 'ios' ? 'Lato-Regular' : 'Lato_400Regular',
+
     fontSize: 12,
     lineHeight: 18,
+
     color: '#000000',
+
+    minHeight: 36,
   },
+
   locationRow: {
     flexDirection: 'row',
+
     alignItems: 'center',
+
     gap: 2,
   },
-  locationPin: {
-    fontSize: 10,
-  },
+
   locationText: {
-    fontFamily: 'Inter',
-    fontWeight: '400',
+    flex: 1,
+
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter_400Regular',
+
     fontSize: 10,
     lineHeight: 12,
+
     color: '#757575',
-    flex: 1,
   },
+
   ratingRow: {
     flexDirection: 'row',
+
     alignItems: 'center',
+
     gap: 2,
   },
+
   star: {
     fontSize: 11,
     lineHeight: 14,
+
+    color: '#F3B416',
   },
+
   ratingVal: {
-    fontFamily: 'Lato-Bold',
+    fontFamily: Platform.OS === 'ios' ? 'Lato-Bold' : 'Lato_700Bold',
+
     fontSize: 12,
     lineHeight: 18,
+
     color: '#281518',
   },
+
   reviewCount: {
-    fontFamily: 'Inter',
-    fontWeight: '400',
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter_400Regular',
+
     fontSize: 10,
     lineHeight: 12,
+
     color: '#666666',
   },
 });

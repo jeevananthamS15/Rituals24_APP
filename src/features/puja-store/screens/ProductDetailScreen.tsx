@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {ProductCard} from '../components/ProductCard';
 
 import {
   ChevronLeft,
@@ -27,10 +27,9 @@ import {
   ChevronRight,
 } from 'lucide-react-native';
 
-
-import { StoreStackParamList } from '../../../app/navigation/types';
-import { MOCK_PRODUCTS } from '../../../constants/mockData';
-const { width: SW } = Dimensions.get('window');
+import {StoreStackParamList} from '../../../app/navigation/types';
+import {MOCK_PRODUCTS} from '../../../constants/mockData';
+const {width: SW} = Dimensions.get('window');
 const scale = (px: number) => (px / 393) * SW;
 const PRIMARY = '#2B000A';
 const GONDOLA = '#281518';
@@ -43,12 +42,10 @@ const STAR_GOLD = '#F3B416';
 const GREEN = '#039900';
 const GREEN_BG = 'rgba(3,153,0,0.12)';
 const REVIEW_BG = 'rgba(221,171,44,0.12)';
-const CHIP_BG = 'rgba(120,120,128,0.12)';
+const CHIP_BG = '#F2F2F7';
 const BRIDAL_HEATH = '#FFFAF0';
 
-
 type Props = NativeStackScreenProps<StoreStackParamList, 'ProductDetail'>;
-
 
 const INCLUDED_ITEMS = [
   'Brass Kalash',
@@ -61,17 +58,12 @@ const INCLUDED_ITEMS = [
   'Cotton Wicks & Ghee',
 ];
 
-
-
-
-const HeroAction = ({ children }: { children: React.ReactNode }) => (
+const HeroAction = ({children}: {children: React.ReactNode}) => (
   <View style={heroStyles.actionCircle}>{children}</View>
 );
 
-
-const IncludedChip = ({ label }: { label: string }) => (
+const IncludedChip = ({label}: {label: string}) => (
   <View style={chipStyles.chip}>
-
     <View style={chipStyles.checkCircle}>
       <Check size={8} color={WHITE} strokeWidth={1.5} />
     </View>
@@ -79,91 +71,43 @@ const IncludedChip = ({ label }: { label: string }) => (
   </View>
 );
 
-const StarRow = ({ count = 5 }: { count?: number }) => (
-  <View style={{ flexDirection: 'row', gap: 2 }}>
-    {Array.from({ length: count }).map((_, i) => (
-      <Star key={i} size={16} color={STAR_GOLD} fill={STAR_GOLD} strokeWidth={0} />
+const StarRow = ({count = 5}: {count?: number}) => (
+  <View style={{flexDirection: 'row', gap: 2}}>
+    {Array.from({length: count}).map((_, i) => (
+      <Star
+        key={i}
+        size={16}
+        color={STAR_GOLD}
+        fill={STAR_GOLD}
+        strokeWidth={0}
+      />
     ))}
   </View>
 );
 
-
-const RelatedCard = ({
-  item,
-  onPress,
-  onAdd,
-}: {
-  item: (typeof MOCK_PRODUCTS)[0];
-  onPress: (id: string) => void;
-  onAdd: (id: string) => void;
-}) => {
-  const CARD_W = scale(130);
-  return (
-    <View style={[relStyles.card, { width: CARD_W }]}>
-      <TouchableOpacity activeOpacity={0.85} onPress={() => onPress(item.id)}>
-        <Image
-          source={item.imageUrl}
-          style={[relStyles.image, { width: CARD_W }]}
-          resizeMode="cover"
-        />
-      </TouchableOpacity>
-      <View style={relStyles.body}>
-        <Text style={relStyles.title} numberOfLines={2}>
-          {item.name}
-        </Text>
-        <Text style={relStyles.itemCount}>{item.itemCount} items included</Text>
-
-   
-        <View style={relStyles.ratingRow}>
-          <Star size={12} color={STAR_GOLD} fill={STAR_GOLD} strokeWidth={0} />
-          <Text style={relStyles.ratingVal}>{item.rating}</Text>
-          <Text style={relStyles.reviewCount}>({item.reviewCount})</Text>
-        </View>
-
-   
-        <View style={relStyles.priceRow}>
-          <Text style={relStyles.price}>₹{item.price?.toLocaleString('en-IN')}</Text>
-          <Text style={relStyles.originalPrice}>
-            ₹{item.originalPrice?.toLocaleString('en-IN')}
-          </Text>
-        </View>
-
-      
-        <TouchableOpacity
-          style={relStyles.addBtn}
-          onPress={() => onAdd(item.id)}
-          activeOpacity={0.8}
-        >
-          <Plus size={20} color={WHITE} strokeWidth={2} />
-          <Text style={relStyles.addText}>Add</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-};
-
-
-export const ProductDetailScreen = ({ route, navigation }: Props) => {
-  const { productId } = route.params;
-  const product = MOCK_PRODUCTS.find((p) => p.id === productId) ?? MOCK_PRODUCTS[0];
-  const related = MOCK_PRODUCTS.filter((p) => p.id !== productId).slice(0, 3);
+export const ProductDetailScreen = ({route, navigation}: Props) => {
+  const {productId} = route.params;
+  const product =
+    MOCK_PRODUCTS.find(p => p.id === productId) ?? MOCK_PRODUCTS[0];
+  const related = MOCK_PRODUCTS.filter(p => p.id !== productId).slice(0, 3);
   const [quantity, setQuantity] = useState(2);
-
 
   const IMAGE_HEIGHT = scale(382);
 
   return (
     <View style={s.root}>
-      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+      <StatusBar
+        barStyle="light-content"
+        translucent
+        backgroundColor="transparent"
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={s.scrollContent}
-      >
- 
-        <View style={[s.heroContainer, { height: IMAGE_HEIGHT }]}>
+        contentContainerStyle={s.scrollContent}>
+        <View style={[s.heroContainer, {height: IMAGE_HEIGHT}]}>
           <Image
-            source={ product.imageUrl}
+            source={product.imageUrl}
             style={StyleSheet.absoluteFillObject}
             resizeMode="cover"
           />
@@ -175,12 +119,14 @@ export const ProductDetailScreen = ({ route, navigation }: Props) => {
               <TouchableOpacity
                 style={heroStyles.actionCircle}
                 onPress={() => navigation.goBack()}
-                activeOpacity={0.8}
-              >
-                <ChevronLeft size={scale(19.64)} color={WHITE} strokeWidth={1.64} />
+                activeOpacity={0.8}>
+                <ChevronLeft
+                  size={scale(19.64)}
+                  color={WHITE}
+                  strokeWidth={1.64}
+                />
               </TouchableOpacity>
 
-        
               <View style={heroStyles.rightActions}>
                 <HeroAction>
                   <Bell size={scale(19.64)} color={WHITE} strokeWidth={1.64} />
@@ -189,88 +135,92 @@ export const ProductDetailScreen = ({ route, navigation }: Props) => {
                   <Heart size={scale(19.64)} color={WHITE} strokeWidth={1.64} />
                 </HeroAction>
                 <HeroAction>
-                  <ShoppingCart size={scale(19.64)} color={WHITE} strokeWidth={1.64} />
+                  <ShoppingCart
+                    size={scale(19.64)}
+                    color={WHITE}
+                    strokeWidth={1.64}
+                  />
                 </HeroAction>
               </View>
             </View>
           </SafeAreaView>
 
           <View style={s.dotsContainer}>
-            {[0, 1, 2, 3].map((i) => (
+            {[0, 1, 2, 3].map(i => (
               <View key={i} style={s.dot} />
             ))}
           </View>
         </View>
 
- 
         <View style={s.body}>
-
-     
           <View style={s.titleRow}>
             <Text style={s.title} numberOfLines={1}>
               {product.name}
             </Text>
             <View style={s.ratingInline}>
-              <Star size={16} color={STAR_GOLD} fill={STAR_GOLD} strokeWidth={0} />
+              <Star
+                size={16}
+                color={STAR_GOLD}
+                fill={STAR_GOLD}
+                strokeWidth={0}
+              />
               <Text style={s.ratingVal}>{product.rating}</Text>
               <Text style={s.ratingCount}>({product.reviewCount})</Text>
             </View>
           </View>
 
-    
           <View style={s.itemsBadge}>
             <Box size={16} color={TEXT_MUTED} strokeWidth={1.5} />
-            <Text style={s.itemsBadgeText}>{product.itemCount} items included</Text>
+            <Text style={s.itemsBadgeText}>
+              {product.itemCount} items included
+            </Text>
           </View>
 
           <View style={s.priceRow}>
-            <Text style={s.price}>₹{product.price?.toLocaleString('en-IN')}</Text>
-            <Text style={s.originalPrice}>₹{product.originalPrice?.toLocaleString('en-IN')}</Text>
+            <Text style={s.price}>
+              ₹{product.price?.toLocaleString('en-IN')}
+            </Text>
+            <Text style={s.originalPrice}>
+              ₹{product.originalPrice?.toLocaleString('en-IN')}
+            </Text>
           </View>
 
-    
           <View style={s.qtyBar}>
             <Text style={s.qtyLabel}>Quantity</Text>
             <View style={s.qtyControls}>
-
               <TouchableOpacity
                 style={s.qtySquareBtn}
-                onPress={() => setQuantity((q) => Math.max(1, q - 1))}
-                activeOpacity={0.8}
-              >
+                onPress={() => setQuantity(q => Math.max(1, q - 1))}
+                activeOpacity={0.8}>
                 <Minus size={18} color={WHITE} strokeWidth={1.5} />
               </TouchableOpacity>
               <Text style={s.qtyValue}>{quantity}</Text>
-              
+
               <TouchableOpacity
                 style={s.qtySquareBtn}
-                onPress={() => setQuantity((q) => q + 1)}
-                activeOpacity={0.8}
-              >
+                onPress={() => setQuantity(q => q + 1)}
+                activeOpacity={0.8}>
                 <Plus size={18} color={WHITE} strokeWidth={1.5} />
               </TouchableOpacity>
             </View>
           </View>
 
-   
           <View style={s.deliveryBadge}>
             <Text style={s.deliveryText}>Delivery by 20 May, Wed</Text>
           </View>
 
-  
           <View style={s.divider} />
 
           <View style={s.descSection}>
             <Text style={s.sectionTitle}>Description</Text>
             <Text style={s.descText}>
-              Complete puja samagri kit for Griha Pravesh ceremony. Includes kalash,
-              mango leaves, turmeric, kumkum, akshat, and all essentials.
+              Complete puja samagri kit for Griha Pravesh ceremony. Includes
+              kalash, mango leaves, turmeric, kumkum, akshat, and all
+              essentials.
             </Text>
           </View>
 
-  
           <View style={s.divider} />
-
 
           <View style={s.includedCard}>
             <Text style={s.includedTitle}>What's Included</Text>
@@ -281,29 +231,25 @@ export const ProductDetailScreen = ({ route, navigation }: Props) => {
             </View>
           </View>
 
-     
           <View style={s.divider} />
 
-      
           <Text style={s.sectionTitle}>Reviews</Text>
           <View style={s.reviewCard}>
-       
             <View style={s.reviewHeader}>
               <View style={s.reviewAvatar} />
               <Text style={s.reviewerName}>Ramesh</Text>
             </View>
-      
+
             <View style={s.reviewStarsAbsolute}>
               <StarRow count={5} />
             </View>
-       
+
             <Text style={s.reviewText}>
               Fresh, Pure and Good quality. Perfect for puja
             </Text>
           </View>
 
           <View style={s.divider} />
-
 
           <View style={s.relatedHeader}>
             <Text style={s.sectionTitle}>Product may also like</Text>
@@ -316,31 +262,36 @@ export const ProductDetailScreen = ({ route, navigation }: Props) => {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={s.relatedScroll}
-          >
-            {related.map((item) => (
-              <RelatedCard
+            contentContainerStyle={s.relatedScroll}>
+            {related.map(item => (
+              <ProductCard
                 key={item.id}
                 item={item}
-                onPress={(id) => navigation.replace('ProductDetail', { productId: id })}
+                onPress={id =>
+                  navigation.replace('ProductDetail', {productId: id})
+                }
                 onAdd={() => {}}
+                variant="home"
               />
             ))}
           </ScrollView>
 
-
-          <View style={{ height: scale(111) }} />
+          <View style={{height: scale(111)}} />
         </View>
       </ScrollView>
 
       <View style={s.stickyBottom}>
-
-        <TouchableOpacity style={s.cartBtn} activeOpacity={0.8} onPress={() => {}}>
+        <TouchableOpacity
+          style={s.cartBtn}
+          activeOpacity={0.8}
+          onPress={() => {}}>
           <Text style={s.cartBtnText}>Add to Cart</Text>
         </TouchableOpacity>
 
-
-        <TouchableOpacity style={s.buyBtn} activeOpacity={0.8} onPress={() => {}}>
+        <TouchableOpacity
+          style={s.buyBtn}
+          activeOpacity={0.8}
+          onPress={() => {}}>
           <Text style={s.buyBtnText}>
             Buy At ₹{product.price?.toLocaleString('en-IN')}
           </Text>
@@ -349,7 +300,6 @@ export const ProductDetailScreen = ({ route, navigation }: Props) => {
     </View>
   );
 };
-
 
 const heroStyles = StyleSheet.create({
   actionCircle: {
@@ -366,7 +316,6 @@ const heroStyles = StyleSheet.create({
   },
 });
 
-
 const chipStyles = StyleSheet.create({
   chip: {
     flexDirection: 'row',
@@ -378,7 +327,7 @@ const chipStyles = StyleSheet.create({
     borderRadius: 19,
 
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.06,
     shadowRadius: 20,
     elevation: 1,
@@ -399,14 +348,13 @@ const chipStyles = StyleSheet.create({
   },
 });
 
-
 const relStyles = StyleSheet.create({
   card: {
     backgroundColor: WHITE,
     borderRadius: 16,
     overflow: 'hidden',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.06,
     shadowRadius: 20,
     elevation: 3,
@@ -489,7 +437,6 @@ const relStyles = StyleSheet.create({
   },
 });
 
-
 const s = StyleSheet.create({
   root: {
     flex: 1,
@@ -505,14 +452,12 @@ const s = StyleSheet.create({
     backgroundColor: '#727272',
   },
   heroGradient: {
- 
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     height: scale(148),
     backgroundColor: 'transparent',
-    
   },
   heroSafeArea: {
     position: 'absolute',
@@ -521,7 +466,6 @@ const s = StyleSheet.create({
     right: 0,
   },
   heroControls: {
-
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -529,7 +473,6 @@ const s = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? scale(24) : scale(16),
   },
   dotsContainer: {
-
     position: 'absolute',
     bottom: scale(18),
     alignSelf: 'center',
@@ -547,7 +490,6 @@ const s = StyleSheet.create({
     borderRadius: scale(4),
     backgroundColor: WHITE,
   },
-
 
   body: {
     paddingHorizontal: scale(20),
@@ -586,7 +528,6 @@ const s = StyleSheet.create({
     color: '#666666',
   },
 
-
   itemsBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -607,7 +548,6 @@ const s = StyleSheet.create({
     color: TEXT_MUTED,
   },
 
-
   priceRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -627,7 +567,6 @@ const s = StyleSheet.create({
     color: TEXT_MUTED,
     textDecorationLine: 'line-through',
   },
-
 
   qtyBar: {
     flexDirection: 'row',
@@ -669,7 +608,6 @@ const s = StyleSheet.create({
     textAlign: 'center',
   },
 
-
   deliveryBadge: {
     alignSelf: 'flex-start',
     backgroundColor: GREEN_BG,
@@ -684,7 +622,6 @@ const s = StyleSheet.create({
     lineHeight: 18,
     color: GREEN,
   },
-
 
   divider: {
     height: StyleSheet.hairlineWidth,
@@ -729,7 +666,6 @@ const s = StyleSheet.create({
     gap: scale(8),
   },
 
-
   reviewCard: {
     borderWidth: 1,
     borderColor: GRAY_BORDER,
@@ -769,7 +705,6 @@ const s = StyleSheet.create({
     color: TEXT_DARK,
   },
 
-
   relatedHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -791,7 +726,6 @@ const s = StyleSheet.create({
     paddingBottom: scale(8),
   },
 
-
   stickyBottom: {
     position: 'absolute',
     bottom: 0,
@@ -808,13 +742,13 @@ const s = StyleSheet.create({
     paddingBottom: Platform.OS === 'ios' ? scale(34) : scale(16),
 
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
+    shadowOffset: {width: 0, height: -2},
     shadowOpacity: 0.06,
     shadowRadius: 8,
     elevation: 8,
   },
   cartBtn: {
-    flex: 136 / (136 + 205), 
+    flex: 136 / (136 + 205),
     height: scale(40),
     borderRadius: 12,
     borderWidth: 1,

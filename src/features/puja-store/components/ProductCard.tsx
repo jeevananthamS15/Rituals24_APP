@@ -5,164 +5,293 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Platform,
+  Dimensions,
 } from 'react-native';
-import { Product } from '../../../types';
 
+import {Product} from '../../../types';
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
-const CARD_WIDTH = 130;
+const HORIZONTAL_PADDING = 20;
+const GAP = 15;
+
+const STORE_CARD_WIDTH =
+  (SCREEN_WIDTH - HORIZONTAL_PADDING * 2 - GAP) / 2;
+
+const HOME_CARD_WIDTH = 130;
 
 interface Props {
   item: Product;
   onPress: (id: string) => void;
   onAdd: (id: string) => void;
+  variant?: 'home' | 'store';
 }
 
-export const ProductCard: React.FC<Props> = ({ item, onPress, onAdd }) => (
-  <TouchableOpacity
-    style={styles.card}
-    onPress={() => onPress(item.id)}
-    activeOpacity={0.85}
-  >
-    <Image
-      source={item.imageUrl }
-      style={styles.image}
-      resizeMode="cover"
-    />
-    <View style={styles.body}>
-      
-      <Text style={styles.title} numberOfLines={2}>{item.name}</Text>
+export const ProductCard: React.FC<Props> = ({
+  item,
+  onPress,
+  onAdd,
+  variant = 'home',
+}) => {
 
-  
-      <Text style={styles.itemCount}>{item.itemCount} items included</Text>
+  const cardWidth =
+    variant === 'store'
+      ? STORE_CARD_WIDTH
+      : HOME_CARD_WIDTH;
 
+  return (
+    <TouchableOpacity
+      style={[
+        styles.card,
+        {
+          width: cardWidth,
+          marginRight: variant === 'home' ? 12 : 0,
+        },
+      ]}
+      onPress={() => onPress(item.id)}
+      activeOpacity={0.85}>
 
-      <View style={styles.ratingRow}>
-        <Text style={styles.star}>⭐</Text>
-        <Text style={styles.ratingVal}>{item.rating}</Text>
-        <Text style={styles.reviewCount}>({item.reviewCount})</Text>
+      {/* IMAGE */}
+      <Image
+        source={item.imageUrl}
+        style={styles.image}
+        resizeMode="cover"
+      />
+
+      {/* INFO */}
+      <View style={styles.infoContainer}>
+
+        {/* TOP CONTENT */}
+        <View style={styles.topContent}>
+
+          <Text
+            style={styles.title}
+            numberOfLines={2}>
+            {item.name}
+          </Text>
+
+          <Text style={styles.itemCount}>
+            {item.itemCount} items included
+          </Text>
+
+          {/* RATING */}
+          <View style={styles.ratingRow}>
+
+            <Text style={styles.star}>
+              ★
+            </Text>
+
+            <Text style={styles.ratingVal}>
+              {item.rating}
+            </Text>
+
+            <Text style={styles.reviewCount}>
+              ({item.reviewCount})
+            </Text>
+
+          </View>
+
+          {/* PRICE */}
+          <View style={styles.priceRow}>
+
+            <Text style={styles.price}>
+              ₹{item.price?.toLocaleString('en-IN')}
+            </Text>
+
+            <Text style={styles.originalPrice}>
+              ₹{item.originalPrice?.toLocaleString('en-IN')}
+            </Text>
+
+          </View>
+
+        </View>
+
+        {/* ADD BUTTON */}
+        <TouchableOpacity
+          style={styles.addBtn}
+          onPress={e => {
+            e.stopPropagation?.();
+            onAdd(item.id);
+          }}
+          activeOpacity={0.8}>
+
+          <Text style={styles.addIcon}>
+            ＋
+          </Text>
+
+          <Text style={styles.addText}>
+            Add
+          </Text>
+
+        </TouchableOpacity>
+
       </View>
 
-  
-      <View style={styles.priceRow}>
-        <Text style={styles.price}>₹{item.price?.toLocaleString('en-IN')}</Text>
-        <Text style={styles.originalPrice}>₹{item.originalPrice?.toLocaleString('en-IN')}</Text>
-      </View>
-
-      <TouchableOpacity
-        style={styles.addBtn}
-        onPress={(e) => { e.stopPropagation?.(); onAdd(item.id); }}
-        activeOpacity={0.8}
-      >
-        <Text style={styles.addIcon}>＋</Text>
-        <Text style={styles.addText}>Add</Text>
-      </TouchableOpacity>
-    </View>
-  </TouchableOpacity>
-);
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   card: {
-    width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    marginRight: 12,
-    overflow: 'hidden',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 20,
-    elevation: 3,
+    marginBottom: 20,
   },
+
   image: {
-    width: CARD_WIDTH,
+    width: '100%',
     height: 160,
+
+    borderRadius: 16,
+
     backgroundColor: '#E0E0E0',
+
+    marginBottom: 6,
   },
-  body: {
-    paddingHorizontal: 8,
-    paddingTop: 8,
-    paddingBottom: 8,
-    gap: 4,
+
+  infoContainer: {
+    height: 150,
+  },
+
+  topContent: {
+    gap: 2,
   },
 
   title: {
-    fontFamily: 'Lato-Bold',
+    fontFamily:
+      Platform.OS === 'ios'
+        ? 'Lato-Bold'
+        : 'Lato_700Bold',
+
     fontSize: 14,
     lineHeight: 22,
+
     color: '#281518',
   },
+
   itemCount: {
-    fontFamily: 'Inter',
-    fontWeight: '400',
+    fontFamily:
+      Platform.OS === 'ios'
+        ? 'Inter'
+        : 'Inter_400Regular',
+
     fontSize: 10,
     lineHeight: 12,
+
     color: '#757575',
   },
+
   ratingRow: {
     flexDirection: 'row',
+
     alignItems: 'center',
+
     gap: 2,
   },
+
   star: {
     fontSize: 11,
     lineHeight: 14,
+
+    color: '#F3B416',
   },
+
   ratingVal: {
-    fontFamily: 'Lato-Bold',
+    fontFamily:
+      Platform.OS === 'ios'
+        ? 'Lato-Bold'
+        : 'Lato_700Bold',
+
     fontSize: 12,
     lineHeight: 18,
+
     color: '#281518',
   },
+
   reviewCount: {
-    fontFamily: 'Inter',
-    fontWeight: '400',
+    fontFamily:
+      Platform.OS === 'ios'
+        ? 'Inter'
+        : 'Inter_400Regular',
+
     fontSize: 10,
     lineHeight: 12,
+
     color: '#666666',
   },
+
   priceRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+
+    alignItems: 'flex-end',
+
     gap: 4,
+
+    marginTop: 2,
   },
+
   price: {
-    fontFamily: 'Lato-Bold',
+    fontFamily:
+      Platform.OS === 'ios'
+        ? 'Lato-Bold'
+        : 'Lato_700Bold',
+
     fontSize: 16,
-    lineHeight: 24,
+    lineHeight: 22,
+
     color: '#281518',
+
+    includeFontPadding: false,
   },
+
   originalPrice: {
-    fontFamily: 'Inter',
-    fontWeight: '400',
+    fontFamily:
+      Platform.OS === 'ios'
+        ? 'Inter'
+        : 'Inter_400Regular',
+
     fontSize: 10,
-    lineHeight: 12,
+    lineHeight: 10,
+
     color: '#757575',
+
     textDecorationLine: 'line-through',
+
+    includeFontPadding: false,
+
+    paddingBottom: 3,
   },
 
   addBtn: {
     flexDirection: 'row',
+
     alignItems: 'center',
+
     justifyContent: 'center',
+
     backgroundColor: '#2B000A',
+
     borderRadius: 12,
+
     height: 40,
-    marginTop: 4,
+
     gap: 4,
+
+    marginTop: 'auto',
   },
+
   addIcon: {
     fontSize: 16,
+    lineHeight: 18,
+
     color: '#FFFAF0',
-    lineHeight: 20,
-    fontWeight: '400',
   },
 
   addText: {
     fontFamily: 'Roboto-Medium',
+
     fontSize: 16,
     lineHeight: 24,
-    letterSpacing: 0.15,
+
     color: '#FFFAF0',
   },
 });

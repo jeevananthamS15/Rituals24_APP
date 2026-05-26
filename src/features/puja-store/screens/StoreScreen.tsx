@@ -124,10 +124,14 @@ export const StoreScreen = () => {
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.bhajanCardsContent}
-                scrollEnabled={false}>
+                contentContainerStyle={styles.bhajanCardsContent}>
                 {MOCK_BHAJANS.map(item => (
-                  <BhajanCard key={item.id} item={item} onPress={() => {}} />
+                  <BhajanCard
+                    key={item.id}
+                    item={item}
+                    onPress={() => {}}
+                    variant="store"
+                  />
                 ))}
               </ScrollView>
             </View>
@@ -153,6 +157,7 @@ export const StoreScreen = () => {
                     navigation.navigate('ProductDetail', {productId: id})
                   }
                   onAdd={() => {}}
+                  variant='store'
                 />
               ))}
             </View>
@@ -366,10 +371,11 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
 
-  productGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingHorizontal: HORIZONTAL_PADDING,
-    gap: 15,
-  },
+productGrid: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  justifyContent: 'space-between',
+  paddingHorizontal: HORIZONTAL_PADDING,
+  rowGap: 20,
+},
 });

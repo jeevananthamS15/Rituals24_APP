@@ -58,7 +58,7 @@ interface Props {
   onServicePress?: (id: string) => void;
 }
 
-export const ServiceGrid: React.FC<Props> = ({ onServicePress }) => {
+export const ServiceGrid = ({ onServicePress }:Props) => {
   const row1 = SERVICES.slice(0, 4);
   const row2 = SERVICES.slice(4, 8);
 
@@ -86,7 +86,8 @@ export const ServiceGrid: React.FC<Props> = ({ onServicePress }) => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    paddingHorizontal: 20,
+    paddingHorizontal:13,
+    paddingVertical:22,
     gap: 16,
   },
   row: {
@@ -112,7 +113,7 @@ icon: {
   resizeMode: 'contain',
 },
   label: {
-    fontFamily: 'Lato-Medium',
+    fontFamily: 'Lato',
     fontSize: 14,
     lineHeight: 17,
     color: '#000000',

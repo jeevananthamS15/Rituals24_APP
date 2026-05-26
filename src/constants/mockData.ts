@@ -220,7 +220,7 @@ export const MOCK_PRODUCTS: Product[] = [
   {
     id: 'pr3',
 
-    name: 'Navratri Special Kit',
+    name: 'Navratri Kit',
 
     itemCount: 18,
 

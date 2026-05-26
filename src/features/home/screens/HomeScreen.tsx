@@ -20,6 +20,8 @@ import {TempleCard} from '../../temples/components/TempleCard';
 import {ProductCard} from '../../puja-store/components/ProductCard';
 import {BhajanCard} from '../../bhajan/components/BhajanCard';
 import {HomeFooterOval} from '../components/Homefooteroval';
+import LinearGradient from 'react-native-linear-gradient';
+
 import {
   Search,
   Mic,
@@ -39,6 +41,16 @@ import {
 } from '../../../constants/mockData';
 
 const PRIMARY = '#2B000A';
+
+const Divider = () => (
+  <LinearGradient
+    colors={['#FFFFFF', '#2B000A', '#FFFFFF']}
+    start={{ x: 0, y: 0 }}
+    end={{ x: 1, y: 0 }}
+    style={styles.divider}
+  />
+);
+
 
 export const HomeScreen = () => {
   const navigation = useNavigation<any>();
@@ -81,7 +93,7 @@ export const HomeScreen = () => {
         </View>
       </TouchableOpacity>
 
-      <View style={styles.divider} />
+      {Divider()}
 
       <View style={styles.section}>
         <Text style={styles.sectionTitleOnly}>Our Services</Text>
@@ -121,7 +133,7 @@ export const HomeScreen = () => {
         <FlatList
           data={MOCK_PRODUCTS}
           renderItem={({item}) => (
-            <ProductCard item={item} onPress={() => {}} onAdd={() => {}} />
+            <ProductCard item={item} onPress={() => {}} onAdd={() => {}}  variant='home'/>
           )}
           keyExtractor={item => item.id}
           horizontal
@@ -158,7 +170,7 @@ export const HomeScreen = () => {
         <SectionHeader title="Book a Bhajan" onViewAll={() => {}} />
         <FlatList
           data={MOCK_BHAJANS}
-          renderItem={({item}) => <BhajanCard item={item} onPress={() => {}} />}
+          renderItem={({item}) => <BhajanCard item={item} onPress={() => {}} variant='home' />}
           keyExtractor={item => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -237,7 +249,7 @@ const styles = StyleSheet.create({
   },
 
   searchPlaceholder: {
-    fontFamily: 'Lato-Regular',
+    fontFamily: 'Lato',
     fontSize: 14,
     lineHeight: 22,
     color: '#757575',
@@ -256,11 +268,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 
-  divider: {
+   divider: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: '#E0E0E0',
     marginHorizontal: 20,
-    marginTop: 10,
+    marginTop:20,
   },
 
   section: {
@@ -272,8 +283,9 @@ const styles = StyleSheet.create({
   },
 
   sectionTitleOnly: {
-    fontFamily: 'Lato-Bold',
+    fontFamily: 'Lato',
     fontSize: 20,
+    fontWeight:'bold',
     lineHeight: 28,
     color: '#000000',
     paddingHorizontal: 20,

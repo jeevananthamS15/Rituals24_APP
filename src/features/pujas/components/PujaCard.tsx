@@ -5,9 +5,9 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Platform,
 } from 'react-native';
-import { Puja } from '../../../types';
-
+import {Puja} from '../../../types';
 
 const CARD_WIDTH = 130;
 
@@ -16,39 +16,39 @@ interface Props {
   onPress: (id: string) => void;
 }
 
-export const PujaCard: React.FC<Props> = ({ item, onPress }) => (
+export const PujaCard = ({item, onPress}: Props) => (
   <TouchableOpacity
     style={styles.card}
     onPress={() => onPress(item.id)}
-    activeOpacity={0.85}
-  >
-    <Image
-      source={item.imageUrl }
-      style={styles.image}
-      resizeMode="cover"
-    />
-    <View style={styles.body}>
+    activeOpacity={0.85}>
+    <Image source={item.imageUrl} style={styles.image} resizeMode="cover" />
 
-      <Text style={styles.title} numberOfLines={1}>{item.title}</Text>
+    <Text style={styles.title} numberOfLines={1}>
+      {item.title}
+    </Text>
 
-      <View style={styles.metaRow}>
-        <Text style={styles.metaText}>{item.duration}</Text>
-        <Text style={styles.bullet}> • </Text>
-        <Text style={styles.metaText}>{item.panditsCount} pandits</Text>
-      </View>
+    <View style={styles.metaRow}>
+      <Text style={styles.metaText}>{item.duration}</Text>
 
+      <Text style={styles.bullet}> • </Text>
 
-      <View style={styles.ratingRow}>
-        <Text style={styles.star}>⭐</Text>
-        <Text style={styles.ratingVal}>{item.rating}</Text>
-        <Text style={styles.reviewCount}>({item.reviewCount})</Text>
-      </View>
+      <Text style={styles.metaText}>{item.panditsCount} pandits</Text>
+    </View>
 
+    <View style={styles.ratingRow}>
+      <Text style={styles.ratingStar}>★</Text>
 
-      <View style={styles.priceRow}>
-        <Text style={styles.price}>₹{item.price?.toLocaleString('en-IN')}</Text>
-        <Text style={styles.originalPrice}>₹{item.originalPrice?.toLocaleString('en-IN')}</Text>
-      </View>
+      <Text style={styles.ratingValue}>{item.rating}</Text>
+
+      <Text style={styles.ratingCount}>({item.reviewCount})</Text>
+    </View>
+
+    <View style={styles.priceRow}>
+      <Text style={styles.price}>₹{item.price?.toLocaleString('en-IN')}</Text>
+
+      <Text style={styles.originalPrice}>
+        ₹{item.originalPrice?.toLocaleString('en-IN')}
+      </Text>
     </View>
   </TouchableOpacity>
 );
@@ -56,89 +56,103 @@ export const PujaCard: React.FC<Props> = ({ item, onPress }) => (
 const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
     marginRight: 12,
-    overflow: 'hidden',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 20,
-    elevation: 3,
+    gap: 4,
   },
+
   image: {
     width: CARD_WIDTH,
     height: 160,
-    backgroundColor: '#E0E0E0',
+    borderRadius: 16,
+    backgroundColor: '#727272',
+    marginBottom: 4,
   },
-  body: {
-    padding: 8,
-    gap: 4,
-  },
+
   title: {
-    fontFamily: 'Lato-Bold',
+    fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',
     fontSize: 14,
+    fontWeight: '700',
     lineHeight: 22,
     color: '#281518',
   },
+
   metaRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 2,
   },
+
   metaText: {
-    fontFamily: 'Inter',
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter_400Regular',
+
+    fontSize: 10,
     fontWeight: '400',
-    fontSize: 10,
     lineHeight: 12,
     color: '#757575',
   },
+
   bullet: {
+    width: 15,
+    height: 12,
+    textAlign: 'center',
     fontFamily: 'Inter',
     fontSize: 10,
     lineHeight: 12,
     color: '#757575',
+    includeFontPadding: false,
+    textAlignVertical: 'center',
   },
+
   ratingRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
   },
-  star: {
-    fontSize: 11,
-    lineHeight: 14,
-  },
-  ratingVal: {
 
-    fontFamily: 'Lato-Bold',
+  ratingStar: {
     fontSize: 12,
+    color: '#F3B416',
+    lineHeight: 16,
+  },
+
+  ratingValue: {
+    fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',
+
+    fontSize: 12,
+    fontWeight: '700',
     lineHeight: 18,
     color: '#281518',
   },
-  reviewCount: {
 
-    fontFamily: 'Inter',
-    fontWeight: '400',
+  ratingCount: {
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter',
+
     fontSize: 10,
+    fontWeight: '400',
     lineHeight: 12,
     color: '#666666',
   },
+
   priceRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'baseline',
     gap: 4,
   },
-  price: {
 
-    fontFamily: 'Lato-Bold',
+  price: {
+    fontFamily: Platform.OS === 'ios' ? 'Lato-Bold' : 'Lato_700Bold',
+
     fontSize: 16,
+    fontWeight: '700',
     lineHeight: 24,
     color: '#281518',
   },
-  originalPrice: {
 
-    fontFamily: 'Inter',
-    fontWeight: '400',
+  originalPrice: {
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter',
+
     fontSize: 10,
+    fontWeight: '400',
     lineHeight: 12,
     color: '#757575',
     textDecorationLine: 'line-through',

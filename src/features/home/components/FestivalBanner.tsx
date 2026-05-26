@@ -32,7 +32,6 @@ export const FestivalBanner: React.FC = () => (
 
     <View style={styles.dotsRow}>
       <View style={styles.dotInactive} />
-
       <View style={styles.dotActive} />
       <View style={styles.dotInactive} />
     </View>
@@ -91,9 +90,9 @@ const styles = StyleSheet.create({
 
   templeImage: {
     position: 'absolute',
-    width: 192,
+    width: 145,
     height: 130,
-    right: -30,
+    right: -8,
     bottom: -7,
   },
 
@@ -121,13 +120,14 @@ const styles = StyleSheet.create({
     width: 196,
   },
   title: {
-    fontFamily: 'Lato-Bold',
+    fontFamily: 'Lato',
     fontSize: 20,
     lineHeight: 28,
+    fontWeight:'bold',
     color: '#000000',
   },
   subtitle: {
-    fontFamily: 'Lato-Regular',
+    fontFamily: 'Lato',
     fontSize: 12,
     lineHeight: 18,
     color: '#000000',
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bookBtnText: {
-    fontFamily: 'Lato-Bold',
+    fontFamily: 'Lato',
     fontSize: 14,
     lineHeight: 17,
     color: '#000000',
