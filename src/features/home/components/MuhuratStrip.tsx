@@ -1,26 +1,26 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 
 const MUHURATS = [
   {
     id: '1',
     time: '5:40 AM - 7:30 AM',
     name: 'Braham Muhurat',
-    icon: '☀️',
+    icon: require('../../../../assets/HomeScreen/Mhuraticons/sun.png'),
     iconSize: 48,
   },
   {
     id: '2',
     time: '9:00 AM - 10:30 AM',
     name: 'Abhijit Muhurat',
-    icon: '📿',
+    icon: require('../../../../assets/HomeScreen/Mhuraticons/negles.png'),
     iconSize: 44,
   },
   {
     id: '3',
     time: '12:00 AM - 1:00 AM',
     name: 'Rahu Kalam',
-    icon: '⌛',
+    icon: require('../../../../assets/HomeScreen/Mhuraticons/time.png'),
     iconSize: 40,
   },
 ];
@@ -29,13 +29,15 @@ interface Props {
   onViewAll?: () => void;
 }
 
-export const MuhuratStrip: React.FC<Props> = ({ onViewAll }) => (
+export const MuhuratStrip: React.FC<Props> = ({onViewAll}) => (
   <View style={styles.card}>
-    <View style={styles.header}>
-      <Text style={styles.calIcon}>📅</Text>
-      <Text style={styles.headerTitle}>Today's Muhurat</Text>
-    </View>
-
+   <View style={styles.header}>
+  <Image
+    source={require('../../../../assets/HomeScreen/Mhuraticons/calender.png')}
+    style={styles.calIcon}
+  />
+  <Text style={styles.headerTitle}>Today's Muhurat</Text>
+</View>
 
     {MUHURATS.map(m => (
       <View key={m.id} style={styles.muhuratRow}>
@@ -44,22 +46,20 @@ export const MuhuratStrip: React.FC<Props> = ({ onViewAll }) => (
           <Text style={styles.rowName}>{m.name}</Text>
         </View>
 
-        <Text style={[styles.rowIcon, { fontSize: m.iconSize }]}>{m.icon}</Text>
+        <Image source={m.icon} style={styles.rowIcon} />
       </View>
     ))}
 
     <TouchableOpacity
       style={styles.calendarBtn}
       onPress={onViewAll}
-      activeOpacity={0.8}
-    >
+      activeOpacity={0.8}>
       <Text style={styles.calendarBtnText}>View Full Calendar</Text>
     </TouchableOpacity>
   </View>
 );
 
 const styles = StyleSheet.create({
-
   card: {
     marginHorizontal: 20,
     backgroundColor: '#2B000A',
@@ -76,10 +76,6 @@ const styles = StyleSheet.create({
     gap: 4,
     marginBottom: 4,
   },
-  calIcon: {
-    fontSize: 18,
-  },
-
   headerTitle: {
     fontFamily: 'Lato-Bold',
     fontSize: 16,
@@ -113,9 +109,11 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: 'rgba(255, 255, 255, 0.75)',
   },
-  rowIcon: {
-    lineHeight: 50,
-  },
+rowIcon: {
+  width: 80,
+  height: 70,
+  resizeMode: 'contain',
+},
 
   calendarBtn: {
     borderWidth: 1,
@@ -133,4 +131,10 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     color: '#FFFFFF',
   },
+  calIcon: {
+  width: 18,
+  height: 18,
+  resizeMode: 'contain',
+},
+
 });

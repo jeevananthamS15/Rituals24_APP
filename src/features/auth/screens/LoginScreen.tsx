@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+// LoginScreen.tsx
+
+import React, {useMemo, useState} from 'react';
 import {
   View,
   Text,
@@ -11,16 +13,23 @@ import {
   Dimensions,
   Image,
   StatusBar,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
+
 import {SafeAreaView} from 'react-native-safe-area-context';
+
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+
 import {AuthStackParamList} from '../../../app/navigation/types';
 
+import {useAuth} from '../../../app/providers/AuthProvider';
+import {loginApi} from '../../../services/auth.api';
 const BASE_WIDTH = 393;
 const BASE_HEIGHT = 852;
 
 const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window');
-const isSmallDevice = SCREEN_WIDTH < 360;
+
 const scaleW = (size: number) => (SCREEN_WIDTH / BASE_WIDTH) * size;
 
 const scaleH = (size: number) => (SCREEN_HEIGHT / BASE_HEIGHT) * size;
@@ -28,27 +37,131 @@ const scaleH = (size: number) => (SCREEN_HEIGHT / BASE_HEIGHT) * size;
 const moderateScale = (size: number, factor = 0.5) =>
   size + (scaleW(size) - size) * factor;
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'Login'> & {
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-};
+type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
-export const LoginScreen = ({navigation, setIsAuthenticated}: Props) => {
-  const [mobile, setMobile] = useState('');
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export const LoginScreen = ({navigation}: Props) => {
+  const {login} = useAuth();
+
+  const [email, setEmail] = useState('');
+
+  const [password, setPassword] = useState('');
+
+  const [showPassword, setShowPassword] = useState(false);
+
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'mobile' | 'email'>('mobile');
 
-  const isReady = mobile.length === 10 && !loading;
+  const [error, setError] = useState('');
 
-  const handleSendOTP = async () => {
-    if (!isReady) return;
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      console.log('OTP Sent');
-    }, 1500);
+  // ---------------- EMAIL ----------------
+
+  const handleEmailChange = (value: string) => {
+    const sanitized = value.trim().toLowerCase();
+
+    setEmail(sanitized);
+
+    if (error) {
+      setError('');
+    }
   };
 
-  const homeNavigate = () => setIsAuthenticated(true);
+  // ---------------- PASSWORD ----------------
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+
+    if (error) {
+      setError('');
+    }
+  };
+
+  // ---------------- VALIDATION ----------------
+
+  const isReady = useMemo(() => {
+    return EMAIL_REGEX.test(email) && password.trim().length > 0 && !loading;
+  }, [email, password, loading]);
+
+  // ---------------- LOGIN ----------------
+
+  const handleLogin = async () => {
+    if (!isReady) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      setError('');
+
+      const payload = {
+        email: email.trim().toLowerCase(),
+        password: password.trim(),
+      };
+
+      console.log('Login Payload:', payload);
+
+      const response = await loginApi(payload);
+      const token = response?.result?.token;
+
+
+      if (!token) {
+        throw new Error('Token not found');
+      }
+
+    console.log(response.result.user);
+      await login(token, response.result.user);
+
+      // RootNavigator automatically moves to MainNavigator
+    } catch (err) {
+      console.log('LOGIN ERROR:', err);
+
+      setError('Invalid email or password');
+
+      Alert.alert('Login Failed', 'Invalid email or password');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ---------------- GUEST LOGIN ----------------
+
+  const handleGuestLogin = async () => {
+    try {
+      setLoading(true);
+
+       await login('guest_token', {
+      id: 'guest',
+      name: 'Guest User',
+      email: '',
+      role: 'guest',
+    });
+    } catch (error) {
+      console.log('Guest Login Error:', error);
+
+      Alert.alert('Error', 'Unable to continue as guest');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ---------------- SOCIAL LOGIN ----------------
+
+  const handleGoogleLogin = async () => {
+    try {
+      console.log('Google Login');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    try {
+      console.log('Apple Login');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -61,7 +174,9 @@ export const LoginScreen = ({navigation, setIsAuthenticated}: Props) => {
       <KeyboardAvoidingView
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <View style={styles.headerBg}>
+        <View style={styles.container}>
+          {/* Background Ellipses */}
+
           <Image
             source={require('../../../../assets/Login/Ellipse8.png')}
             style={styles.ellipseTopRight}
@@ -78,9 +193,12 @@ export const LoginScreen = ({navigation, setIsAuthenticated}: Props) => {
           />
 
           <ScrollView
+            bounces={false}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollContent}
-            keyboardShouldPersistTaps="handled">
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={styles.scrollContent}>
+            {/* Logo */}
+
             <View style={styles.logoContainer}>
               <Image
                 source={require('../../../../assets/images/logo.png')}
@@ -89,6 +207,8 @@ export const LoginScreen = ({navigation, setIsAuthenticated}: Props) => {
               />
             </View>
 
+            {/* Card */}
+
             <View style={styles.card}>
               <Text style={styles.title}>Welcome Back</Text>
 
@@ -96,115 +216,141 @@ export const LoginScreen = ({navigation, setIsAuthenticated}: Props) => {
                 Sign in to Book pandits, poojas, and temple darshan
               </Text>
 
-              <View style={styles.segmentContainer}>
-                <TouchableOpacity
-                  activeOpacity={0.9}
-                  onPress={() => setActiveTab('mobile')}
-                  style={[
-                    styles.segmentButton,
-                    activeTab === 'mobile' && styles.segmentActive,
-                  ]}>
-                  <Text
-                    style={[
-                      styles.segmentText,
-                      activeTab === 'mobile' && styles.segmentTextActive,
-                    ]}>
-                    Mobile
-                  </Text>
-                </TouchableOpacity>
+              {/* Email */}
 
-                <TouchableOpacity
-                  activeOpacity={0.9}
-                  onPress={() => setActiveTab('email')}
+              <View style={styles.fieldGroup}>
+                <Text style={styles.label}>E-Mail</Text>
+
+                <View
                   style={[
-                    styles.segmentButton,
-                    activeTab === 'email' && styles.segmentActive,
+                    styles.inputWrapper,
+                    error && styles.inputErrorBorder,
                   ]}>
-                  <Text
-                    style={[
-                      styles.segmentText,
-                      activeTab === 'email' && styles.segmentTextActive,
-                    ]}>
-                    Email
-                  </Text>
-                </TouchableOpacity>
+                  <TextInput
+                    value={email}
+                    onChangeText={handleEmailChange}
+                    placeholder="example@gmail.com"
+                    placeholderTextColor="#757575"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    style={styles.input}
+                    returnKeyType="next"
+                  />
+                </View>
               </View>
 
-              <View style={styles.inputWrapper}>
-                <View style={styles.countrySection}>
-                  <Image
-                    source={require('../../../../assets/Login/flag.png')}
-                    style={styles.flag}
+              {/* Password */}
+
+              <View style={styles.fieldGroup}>
+                <Text style={styles.label}>Password</Text>
+
+                <View
+                  style={[
+                    styles.inputWrapper,
+                    error && styles.inputErrorBorder,
+                  ]}>
+                  <TextInput
+                    value={password}
+                    onChangeText={handlePasswordChange}
+                    placeholder="Enter your password"
+                    placeholderTextColor="#757575"
+                    secureTextEntry={!showPassword}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    style={styles.input}
+                    returnKeyType="done"
                   />
-                  <Text style={styles.countryCode}>+91</Text>
+
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    style={styles.eyeButton}
+                    onPress={() => setShowPassword(prev => !prev)}>
+                    <Image
+                      source={
+                        showPassword
+                          ? require('../../../../assets/Login/open-eye.png')
+                          : require('../../../../assets/Login/eye.png')
+                      }
+                      style={styles.eyeIcon}
+                    />
+                  </TouchableOpacity>
                 </View>
 
-                <View style={styles.inputDivider} />
-
-                <TextInput
-                  value={mobile}
-                  onChangeText={setMobile}
-                  keyboardType="phone-pad"
-                  maxLength={10}
-                  placeholder="Enter mobile number"
-                  placeholderTextColor="#757575"
-                  style={styles.input}
-                />
+                {!!error && <Text style={styles.errorText}>{error}</Text>}
               </View>
 
-              <View style={styles.helperRow}>
-                <Image
-                  source={require('../../../../assets/Login/lock.png')}
-                  style={styles.helperIcon}
-                />
-                <Text style={styles.helperText}>
-                  Secure OTP Verification. Your data is protected.
-                </Text>
-              </View>
+              {/* Forgot Password */}
+
+              <TouchableOpacity activeOpacity={0.8} style={styles.forgotRow}>
+                <Text style={styles.forgotText}>Forgot Password?</Text>
+              </TouchableOpacity>
+
+              {/* Login Button */}
 
               <TouchableOpacity
-                activeOpacity={0.85}
+                activeOpacity={0.9}
                 disabled={!isReady}
-                onPress={handleSendOTP}
-                style={[styles.otpButton, isReady && styles.otpButtonReady]}>
-                <Text style={styles.otpButtonText}>
-                  {loading ? 'Sending...' : 'Send OTP →'}
-                </Text>
+                onPress={handleLogin}
+                style={[
+                  styles.loginButton,
+                  isReady && styles.loginButtonActive,
+                ]}>
+                {loading ? (
+                  <ActivityIndicator color="#FFFFFF" />
+                ) : (
+                  <Text style={styles.loginButtonText}>Sign In →</Text>
+                )}
               </TouchableOpacity>
+
+              {/* Create Account */}
 
               <TouchableOpacity
                 activeOpacity={0.8}
-                style={styles.createAccountRow}>
+                style={styles.createAccountRow}
+                onPress={() => navigation.navigate('Signup')}>
                 <Text style={styles.createAccountText}>
                   New here?{' '}
                   <Text style={styles.createAccountLink}>Create Account</Text>
                 </Text>
               </TouchableOpacity>
 
+              {/* Divider */}
+
               <View style={styles.dividerRow}>
                 <View style={styles.line} />
+
                 <Text style={styles.orText}>or</Text>
+
                 <View style={styles.line} />
               </View>
+
+              {/* Guest Login */}
 
               <TouchableOpacity
                 activeOpacity={0.9}
                 style={styles.guestButton}
-                onPress={homeNavigate}>
+                onPress={handleGuestLogin}>
                 <Text style={styles.guestButtonText}>Continue as Guest</Text>
               </TouchableOpacity>
+
+              {/* Social Login */}
+
               <View style={styles.socialRow}>
                 <TouchableOpacity
                   activeOpacity={0.9}
-                  style={styles.socialButton}>
+                  style={styles.socialButton}
+                  onPress={handleGoogleLogin}>
                   <Image
                     source={require('../../../../assets/Login/google.png')}
                     style={styles.socialIcon}
                   />
                 </TouchableOpacity>
+
                 <TouchableOpacity
                   activeOpacity={0.9}
-                  style={styles.socialButton}>
+                  style={styles.socialButton}
+                  onPress={handleAppleLogin}>
                   <Image
                     source={require('../../../../assets/Login/apple.png')}
                     style={styles.socialIcon}
@@ -220,16 +366,22 @@ export const LoginScreen = ({navigation, setIsAuthenticated}: Props) => {
 };
 
 const styles = StyleSheet.create({
-  flex: {flex: 1},
+  flex: {
+    flex: 1,
+  },
 
   safeArea: {
     flex: 1,
     backgroundColor: '#2B000A',
   },
 
-  headerBg: {
+  container: {
     flex: 1,
     backgroundColor: '#2B000A',
+  },
+
+  scrollContent: {
+    flexGrow: 1,
   },
 
   ellipseTopLeft: {
@@ -247,7 +399,7 @@ const styles = StyleSheet.create({
     width: scaleW(279),
     height: scaleW(279),
     right: scaleW(-106),
-    top: scaleW(-125),
+    top: scaleW(-105),
     resizeMode: 'contain',
     transform: [{rotate: '90deg'}],
   },
@@ -262,21 +414,17 @@ const styles = StyleSheet.create({
     transform: [{rotate: '-15.88deg'}],
   },
 
-  scrollContent: {
-    flexGrow: 1,
-  },
-
   logoContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: scaleH(39),
-    paddingBottom: scaleH(23),
+    paddingTop: scaleH(40),
+    paddingBottom: scaleH(24),
   },
 
   logo: {
-  width: scaleW(300),
-  height: scaleH(185),
-},
+    width: scaleW(300),
+    height: scaleH(185),
+  },
 
   card: {
     flex: 1,
@@ -293,54 +441,32 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato',
     fontSize: moderateScale(28),
     lineHeight: moderateScale(36),
-    marginBottom: scaleH(8),
     fontWeight: '700',
     color: '#000000',
+    marginBottom: scaleH(8),
   },
 
   subtitle: {
-    fontSize: moderateScale(14),
     fontFamily: 'Lato',
+    fontSize: moderateScale(14),
     lineHeight: moderateScale(22),
     fontWeight: '400',
     color: '#000000',
-    marginBottom: scaleH(20),
+    marginBottom: scaleH(24),
     maxWidth: scaleW(301),
   },
 
-  segmentContainer: {
-    height: moderateScale(32),
-    borderRadius: moderateScale(100),
-    backgroundColor: 'rgba(118,118,128,0.12)',
-    flexDirection: 'row',
-    padding: moderateScale(2),
-    gap: scaleW(4),
-    marginBottom: scaleH(22),
+  fieldGroup: {
+    marginBottom: scaleH(16),
   },
 
-  segmentButton: {
-    flex: 1,
-    borderRadius: moderateScale(100),
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  segmentActive: {
-    backgroundColor: '#2B000A',
-    borderRadius: moderateScale(20),
-  },
-
-  segmentText: {
-    fontSize: moderateScale(13),
-    fontWeight: '500',
-    fontFamily: 'SFPro',
-    color: 'rgba(60,60,67,0.6)',
-    letterSpacing: -0.08,
-  },
-
-  segmentTextActive: {
+  label: {
+    fontFamily: 'Lato',
+    fontSize: moderateScale(12),
+    lineHeight: moderateScale(18),
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#000000',
+    marginBottom: scaleH(8),
   },
 
   inputWrapper: {
@@ -351,37 +477,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9F9F9',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: scaleW(12),
+    paddingLeft: scaleW(16),
     paddingRight: scaleW(12),
-    marginBottom: 0,
   },
 
-  countrySection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: scaleW(4),
-    width: scaleW(47),
-  },
-
-  flag: {
-    width: scaleW(16),
-    height: scaleW(16),
-    resizeMode: 'contain',
-  },
-
-  countryCode: {
-    fontFamily: 'Lato',
-    fontSize: moderateScale(14),
-    lineHeight: moderateScale(22),
-    color: '#757575',
-    fontWeight: '400',
-  },
-
-  inputDivider: {
-    width: 1,
-    height: scaleH(22),
-    marginHorizontal: scaleW(8),
-    backgroundColor: '#D9D9D9',
+  inputErrorBorder: {
+    borderColor: '#D92D20',
   },
 
   input: {
@@ -390,32 +491,43 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato',
     fontSize: moderateScale(14),
     color: '#000000',
-    paddingTop: 0,
-    paddingBottom: 0,
+    paddingVertical: 0,
   },
 
-  helperRow: {
-    flexDirection: 'row',
+  eyeButton: {
+    padding: scaleW(4),
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: scaleW(4),
-    marginTop: scaleH(10),
-    marginBottom: scaleH(16),
   },
 
-  helperIcon: {
-    width: scaleW(12),
-    height: scaleW(12),
+  eyeIcon: {
+    width: scaleW(18),
+    height: scaleW(18),
     resizeMode: 'contain',
+    tintColor: '#757575',
   },
 
-  helperText: {
-    fontFamily: 'Inter',
-    fontSize: moderateScale(10),
-    lineHeight: moderateScale(12),
-    color: '#757575',
+  errorText: {
+    marginTop: scaleH(6),
+    marginLeft: scaleW(4),
+    color: '#D92D20',
+    fontSize: moderateScale(11),
+    fontFamily: 'Lato',
   },
 
-  otpButton: {
+  forgotRow: {
+    alignSelf: 'flex-end',
+    marginBottom: scaleH(20),
+  },
+
+  forgotText: {
+    fontFamily: 'Lato',
+    fontSize: moderateScale(12),
+    lineHeight: moderateScale(18),
+    color: '#2B000A',
+  },
+
+  loginButton: {
     height: moderateScale(42),
     borderRadius: moderateScale(12),
     backgroundColor: '#A7A7A7',
@@ -423,15 +535,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  otpButtonReady: {
-    backgroundColor: '#727272',
+  loginButtonActive: {
+    backgroundColor: '#2B000A',
   },
 
-  otpButtonText: {
+  loginButtonText: {
     fontFamily: 'Lato',
     fontSize: moderateScale(14),
-    fontWeight: '500',
-    lineHeight: moderateScale(17),
+    fontWeight: '600',
     color: '#FFFFFF',
   },
 
@@ -443,16 +554,14 @@ const styles = StyleSheet.create({
   createAccountText: {
     fontFamily: 'Lato',
     fontSize: moderateScale(12),
-    lineHeight: moderateScale(18),
     color: '#757575',
   },
 
   createAccountLink: {
     fontFamily: 'Lato',
     fontSize: moderateScale(14),
-    lineHeight: moderateScale(22),
     color: '#2B000A',
-    fontWeight: '400',
+    fontWeight: '700',
   },
 
   dividerRow: {
@@ -472,7 +581,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato',
     fontSize: moderateScale(14),
     fontWeight: '500',
-    lineHeight: moderateScale(17),
     color: '#727272',
     marginHorizontal: scaleW(12),
   },
@@ -484,14 +592,13 @@ const styles = StyleSheet.create({
     borderColor: '#2B000A',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    marginBottom: scaleH(10),
   },
 
   guestButtonText: {
     fontFamily: 'Lato',
     fontSize: moderateScale(14),
     fontWeight: '500',
-    lineHeight: moderateScale(17),
     color: '#2B000A',
   },
 
@@ -499,7 +606,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: scaleW(15),
-    marginTop: scaleH(9.5),
   },
 
   socialButton: {

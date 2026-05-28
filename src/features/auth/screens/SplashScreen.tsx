@@ -1,4 +1,6 @@
-import React, {useEffect} from 'react'; 
+// SplashScreen.tsx
+
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,12 +11,8 @@ import {
   Platform,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {NativeStackScreenProps} from '@react-navigation/native-stack'; 
-import {RootStackParamList} from '../../../app/navigation/types'; 
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Splash'> & {
-  onFinish: () => void;
-};
 
 const {width, height} = Dimensions.get('window');
 
@@ -22,7 +20,8 @@ const guidelineBaseWidth = 393;
 const guidelineBaseHeight = 852;
 
 const scale = (size: number) => (width / guidelineBaseWidth) * size;
-const verticalScale = (size: number) => (height / guidelineBaseHeight) * size;
+const verticalScale = (size: number) =>
+  (height / guidelineBaseHeight) * size;
 const moderateScale = (size: number, factor = 0.5) =>
   size + (scale(size) - size) * factor;
 
@@ -88,19 +87,18 @@ const SplashLogoSection = () => {
         style={styles.logo}
         resizeMode="contain"
       />
+
       <View style={styles.divider} />
-      <Text style={styles.tagline}>Your Sacred Journey, Simplified</Text>
+
+      <Text style={styles.tagline}>
+        Your Sacred Journey, Simplified
+      </Text>
     </View>
   );
 };
 
-export const SplashScreen = ({onFinish}: Props) => {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onFinish();
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, []);
+export const SplashScreen = () => {
+
 
   return (
     <View style={styles.container}>
@@ -196,7 +194,7 @@ const styles = StyleSheet.create({
   },
 
   divider: {
-    width: '75%', 
+    width: '75%',
     alignSelf: 'center',
     borderTopWidth: moderateScale(1),
     borderColor: 'rgba(255,255,255,0.85)',
@@ -210,9 +208,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#FFFFFF',
     textAlign: 'center',
-
     marginTop: verticalScale(15),
-    paddingHorizontal: scale(20), 
+    paddingHorizontal: scale(20),
     fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',
   },
 

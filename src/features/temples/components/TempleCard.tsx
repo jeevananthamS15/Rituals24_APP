@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
 
     fontSize: 14,
     lineHeight: 22,
-
+    fontWeight: 'bold',
     color: '#281518',
 
     minHeight: 22,
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
 
   ratingVal: {
     fontFamily: Platform.OS === 'ios' ? 'Lato-Bold' : 'Lato_700Bold',
-
+    fontWeight: 'bold',
     fontSize: 12,
     lineHeight: 18,
 
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter_400Regular',
 
     fontSize: 10,
-    lineHeight: 12,
+    lineHeight: 18,
 
     color: '#666666',
   },

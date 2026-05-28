@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   divider: {
     width: 185,
     borderTopWidth: 1,
-    borderColor: 'rgba(255,255,255,0.85)',
+    borderColor: '#F3B416',
     marginTop: -35,
     marginBottom: 4,
   },
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#F3B416',
     textAlign: 'center',
     marginTop: 15,
     fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',

@@ -13,14 +13,11 @@ const CARD_WIDTH = 130;
 
 interface Props {
   item: Puja;
-  onPress: (id: string) => void;
+  onPress: () => void;
 }
 
 export const PujaCard = ({item, onPress}: Props) => (
-  <TouchableOpacity
-    style={styles.card}
-    onPress={() => onPress(item.id)}
-    activeOpacity={0.85}>
+  <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.85}>
     <Image source={item.imageUrl} style={styles.image} resizeMode="cover" />
 
     <Text style={styles.title} numberOfLines={1}>

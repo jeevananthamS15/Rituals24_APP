@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -20,11 +20,10 @@ import {
   TrendingUp,
   ChevronRight,
 } from 'lucide-react-native';
-
+import {getHomeData} from '../../../services/home.service';
 import {ProductCard} from '../components/ProductCard';
 import {BhajanCard} from '../../bhajan/components/BhajanCard';
-import {STORE_TABS} from '../../../constants';
-import {MOCK_PRODUCTS, MOCK_BHAJANS} from '../../../constants/mockData';
+import LinearGradient from 'react-native-linear-gradient';
 
 const {width: SCREEN_WIDTH} = Dimensions.get('window');
 const HORIZONTAL_PADDING = 20;
@@ -40,16 +39,62 @@ const STORE_FILTER_TABS = [
 ];
 
 const PRIMARY = '#2B000A';
+
+const Divider = () => (
+  <LinearGradient
+    colors={['#FFFFFF', '#2B000A', '#FFFFFF']}
+    start={{x: 0, y: 0}}
+    end={{x: 1, y: 0}}
+    style={styles.divider}
+  />
+);
+
 export const StoreScreen = () => {
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation<any>();
   const [activeTab, setActiveTab] = useState('All');
   const [query, setQuery] = useState('');
+  const [products, setProducts] = useState<any[]>([]);
+  const [bhajans, setBhajans] = useState<any[]>([]);
+
+  useEffect(() => {
+    loadHomeData();
+  }, []);
+
+  const loadHomeData = async () => {
+    try {
+      setLoading(true);
+      const data = await getHomeData();
+      setProducts(data.products);
+      setBhajans(data.bhajans);
+    } catch (error) {
+      console.log('API ERROR:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#FFFFFF',
+        }}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}>
+
+        {/* ── Header ── */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
             <Text style={styles.title}>Spiritual Store</Text>
@@ -68,6 +113,7 @@ export const StoreScreen = () => {
           </View>
         </View>
 
+        {/* ── Search Bar ── */}
         <View style={styles.searchWrapper}>
           <View style={styles.searchBar}>
             <View style={styles.searchLeft}>
@@ -86,6 +132,7 @@ export const StoreScreen = () => {
           </View>
         </View>
 
+        {/* ── Filter Tabs ── */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -108,8 +155,9 @@ export const StoreScreen = () => {
           ))}
         </ScrollView>
 
-        <View style={styles.divider} />
+        <Divider />
 
+        {/* ── Bhajan Section ── */}
         {(activeTab === 'All' || activeTab === 'Bhajan Services') && (
           <View style={styles.bhajanSection}>
             <View style={styles.bhajanContainer}>
@@ -120,12 +168,11 @@ export const StoreScreen = () => {
                   <ChevronRight size={16} color="#FFFFFF" strokeWidth={1.5} />
                 </TouchableOpacity>
               </View>
-
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.bhajanCardsContent}>
-                {MOCK_BHAJANS.map(item => (
+                {bhajans.map(item => (
                   <BhajanCard
                     key={item.id}
                     item={item}
@@ -138,31 +185,36 @@ export const StoreScreen = () => {
           </View>
         )}
 
+        {/* ── Puja Kits & Products ── */}
         {(activeTab === 'All' || activeTab === 'Puja Kits') && (
           <View style={styles.pujaSection}>
             <View style={styles.pujaHeader}>
               <View>
-                <Text style={styles.pujaTitle}>Puja kits &amp; Items</Text>
+                <Text style={styles.pujaTitle}>Puja kits & Items</Text>
                 <Text style={styles.pujaSubtitle}>Delivered to your home</Text>
               </View>
-              <TouchableOpacity activeOpacity={0.7}></TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.7} />
             </View>
-
             <View style={styles.productGrid}>
-              {MOCK_PRODUCTS.map(item => (
+              {products.map(item => (
                 <ProductCard
                   key={item.id}
                   item={item}
-                  onPress={id =>
-                    navigation.navigate('ProductDetail', {productId: id})
-                  }
+                  onPress={id => {
+                    const selectedProduct = products.find(p => p.id === id);
+                    navigation.navigate('ProductDetail', {
+                      product: selectedProduct,
+                      products,
+                    });
+                  }}
                   onAdd={() => {}}
-                  variant='store'
+                  variant="store"
                 />
               ))}
             </View>
           </View>
         )}
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -178,6 +230,7 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
 
+  /* ── Header ── */
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -191,14 +244,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 4,
   },
-
   title: {
     fontFamily: 'Lato-Bold',
     fontSize: 28,
     lineHeight: 36,
     color: '#2B000A',
   },
-
   subtitle: {
     fontFamily: 'Inter',
     fontWeight: '400',
@@ -218,6 +269,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  /* ── Search ── */
   searchWrapper: {
     paddingHorizontal: HORIZONTAL_PADDING,
     marginTop: 20,
@@ -249,7 +301,6 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: '#757575',
     padding: 0,
-    textAlign: 'center',
   },
   micBtn: {
     width: 24,
@@ -260,7 +311,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  /* ── Tabs ── */
   tabsScroll: {
+    flexGrow: 0,      // ← FIXES the giant gap below tabs
+    flexShrink: 0,
     marginTop: 12,
     marginBottom: 0,
   },
@@ -283,7 +337,6 @@ const styles = StyleSheet.create({
   tabActive: {
     backgroundColor: '#2B000A',
   },
-
   tabText: {
     fontFamily: 'Lato-Medium',
     fontSize: 14,
@@ -295,19 +348,20 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 
+  /* ── Divider ── */
   divider: {
-    height: 1,
-    backgroundColor: 'transparent',
+    height: StyleSheet.hairlineWidth,
+    marginHorizontal: 20,
     marginTop: 12,
-    marginHorizontal: HORIZONTAL_PADDING,
+    marginBottom: 0,
   },
 
+  /* ── Bhajan ── */
   bhajanSection: {
     paddingHorizontal: HORIZONTAL_PADDING,
     marginTop: 12,
     marginBottom: 24,
   },
-
   bhajanContainer: {
     backgroundColor: '#2B000A',
     borderRadius: 12,
@@ -322,7 +376,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-
   bhajanTitle: {
     fontFamily: 'Lato-Bold',
     fontSize: 20,
@@ -333,7 +386,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-
   viewAllText: {
     fontFamily: 'Lato-Medium',
     fontSize: 14,
@@ -344,6 +396,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
 
+  /* ── Puja / Products ── */
   pujaSection: {
     paddingTop: 0,
   },
@@ -354,14 +407,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: HORIZONTAL_PADDING,
     marginBottom: 16,
   },
-
   pujaTitle: {
     fontFamily: 'Lato-Bold',
     fontSize: 20,
     lineHeight: 28,
     color: '#000000',
   },
-
   pujaSubtitle: {
     fontFamily: 'Inter',
     fontWeight: '400',
@@ -370,12 +421,11 @@ const styles = StyleSheet.create({
     color: '#000000',
     marginTop: 3,
   },
-
-productGrid: {
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  justifyContent: 'space-between',
-  paddingHorizontal: HORIZONTAL_PADDING,
-  rowGap: 20,
-},
+  productGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    paddingHorizontal: HORIZONTAL_PADDING,
+    rowGap: 20,
+  },
 });

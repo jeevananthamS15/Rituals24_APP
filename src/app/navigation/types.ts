@@ -1,34 +1,70 @@
-import { NavigatorScreenParams } from '@react-navigation/native';
-
+import {NavigatorScreenParams} from '@react-navigation/native';
 
 export type AuthStackParamList = {
   Onboarding: undefined;
   Login: undefined;
+  Signup: undefined;
 };
 
 export type HomeStackParamList = {
   HomeMain: undefined;
-  PujaDetail: { pujaId: string };
-  PanditDetail: { panditId: string };
-  TempleDetail: { templeId: string };
+  PujaDetail: {pujaId: string};
+  PanditDetail: {panditId: string};
+  TempleDetail: {templeId: string};
 };
-
 
 export type StoreStackParamList = {
   StoreMain: undefined;
-  ProductDetail: { productId: string };
+  ProductDetail: {
+    product: any;
+    products: any[];
+  };
   Cart: undefined;
 };
 
-
-export type CheckoutStackParamList = {
-  ServiceMode: { pujaId: string };
-  DateMuhurat: undefined;
-  PanditSelect: undefined;
-  AddOns: undefined;
-  Payment: undefined;
+type PujaType = {
+  id: string;
+  title: string;
+  category: string;
+  duration: string;
+  imageUrl: {
+    uri: string;
+  };
+  originalPrice: number;
+  panditsCount: number;
+  price: number;
+  rating: number;
+  reviewCount: number;
 };
 
+export type CheckoutStackParamList = {
+  ServiceMode: {
+    pujaId: string;
+    puja: PujaType;
+  };
+
+  DateMuhurat: {
+    pujaId: string;
+    puja: PujaType;
+    selectedMode: string;
+  };
+
+  PanditSelect: {
+    pujaId: string;
+    puja: PujaType;
+    selectedMode: string;
+    selectedDate: number;
+    selectedTime: {
+      id: string;
+      time: string;
+      label: string;
+    };
+  };
+
+  AddOns: undefined;
+
+  Payment: undefined;
+};
 
 export type MainTabParamList = {
   Home: NavigatorScreenParams<HomeStackParamList>;
@@ -39,10 +75,12 @@ export type MainTabParamList = {
   MuhuratCalendar: undefined;
 };
 
-
 export type RootStackParamList = {
-  Splash: undefined;  
+  Splash: undefined;
+
   Auth: NavigatorScreenParams<AuthStackParamList>;
+
   Main: NavigatorScreenParams<MainTabParamList>;
+
   Checkout: NavigatorScreenParams<CheckoutStackParamList>;
 };

@@ -10,6 +10,7 @@ import {
   Platform,
   Image,
 } from 'react-native';
+import {MapPin} from 'lucide-react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Bell, Heart, ShoppingCart} from 'lucide-react-native';
@@ -32,9 +33,24 @@ const PITRA_DAYS = ['7', '30'];
 const NEXT_MONTH_DAYS = ['1', '2'];
 
 const TIMINGS = [
-  {id: '1', time: '5:40 AM -7:30 AM', name: 'Braham Muhurat', emoji: '☀️'},
-  {id: '2', time: '9:00 AM -10:30 AM', name: 'Abhijit Muhurat', emoji: '📿'},
-  {id: '3', time: '12:00 AM -1:00 AM', name: 'Rahu Kalam', emoji: '⏳'},
+  {
+    id: '1',
+    time: '5:40 AM -7:30 AM',
+    name: 'Braham Muhurat',
+    icon: require('../../../../assets/HomeScreen/Mhuraticons/sun.png'),
+  },
+  {
+    id: '2',
+    time: '9:00 AM -10:30 AM',
+    name: 'Abhijit Muhurat',
+    icon: require('../../../../assets/HomeScreen/Mhuraticons/negles.png'),
+  },
+  {
+    id: '3',
+    time: '12:00 AM -1:00 AM',
+    name: 'Rahu Kalam',
+    icon: require('../../../../assets/HomeScreen/Mhuraticons/time.png'),
+  },
 ];
 
 const UPCOMING = [
@@ -219,7 +235,7 @@ export const MuhuratCalendarScreen: React.FC = () => {
         <View style={styles.topBarLeft}>
           <Text style={styles.screenTitle}>Muhurat Calendar</Text>
           <View style={styles.locationRow}>
-            <Text style={styles.locationPin}>📍</Text>
+            <MapPin size={12} color={FIGMA_GRAY} />
             <Text style={styles.locationText}>Andhra Pradesh</Text>
             <Text style={styles.locationSep}>·</Text>
             <Text style={styles.tithiText}>Tithi: Panchami</Text>
@@ -321,7 +337,10 @@ export const MuhuratCalendarScreen: React.FC = () => {
           </View>
 
           <TouchableOpacity style={styles.bookmarkBtn} activeOpacity={0.7}>
-            <Text style={styles.bookmarkIcon}>🔖</Text>
+            <Image
+              source={require('../../../../assets/HomeScreen/Mhuraticons/bookmark.png')}
+              style={styles.bookmarkIcon}
+            />
           </TouchableOpacity>
         </View>
 
@@ -335,7 +354,7 @@ export const MuhuratCalendarScreen: React.FC = () => {
               <Text style={styles.timingSubTime}>{t.time}</Text>
               <Text style={styles.timingSubName}>{t.name}</Text>
             </View>
-            <Text style={styles.timingEmoji}>{t.emoji}</Text>
+            <Image source={t.icon} style={styles.timingIcon} />
           </View>
         ))}
 
@@ -381,7 +400,11 @@ export const MuhuratCalendarScreen: React.FC = () => {
         <Text style={[styles.sectionTitle, {marginBottom: 12}]}>
           Upcoming Muhurats
         </Text>
-        <View style={styles.upcomingRow}>
+
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.upcomingRow}>
           {UPCOMING.map(u => (
             <TouchableOpacity
               key={u.id}
@@ -393,6 +416,7 @@ export const MuhuratCalendarScreen: React.FC = () => {
                   <Text style={styles.upcomingBadgeNum}>{u.day}</Text>
                   <Text style={styles.upcomingBadgeDay}>{u.weekday}</Text>
                 </View>
+
                 <View style={styles.upcomingInfo}>
                   <Text style={styles.upcomingDesc}>{u.desc}</Text>
                   <Text style={styles.upcomingNakshatra}>{u.nakshatra}</Text>
@@ -400,7 +424,7 @@ export const MuhuratCalendarScreen: React.FC = () => {
               </View>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
       </View>
 
       <View style={styles.section}>
@@ -422,7 +446,7 @@ export const MuhuratCalendarScreen: React.FC = () => {
               <Text style={styles.smartCardTitle}>{item.title}</Text>
               <Text style={styles.smartCardDesc}>{item.desc}</Text>
               <View style={styles.smartDateRow}>
-                <Text style={styles.smartDatePin}>📍</Text>
+                <MapPin size={12} color={FIGMA_GRAY} />
                 <Text style={styles.smartDateText}>{item.date}</Text>
               </View>
               <View style={styles.ratingRow}>
@@ -490,7 +514,7 @@ export const MuhuratCalendarScreen: React.FC = () => {
               <Text style={styles.templeCardTitle}>{item.name}</Text>
               <Text style={styles.templeCardSub}>{item.sub}</Text>
               <View style={styles.templeLoc}>
-                <Text style={styles.templeLocPin}>📍</Text>
+                <MapPin size={12} color={FIGMA_GRAY} />
                 <Text style={styles.templeLocText}>{item.loc}</Text>
               </View>
               <View style={styles.ratingRow}>
@@ -606,7 +630,7 @@ const styles = StyleSheet.create({
         shadowOffset: {width: 0, height: 4},
         shadowOpacity: 0.06,
         shadowRadius: 20,
-      }
+      },
     }),
   },
 
@@ -823,9 +847,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  bookmarkIcon: {
-    fontSize: 14,
-  },
 
   darkDivider: {
     height: 1,
@@ -869,8 +890,17 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: 'rgba(255, 255, 255, 0.75)',
   },
-  timingEmoji: {
-    fontSize: 36,
+  bookmarkIcon: {
+    width: 18,
+    height: 18,
+    resizeMode: 'contain',
+    tintColor: '#FFFFFF', // optional if white icon needed
+  },
+
+  timingIcon: {
+    width: 68,
+    height: 68,
+    resizeMode: 'contain',
   },
 
   panchaGrid: {
@@ -892,7 +922,7 @@ const styles = StyleSheet.create({
   },
   panchaRight: {
     flex: 1,
-    paddingLeft: 16,
+    paddingLeft: 120,
     gap: 16,
   },
   panchaItem: {

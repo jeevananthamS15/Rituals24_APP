@@ -35,8 +35,9 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontFamily: 'Lato-Bold',
+    fontFamily: 'Lato',
     fontSize: 20,
+    fontWeight:'bold',
     lineHeight: 28,
     color: '#000000',
   },

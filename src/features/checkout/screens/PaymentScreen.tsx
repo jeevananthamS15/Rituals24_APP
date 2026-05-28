@@ -84,7 +84,10 @@ const pb = StyleSheet.create({
   },
 });
 
-const Header: React.FC<{onBack: () => void}> = ({onBack}) => {
+const Header: React.FC<{
+  onBack: () => void;
+  pujaName?: string;
+}> = ({onBack, pujaName}) => {
   const insets = useSafeAreaInsets();
 
   return (
@@ -99,7 +102,7 @@ const Header: React.FC<{onBack: () => void}> = ({onBack}) => {
       </TouchableOpacity>
 
       <View style={hdr.titleBlock}>
-        <Text style={hdr.title}>Satyanarayan puja</Text>
+        <Text style={hdr.title}>{pujaName || 'Satyanarayan puja'}</Text>
 
         <Text style={hdr.step}>
           Step <Text style={hdr.bold}>5 / 5</Text> :{' '}
@@ -182,17 +185,26 @@ const hdr = StyleSheet.create({
   },
 });
 
-const BookingSummaryCard: React.FC = () => (
+const BookingSummaryCard: React.FC<{
+  puja?: any;
+  mode?: string;
+  date?: any;
+  time?: any;
+  pandit?: any;
+}> = ({puja, mode, date, time, pandit}) => (
   <View style={bsc.card}>
     <View style={bsc.topRow}>
       <View style={bsc.iconBox}>
-        <Text style={bsc.iconEmoji}>🏠</Text>
+        <Text style={bsc.iconEmoji}>
+          {mode === 'Temple Visit' ? '🛕' : '🏠'}
+        </Text>
       </View>
+
       <View style={bsc.topInfo}>
-        <Text style={bsc.modeName}>Home Visit</Text>
+        <Text style={bsc.modeName}>{puja?.title || 'Satyanarayan puja'}</Text>
+
         <Text style={bsc.modeDesc} numberOfLines={2}>
-          One of the most beloved Vaishnava rituals, performed to seek Lord
-          Vishnu's blessings fo...
+          {puja?.description || 'One of the most beloved Vaishnava rituals.'}
         </Text>
       </View>
     </View>
@@ -205,7 +217,8 @@ const BookingSummaryCard: React.FC = () => (
           <Text style={bsc.detailIcon}>⚙</Text>
           <Text style={bsc.detailLbl}>Mode</Text>
         </View>
-        <Text style={bsc.detailVal}>Home Visit</Text>
+
+        <Text style={bsc.detailVal}>{mode || 'Home Visit'}</Text>
       </View>
 
       <View style={bsc.vertDivider} />
@@ -215,7 +228,8 @@ const BookingSummaryCard: React.FC = () => (
           <Text style={bsc.detailIcon}>📅</Text>
           <Text style={bsc.detailLbl}>Date</Text>
         </View>
-        <Text style={bsc.detailVal}>12-05-2026</Text>
+
+        <Text style={bsc.detailVal}>{date || '12-05-2026'}</Text>
       </View>
     </View>
 
@@ -225,7 +239,8 @@ const BookingSummaryCard: React.FC = () => (
           <Text style={bsc.detailIcon}>⏰</Text>
           <Text style={bsc.detailLbl}>Time</Text>
         </View>
-        <Text style={bsc.detailVal}>7:30 - 9 AM</Text>
+
+        <Text style={bsc.detailVal}>{time?.time || '7:30 AM'}</Text>
       </View>
 
       <View style={bsc.vertDivider} />
@@ -235,18 +250,22 @@ const BookingSummaryCard: React.FC = () => (
           <Text style={bsc.detailIcon}>👤</Text>
           <Text style={bsc.detailLbl}>Pandits</Text>
         </View>
-        <Text style={bsc.detailVal}>Pt. Acharya Vivek</Text>
+
+        <Text style={bsc.detailVal}>{pandit?.name || 'Pt. Acharya Vivek'}</Text>
       </View>
     </View>
 
     <View style={bsc.addrRow}>
       <Text style={bsc.addrIcon}>📍</Text>
+
       <View style={bsc.addrBlock}>
         <Text style={bsc.addrTitle}>Address</Text>
+
         <Text style={bsc.addrTxt}>
           Flat 4B, Sunrise Apartments, Bandra West, Mumbai
         </Text>
       </View>
+
       <Text style={bsc.editIcon}>✏</Text>
     </View>
   </View>
@@ -440,11 +459,7 @@ const prow = StyleSheet.create({
 const AddCardRow: React.FC = () => (
   <View style={acr.row}>
     <View style={acr.iconCircle}>
-      <Image
-        source={cardIcon}
-        style={acr.cardImg}
-        resizeMode="contain"
-      />
+      <Image source={cardIcon} style={acr.cardImg} resizeMode="contain" />
     </View>
 
     <Text style={acr.title}>Add Card</Text>
@@ -525,14 +540,73 @@ const sl = StyleSheet.create({
   },
 });
 
-const PricingCard: React.FC = () => {
+const PricingCard: React.FC<{
+  selectedDate?: any;
+  selectedTime?: any;
+  selectedKit?: any;
+  selectedBhajan?: any;
+  total?: number;
+  finalAmount?: number;
+  discount?: number;
+}> = ({
+  selectedDate,
+  selectedTime,
+  selectedKit,
+  selectedBhajan,
+  total,
+  finalAmount,
+  discount,
+}) => {
   const rows = [
-    {label: 'Satyanarayan Katha Puja', value: '₹899', isDate: false},
-    {label: 'Puja kit', value: '₹599', isDate: false},
-    {label: 'Pandit Fee', value: '₹400', isDate: false},
-    {label: 'Platform Fee', value: '₹500', isDate: false},
-    {label: 'Date', value: 'Mar 15, 2026', isDate: true},
-    {label: 'Time', value: '09:00 AM', isDate: true},
+    {
+      label: 'Satyanarayan Katha Puja',
+      value: '₹899',
+      isDate: false,
+    },
+
+    ...(selectedKit
+      ? [
+          {
+            label: 'Puja Kit',
+            value: '₹599',
+            isDate: false,
+          },
+        ]
+      : []),
+
+    ...(selectedBhajan
+      ? [
+          {
+            label: 'Bhajan Service',
+            value: '₹2100',
+            isDate: false,
+          },
+        ]
+      : []),
+
+    {
+      label: 'Pandit Fee',
+      value: '₹400',
+      isDate: false,
+    },
+
+    {
+      label: 'Platform Fee',
+      value: '₹500',
+      isDate: false,
+    },
+
+    {
+      label: 'Date',
+      value: String(selectedDate || '15 Mar 2026'),
+      isDate: true,
+    },
+
+    {
+      label: 'Time',
+      value: selectedTime?.time || '09:00 AM',
+      isDate: true,
+    },
   ];
 
   return (
@@ -547,6 +621,7 @@ const PricingCard: React.FC = () => {
             <Text style={[prc.lbl, row.isDate && prc.lblDate]}>
               {row.label}
             </Text>
+
             <Text style={[prc.val, row.isDate && prc.valDate]}>
               {row.value}
             </Text>
@@ -557,19 +632,26 @@ const PricingCard: React.FC = () => {
 
         <View style={prc.totalRow}>
           <Text style={prc.totalLbl}>Total</Text>
-          <Text style={prc.totalVal}>₹1,599</Text>
+
+          <Text style={prc.totalVal}>₹{total}</Text>
         </View>
 
-        <View style={prc.discountBox}>
-          <Text style={prc.discountTitle}>Bundle Discount Applied: -₹300</Text>
-          <Text style={prc.youPay}>You Pay: ₹1,200</Text>
-        </View>
+        {discount > 0 && (
+          <View style={prc.discountBox}>
+            <Text style={prc.discountTitle}>
+              Bundle Discount Applied: -₹{discount}
+            </Text>
+
+            <Text style={prc.youPay}>You Pay: ₹{finalAmount}</Text>
+          </View>
+        )}
 
         <View style={prc.trustRow}>
           <View style={prc.trustItem}>
             <Text style={prc.trustIcon}>✓</Text>
             <Text style={prc.trustTxt}>100% Verified Pandit</Text>
           </View>
+
           <View style={prc.trustItem}>
             <Text style={prc.trustIcon}>📹</Text>
             <Text style={prc.trustTxt}>Sankalp Video Proof</Text>
@@ -688,18 +770,58 @@ const UPI_METHODS: PayMethod[] = [
   },
 ];
 
-export const PaymentScreen: React.FC<{navigation?: any}> = ({navigation}) => {
+export const PaymentScreen: React.FC<{
+  navigation?: any;
+  route?: any;
+}> = ({navigation, route}) => {
+  const {
+    puja,
+    pujaId,
+    selectedMode,
+    selectedDate,
+    selectedTime,
+    selectedPandit,
+    selectedKit,
+    selectedBhajan,
+  } = route?.params || {};
+  const formattedMode =
+    selectedMode === 'home_visit'
+      ? 'Home Visit'
+      : selectedMode === 'temple_visit'
+      ? 'Temple Visit'
+      : 'Home Visit';
   const [selectedMethod, setSelectedMethod] = useState<string>('paypal');
+  const formattedDate = selectedDate ? `${selectedDate}-05-2026` : '12-05-2026';
   const insets = useSafeAreaInsets();
+  const pujaPrice = 899;
 
+  const kitPrice = selectedKit ? 599 : 0;
+
+  const bhajanPrice = selectedBhajan ? 2100 : 0;
+
+  const panditFee = 400;
+
+  const platformFee = 500;
+
+  const subtotal = pujaPrice + kitPrice + bhajanPrice + panditFee + platformFee;
+
+  const discount = selectedKit && selectedBhajan ? 300 : 0;
+
+  const finalAmount = subtotal - discount;
   return (
     <View style={s.container}>
-      <Header onBack={() => navigation?.goBack()} />
+      <Header pujaName={puja?.title} onBack={() => navigation?.goBack()} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={s.scroll}>
-        <BookingSummaryCard />
+        <BookingSummaryCard
+          puja={puja}
+          mode={formattedMode}
+          date={formattedDate}
+          time={selectedTime}
+          pandit={selectedPandit}
+        />
 
         <Text style={s.sectionTitle}>Payment Method</Text>
 
@@ -724,15 +846,38 @@ export const PaymentScreen: React.FC<{navigation?: any}> = ({navigation}) => {
         <AddCardRow />
         <View style={s.methodDivider} />
 
-        <PricingCard />
+        <PricingCard
+          selectedDate={selectedDate}
+          selectedTime={selectedTime}
+          selectedKit={selectedKit}
+          selectedBhajan={selectedBhajan}
+          total={subtotal}
+          finalAmount={finalAmount}
+          discount={discount}
+        />
       </ScrollView>
 
       <View style={[s.footer, {paddingBottom: insets.bottom + sc(8)}]}>
         <TouchableOpacity
           style={s.cta}
-          onPress={() => navigation?.popToTop?.()}
+          onPress={() =>
+            navigation?.reset({
+              index: 0,
+              routes: [
+                {
+                  name: 'Main',
+                  params: {
+                    screen: 'Home',
+                    params: {
+                      screen: 'HomeMain',
+                    },
+                  },
+                },
+              ],
+            })
+          }
           activeOpacity={0.88}>
-          <Text style={s.ctaTxt}>Pay Now ₹2100</Text>
+          <Text style={s.ctaTxt}>Pay Now ₹{finalAmount}</Text>
         </TouchableOpacity>
       </View>
     </View>

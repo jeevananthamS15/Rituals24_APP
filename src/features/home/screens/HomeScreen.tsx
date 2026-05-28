@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   View,
   Text,
@@ -21,7 +20,9 @@ import {ProductCard} from '../../puja-store/components/ProductCard';
 import {BhajanCard} from '../../bhajan/components/BhajanCard';
 import {HomeFooterOval} from '../components/Homefooteroval';
 import LinearGradient from 'react-native-linear-gradient';
-
+import React, {useEffect, useState} from 'react';
+import {getHomeData} from '../../../services/home.service';
+import {useAuth} from '../../../app/providers/AuthProvider';
 import {
   Search,
   Mic,
@@ -32,37 +33,77 @@ import {
   ChevronRight,
 } from 'lucide-react-native';
 
-import {
-  MOCK_PUJAS,
-  MOCK_PANDITS,
-  MOCK_TEMPLES,
-  MOCK_PRODUCTS,
-  MOCK_BHAJANS,
-} from '../../../constants/mockData';
+// import {
+//   MOCK_PUJAS,
+//   MOCK_PANDITS,
+//   MOCK_TEMPLES,
+//   MOCK_PRODUCTS,
+//   MOCK_BHAJANS,
+// } from '../../../constants/mockData';
 
 const PRIMARY = '#2B000A';
 
 const Divider = () => (
   <LinearGradient
     colors={['#FFFFFF', '#2B000A', '#FFFFFF']}
-    start={{ x: 0, y: 0 }}
-    end={{ x: 1, y: 0 }}
+    start={{x: 0, y: 0}}
+    end={{x: 1, y: 0}}
     style={styles.divider}
   />
 );
 
-
 export const HomeScreen = () => {
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation<any>();
-  const userName = 'Amit';
+  const {user} = useAuth();
+  const [pujas, setPujas] = useState([]);
+  const [pandits, setPandits] = useState([]);
+  const [temples, setTemples] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [bhajans, setBhajans] = useState([]);
 
+  useEffect(() => {
+    loadHomeData();
+  }, []);
+
+  const loadHomeData = async () => {
+    try {
+      setLoading(true);
+
+      const data = await getHomeData();
+
+      setPujas(data.pujas);
+      setPandits(data.pandits);
+      setTemples(data.temples);
+      setProducts(data.products);
+      setBhajans(data.bhajans);
+    } catch (error) {
+      console.log('HOME API ERROR:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#FFFFFF',
+        }}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+console.log(user);
   return (
     <ScreenWrapper scrollable backgroundColor="#FFFFFF">
       <View style={styles.topBar}>
         <View style={styles.greetingBlock}>
           <Text style={styles.greeting}>Jai Shri Ram</Text>
 
-          <Text style={styles.userName}>{userName ?? 'Devotee'}</Text>
+          <Text style={styles.userName}>{user?.name || 'Devotee'}</Text>
         </View>
 
         <View style={styles.headerIcons}>
@@ -108,11 +149,16 @@ export const HomeScreen = () => {
       <View style={styles.section}>
         <SectionHeader title="Our Puja Services" onViewAll={() => {}} />
         <FlatList
-          data={MOCK_PUJAS}
+          data={pujas}
           renderItem={({item}) => (
             <PujaCard
               item={item}
-              onPress={id => navigation.navigate('PujaDetail', {pujaId: id})}
+              onPress={() =>
+                navigation.navigate('PujaDetail', {
+                  pujaId: item.id,
+                  puja: item,
+                })
+              }
             />
           )}
           keyExtractor={item => item.id}
@@ -131,9 +177,14 @@ export const HomeScreen = () => {
       <View style={styles.section}>
         <SectionHeader title="Our Store" onViewAll={() => {}} />
         <FlatList
-          data={MOCK_PRODUCTS}
+          data={products}
           renderItem={({item}) => (
-            <ProductCard item={item} onPress={() => {}} onAdd={() => {}}  variant='home'/>
+            <ProductCard
+              item={item}
+              onPress={() => {}}
+              onAdd={() => {}}
+              variant="home"
+            />
           )}
           keyExtractor={item => item.id}
           horizontal
@@ -145,7 +196,7 @@ export const HomeScreen = () => {
       <View style={styles.section}>
         <SectionHeader title="Our Pandits" onViewAll={() => {}} />
         <FlatList
-          data={MOCK_PANDITS}
+          data={pandits}
           renderItem={({item}) => <PanditCard item={item} onPress={() => {}} />}
           keyExtractor={item => item.id}
           horizontal
@@ -157,7 +208,7 @@ export const HomeScreen = () => {
       <View style={styles.section}>
         <SectionHeader title="Temple Pooja & Darshan" onViewAll={() => {}} />
         <FlatList
-          data={MOCK_TEMPLES}
+          data={temples}
           renderItem={({item}) => <TempleCard item={item} onPress={() => {}} />}
           keyExtractor={item => item.id}
           horizontal
@@ -169,8 +220,10 @@ export const HomeScreen = () => {
       <View style={styles.section}>
         <SectionHeader title="Book a Bhajan" onViewAll={() => {}} />
         <FlatList
-          data={MOCK_BHAJANS}
-          renderItem={({item}) => <BhajanCard item={item} onPress={() => {}} variant='home' />}
+          data={bhajans}
+          renderItem={({item}) => (
+            <BhajanCard item={item} onPress={() => {}} variant="home" />
+          )}
           keyExtractor={item => item.id}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -268,10 +321,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 
-   divider: {
+  divider: {
     height: StyleSheet.hairlineWidth,
     marginHorizontal: 20,
-    marginTop:20,
+    marginTop: 20,
   },
 
   section: {
@@ -285,7 +338,7 @@ const styles = StyleSheet.create({
   sectionTitleOnly: {
     fontFamily: 'Lato',
     fontSize: 20,
-    fontWeight:'bold',
+    fontWeight: 'bold',
     lineHeight: 28,
     color: '#000000',
     paddingHorizontal: 20,
@@ -297,6 +350,6 @@ const styles = StyleSheet.create({
   },
 
   footerSpacing: {
-  marginTop: 32,
-},
+    marginTop: 32,
+  },
 });

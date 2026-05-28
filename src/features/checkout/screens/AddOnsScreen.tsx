@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,90 +7,182 @@ import {
   StyleSheet,
   Dimensions,
   Platform,
-  Image
+  Image,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path, Circle, Rect, Line, Polyline, Polygon } from 'react-native-svg';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import Svg, {
+  Path,
+  Circle,
+  Rect,
+  Line,
+  Polyline,
+  Polygon,
+} from 'react-native-svg';
 
-const { width: SW } = Dimensions.get('window');
+const {width: SW} = Dimensions.get('window');
 const BASE = 393;
 const sc = (n: number) => (SW / BASE) * n;
 
-const PRIMARY  = '#2B000A';
-const GOLD     = '#F3B416';
-const GOLD2    = '#DDAB2C';
-const GOLD_BG  = 'rgba(221,171,44,0.2)';
-const WHITE    = '#FFFFFF';
-const SURFACE  = '#F9F9F9';
-const BORDER   = '#D9D9D9';
+const PRIMARY = '#2B000A';
+const GOLD = '#F3B416';
+const GOLD2 = '#DDAB2C';
+const GOLD_BG = 'rgba(221,171,44,0.2)';
+const WHITE = '#FFFFFF';
+const SURFACE = '#F9F9F9';
+const BORDER = '#D9D9D9';
 const TEXT_PRI = '#000000';
-const TEXT_DEEP= '#281518';
+const TEXT_DEEP = '#281518';
 const TEXT_SEC = '#757575';
-const GREEN    = '#00A703';
+const GREEN = '#00A703';
 const GREEN_BG = 'rgba(0,167,3,0.18)';
-const SEG_DIM  = 'rgba(255,255,255,0.2)';
+const SEG_DIM = 'rgba(255,255,255,0.2)';
 
 // ── SVG Icons ────────────────────────────────────────────────
-const ChevronLeft: React.FC<{ size?: number; color?: string; strokeWidth?: number }> = 
-  ({ size = 20, color = PRIMARY, strokeWidth = 1.64 }) => (
+const ChevronLeft: React.FC<{
+  size?: number;
+  color?: string;
+  strokeWidth?: number;
+}> = ({size = 20, color = PRIMARY, strokeWidth = 1.64}) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <Path d="M15 18l-6-6 6-6" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
+    <Path
+      d="M15 18l-6-6 6-6"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </Svg>
 );
 
-const ArrowRight: React.FC<{ size?: number; color?: string }> = ({ size = 20, color = WHITE }) => (
+const ArrowRight: React.FC<{size?: number; color?: string}> = ({
+  size = 20,
+  color = WHITE,
+}) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <Path d="M5 12h14M12 5l7 7-7 7" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+    <Path
+      d="M5 12h14M12 5l7 7-7 7"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </Svg>
 );
 
-const BoxIcon: React.FC<{ size?: number; color?: string }> = ({ size = 18, color = GOLD2 }) => (
+const BoxIcon: React.FC<{size?: number; color?: string}> = ({
+  size = 18,
+  color = GOLD2,
+}) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <Path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-    <Path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+    <Path
+      d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <Path
+      d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"
+      stroke={color}
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </Svg>
 );
 
-const TruckIcon: React.FC<{ size?: number; color?: string }> = ({ size = 14, color = TEXT_SEC }) => (
+const TruckIcon: React.FC<{size?: number; color?: string}> = ({
+  size = 14,
+  color = TEXT_SEC,
+}) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <Path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z" stroke={color} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+    <Path
+      d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8z"
+      stroke={color}
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
     <Circle cx="5.5" cy="18.5" r="2.5" stroke={color} strokeWidth={1.5} />
     <Circle cx="18.5" cy="18.5" r="2.5" stroke={color} strokeWidth={1.5} />
   </Svg>
 );
 
-const MicIcon: React.FC<{ size?: number; color?: string }> = ({ size = 14, color = TEXT_SEC }) => (
+const MicIcon: React.FC<{size?: number; color?: string}> = ({
+  size = 14,
+  color = TEXT_SEC,
+}) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
-    <Rect x="9" y="2" width="6" height="12" rx="3" stroke={color} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-    <Path d="M5 10a7 7 0 0014 0" stroke={color} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-    <Path d="M12 19v3M8 22h8" stroke={color} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+    <Rect
+      x="9"
+      y="2"
+      width="6"
+      height="12"
+      rx="3"
+      stroke={color}
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <Path
+      d="M5 10a7 7 0 0014 0"
+      stroke={color}
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <Path
+      d="M12 19v3M8 22h8"
+      stroke={color}
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </Svg>
 );
 
-const ClockIcon: React.FC<{ size?: number; color?: string }> = ({ size = 14, color = TEXT_SEC }) => (
+const ClockIcon: React.FC<{size?: number; color?: string}> = ({
+  size = 14,
+  color = TEXT_SEC,
+}) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
     <Circle cx="12" cy="12" r="10" stroke={color} strokeWidth={1.5} />
-    <Path d="M12 6v6l4 2" stroke={color} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+    <Path
+      d="M12 6v6l4 2"
+      stroke={color}
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </Svg>
 );
 
 // ── Header ───────────────────────────────────────────────────
-const Header: React.FC<{ onBack: () => void; onSkip: () => void }> = ({ onBack, onSkip }) => {
+const Header: React.FC<{
+  onBack: () => void;
+  onSkip: () => void;
+  pujaName?: string;
+}> = ({onBack, onSkip, pujaName}) => {
   const insets = useSafeAreaInsets();
   const SEG_COLORS = [GOLD, GOLD2, GOLD2, GOLD2, SEG_DIM];
 
   return (
-    <View style={[hdr.wrap, { paddingTop: insets.top }]}>
+    <View style={[hdr.wrap, {paddingTop: insets.top}]}>
       {/* Row: back + title + skip */}
       <View style={hdr.row}>
-        <TouchableOpacity style={hdr.backBtn} onPress={onBack} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={hdr.backBtn}
+          onPress={onBack}
+          activeOpacity={0.8}>
           <View style={hdr.circle}>
             <ChevronLeft size={sc(20)} color={PRIMARY} strokeWidth={2} />
           </View>
         </TouchableOpacity>
 
         <View style={hdr.titleBlock}>
-          <Text style={hdr.title} numberOfLines={1}>Satyanarayan puja</Text>
+          <Text style={hdr.title} numberOfLines={1}>
+            {pujaName || 'Satyanarayan puja'}
+          </Text>
           <Text style={hdr.step}>
             {'Step '}
             <Text style={hdr.bold}>4 / 5</Text>
@@ -99,7 +191,10 @@ const Header: React.FC<{ onBack: () => void; onSkip: () => void }> = ({ onBack, 
           </Text>
         </View>
 
-        <TouchableOpacity style={hdr.skipBtn} onPress={onSkip} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={hdr.skipBtn}
+          onPress={onSkip}
+          activeOpacity={0.8}>
           <Text style={hdr.skipTxt}>Skip</Text>
         </TouchableOpacity>
       </View>
@@ -107,7 +202,7 @@ const Header: React.FC<{ onBack: () => void; onSkip: () => void }> = ({ onBack, 
       {/* Progress segments */}
       <View style={hdr.progRow}>
         {SEG_COLORS.map((c, i) => (
-          <View key={i} style={[hdr.seg, { backgroundColor: c }]} />
+          <View key={i} style={[hdr.seg, {backgroundColor: c}]} />
         ))}
       </View>
     </View>
@@ -157,7 +252,7 @@ const hdr = StyleSheet.create({
     color: WHITE,
     fontFamily: Platform.OS === 'ios' ? 'Inter' : 'sans-serif',
   },
-  bold: { fontWeight: '700' },
+  bold: {fontWeight: '700'},
   skipBtn: {
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.75)',
@@ -186,21 +281,34 @@ const hdr = StyleSheet.create({
 });
 
 // ── Summary Bar ──────────────────────────────────────────────
-const SummaryBar: React.FC = () => (
+const SummaryBar: React.FC<{
+  mode?: string;
+  date?: string | number;
+  time?: any;
+  pandit?: any;
+}> = ({mode, date, time, pandit}) => (
   <View style={sb.wrap}>
     <View style={sb.cell}>
       <Text style={sb.lbl}>Mode:</Text>
-      <Text style={sb.val}>Home Visit</Text>
+      <Text style={sb.val}>{mode || 'Home Visit'}</Text>
     </View>
+
     <View style={sb.divider} />
+
     <View style={sb.cell}>
       <Text style={sb.lbl}>Date & Time:</Text>
-      <Text style={sb.val}>11-05 / 6:00 AM</Text>
+
+      <Text style={sb.val}>
+        {date || '11-05'} / {time?.time || '6:00 AM'}
+      </Text>
     </View>
+
     <View style={sb.divider} />
+
     <View style={sb.cell}>
       <Text style={sb.lbl}>Pandits</Text>
-      <Text style={sb.val}>Pt. Acharya Vivek</Text>
+
+      <Text style={sb.val}>{pandit?.name || 'Pt. Acharya Vivek'}</Text>
     </View>
   </View>
 );
@@ -251,7 +359,9 @@ const EnhanceBanner: React.FC = () => (
     <BoxIcon size={sc(18)} color={GOLD2} />
     <View style={en.textBlock}>
       <Text style={en.title}>Enhance Your Ritual Experience</Text>
-      <Text style={en.sub}>All add-ons are completely optional — skip freely.</Text>
+      <Text style={en.sub}>
+        All add-ons are completely optional — skip freely.
+      </Text>
     </View>
   </View>
 );
@@ -284,12 +394,8 @@ const en = StyleSheet.create({
 });
 
 // ── Image Placeholder ────────────────────────────────────────
-const ImgPlaceholder: React.FC<{ source: any }> = ({ source }) => (
-  <Image
-    source={source}
-    style={img.box}
-    resizeMode="cover"
-  />
+const ImgPlaceholder: React.FC<{source: any}> = ({source}) => (
+  <Image source={source} style={img.box} resizeMode="cover" />
 );
 
 const img = StyleSheet.create({
@@ -298,7 +404,7 @@ const img = StyleSheet.create({
     height: sc(76),
     borderRadius: sc(16),
     overflow: 'hidden',
-  }
+  },
 });
 
 // ── AddonCard ────────────────────────────────────────────────
@@ -310,10 +416,13 @@ interface AddonItem {
   metaType: 'truck' | 'mic_clock';
   metaText: string;
   items?: string[];
-  image:any;
+  image: any;
 }
 
-const MetaRow: React.FC<{ type: 'truck' | 'mic_clock'; text: string }> = ({ type, text }) => {
+const MetaRow: React.FC<{type: 'truck' | 'mic_clock'; text: string}> = ({
+  type,
+  text,
+}) => {
   if (type === 'truck') {
     return (
       <View style={meta.row}>
@@ -336,21 +445,20 @@ const MetaRow: React.FC<{ type: 'truck' | 'mic_clock'; text: string }> = ({ type
 };
 
 const meta = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', gap: sc(4) },
-  txt: { fontSize: sc(10), color: TEXT_SEC, lineHeight: sc(12) },
-  spacer: { width: sc(4) },
+  row: {flexDirection: 'row', alignItems: 'center', gap: sc(4)},
+  txt: {fontSize: sc(10), color: TEXT_SEC, lineHeight: sc(12)},
+  spacer: {width: sc(4)},
 });
 
 const AddonCard: React.FC<{
   item: AddonItem;
   selected: boolean;
   onSelect: () => void;
-}> = ({ item, selected, onSelect }) => (
+}> = ({item, selected, onSelect}) => (
   <TouchableOpacity
     style={[adc.card, selected && adc.cardActive]}
     onPress={onSelect}
-    activeOpacity={0.85}
-  >
+    activeOpacity={0.85}>
     <View style={adc.topRow}>
       <ImgPlaceholder source={item.image} />
 
@@ -374,7 +482,9 @@ const AddonCard: React.FC<{
         <View style={adc.divider} />
         <View style={adc.itemsList}>
           {item.items.map((it, i) => (
-            <Text key={i} style={adc.itemTxt}>{'• ' + it}</Text>
+            <Text key={i} style={adc.itemTxt}>
+              {'• ' + it}
+            </Text>
           ))}
         </View>
       </>
@@ -391,7 +501,7 @@ const adc = StyleSheet.create({
     padding: sc(16),
     gap: sc(10),
   },
-  cardActive: { borderColor: PRIMARY, borderWidth: 1.5 },
+  cardActive: {borderColor: PRIMARY, borderWidth: 1.5},
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -439,7 +549,7 @@ const adc = StyleSheet.create({
     borderTopWidth: 0.75,
     borderTopColor: BORDER,
   },
-  itemsList: { gap: sc(2) },
+  itemsList: {gap: sc(2)},
   itemTxt: {
     fontSize: sc(12),
     color: TEXT_SEC,
@@ -456,8 +566,14 @@ const KITS: AddonItem[] = [
     price: '₹2,100',
     metaType: 'truck',
     metaText: 'Next day delivery',
-    items: ['Diyas (10)', 'Incense sticks', 'Flowers', 'Kumkum & Haldi', 'Coconut'],
-       image: require('../../../../assets/HomeScreen/StoreKit/pk1.jpg'),
+    items: [
+      'Diyas (10)',
+      'Incense sticks',
+      'Flowers',
+      'Kumkum & Haldi',
+      'Coconut',
+    ],
+    image: require('../../../../assets/HomeScreen/StoreKit/pk1.jpg'),
   },
   {
     id: 'complete',
@@ -475,7 +591,7 @@ const KITS: AddonItem[] = [
     price: '₹2,100',
     metaType: 'truck',
     metaText: 'Same day delivery',
-        image: require('../../../../assets/HomeScreen/StoreKit/pk3.jpg'),
+    image: require('../../../../assets/HomeScreen/StoreKit/pk3.jpg'),
   },
 ];
 
@@ -486,7 +602,7 @@ const BHAJANS: AddonItem[] = [
     price: '₹2,100',
     metaType: 'mic_clock',
     metaText: '2 singers  1 Hour',
-        image: require('../../../../assets/HomeScreen/StoreKit/pk1.jpg'),
+    image: require('../../../../assets/HomeScreen/StoreKit/pk1.jpg'),
   },
   {
     id: 'pro',
@@ -495,8 +611,13 @@ const BHAJANS: AddonItem[] = [
     price: '₹2,100',
     metaType: 'mic_clock',
     metaText: '2 singers  1 Hour',
-    items: ['4 professional singers', 'Full percussion', 'Customised song selection', 'Sound system'],
-        image: require('../../../../assets/HomeScreen/StoreKit/pk2.jpg'),
+    items: [
+      '4 professional singers',
+      'Full percussion',
+      'Customised song selection',
+      'Sound system',
+    ],
+    image: require('../../../../assets/HomeScreen/StoreKit/pk2.jpg'),
   },
   {
     id: 'advanced',
@@ -504,29 +625,60 @@ const BHAJANS: AddonItem[] = [
     price: '₹2,100',
     metaType: 'mic_clock',
     metaText: '2 singers  1 Hour',
-        image: require('../../../../assets/HomeScreen/StoreKit/pk3.jpg'),
+    image: require('../../../../assets/HomeScreen/StoreKit/pk3.jpg'),
   },
 ];
 
 // ── Screen ───────────────────────────────────────────────────
-export const AddOnsScreen: React.FC<{ navigation?: any }> = ({ navigation }) => {
+export const AddOnsScreen: React.FC<{
+  navigation?: any;
+  route?: any;
+}> = ({navigation, route}) => {
+  const {
+    puja,
+    pujaId,
+    selectedMode,
+    selectedDate,
+    selectedTime,
+    selectedPandit,
+  } = route?.params || {};
   const [selectedKit, setSelectedKit] = useState<string | null>(null);
+  const formattedMode =
+    selectedMode === 'home_visit'
+      ? 'Home Visit'
+      : selectedMode === 'temple_visit'
+      ? 'Temple Visit'
+      : 'Home Visit';
   const [selectedBhajan, setSelectedBhajan] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
 
   return (
     <View style={s.container}>
       <Header
+        pujaName={puja?.title}
         onBack={() => navigation?.goBack()}
-        onSkip={() => navigation?.navigate('Payment')}
+        onSkip={() =>
+          navigation?.navigate('Payment', {
+            puja,
+            pujaId,
+            selectedMode,
+            selectedDate,
+            selectedTime,
+            selectedPandit,
+          })
+        }
       />
 
-      <SummaryBar />
+      <SummaryBar
+        mode={formattedMode}
+        date={selectedDate}
+        time={selectedTime}
+        pandit={selectedPandit}
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={s.scroll}
-      >
+        contentContainerStyle={s.scroll}>
         {/* ── Puja Kit section ── */}
         <View style={s.sectionHeader}>
           <Text style={s.sectionTitle}>Puja Kit</Text>
@@ -540,7 +692,9 @@ export const AddOnsScreen: React.FC<{ navigation?: any }> = ({ navigation }) => 
             key={kit.id}
             item={kit}
             selected={selectedKit === kit.id}
-            onSelect={() => setSelectedKit(selectedKit === kit.id ? null : kit.id)}
+            onSelect={() =>
+              setSelectedKit(selectedKit === kit.id ? null : kit.id)
+            }
           />
         ))}
 
@@ -558,18 +712,30 @@ export const AddOnsScreen: React.FC<{ navigation?: any }> = ({ navigation }) => 
             key={b.id}
             item={b}
             selected={selectedBhajan === b.id}
-            onSelect={() => setSelectedBhajan(selectedBhajan === b.id ? null : b.id)}
+            onSelect={() =>
+              setSelectedBhajan(selectedBhajan === b.id ? null : b.id)
+            }
           />
         ))}
       </ScrollView>
 
       {/* ── Footer ── */}
-      <View style={[s.footer, { paddingBottom: insets.bottom || sc(16) }]}>
+      <View style={[s.footer, {paddingBottom: insets.bottom || sc(16)}]}>
         <TouchableOpacity
           style={s.cta}
-          onPress={() => navigation?.navigate('Payment')}
-          activeOpacity={0.88}
-        >
+          onPress={() =>
+            navigation?.navigate('Payment', {
+              puja,
+              pujaId,
+              selectedMode,
+              selectedDate,
+              selectedTime,
+              selectedPandit,
+              selectedKit,
+              selectedBhajan,
+            })
+          }
+          activeOpacity={0.88}>
           <Text style={s.ctaTxt}>Continue Booking</Text>
           <ArrowRight size={sc(20)} color={WHITE} />
         </TouchableOpacity>
@@ -579,14 +745,14 @@ export const AddOnsScreen: React.FC<{ navigation?: any }> = ({ navigation }) => 
 };
 
 const s = StyleSheet.create({
-  container: { flex: 1, backgroundColor: WHITE },
+  container: {flex: 1, backgroundColor: WHITE},
   scroll: {
     paddingHorizontal: sc(20),
     paddingTop: sc(16),
     paddingBottom: sc(32),
     gap: sc(12),
   },
-  sectionHeader: { gap: sc(2) },
+  sectionHeader: {gap: sc(2)},
   sectionTitle: {
     fontWeight: '700',
     fontSize: sc(20),

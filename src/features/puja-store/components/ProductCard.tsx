@@ -16,8 +16,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const HORIZONTAL_PADDING = 20;
 const GAP = 15;
 
-const STORE_CARD_WIDTH =
-  (SCREEN_WIDTH - HORIZONTAL_PADDING * 2 - GAP) / 2;
+const STORE_CARD_WIDTH = (SCREEN_WIDTH - HORIZONTAL_PADDING * 2 - GAP) / 2;
 
 const HOME_CARD_WIDTH = 130;
 
@@ -34,11 +33,7 @@ export const ProductCard: React.FC<Props> = ({
   onAdd,
   variant = 'home',
 }) => {
-
-  const cardWidth =
-    variant === 'store'
-      ? STORE_CARD_WIDTH
-      : HOME_CARD_WIDTH;
+  const cardWidth = variant === 'store' ? STORE_CARD_WIDTH : HOME_CARD_WIDTH;
 
   return (
     <TouchableOpacity
@@ -51,50 +46,34 @@ export const ProductCard: React.FC<Props> = ({
       ]}
       onPress={() => onPress(item.id)}
       activeOpacity={0.85}>
-
       {/* IMAGE */}
-      <Image
-        source={item.imageUrl}
-        style={styles.image}
-        resizeMode="cover"
-      />
+      <Image source={item.imageUrl} style={styles.image} resizeMode="cover" />
 
-      {/* INFO */}
+      {/* CONTENT */}
       <View style={styles.infoContainer}>
-
         {/* TOP CONTENT */}
         <View style={styles.topContent}>
-
-          <Text
-            style={styles.title}
-            numberOfLines={2}>
+          {/* TITLE */}
+          <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
             {item.name}
           </Text>
 
-          <Text style={styles.itemCount}>
+          {/* ITEM COUNT */}
+          <Text style={styles.itemCount} numberOfLines={1}>
             {item.itemCount} items included
           </Text>
 
           {/* RATING */}
           <View style={styles.ratingRow}>
+            <Text style={styles.star}>★</Text>
 
-            <Text style={styles.star}>
-              ★
-            </Text>
+            <Text style={styles.ratingVal}>{item.rating}</Text>
 
-            <Text style={styles.ratingVal}>
-              {item.rating}
-            </Text>
-
-            <Text style={styles.reviewCount}>
-              ({item.reviewCount})
-            </Text>
-
+            <Text style={styles.reviewCount}>({item.reviewCount})</Text>
           </View>
 
           {/* PRICE */}
           <View style={styles.priceRow}>
-
             <Text style={styles.price}>
               ₹{item.price?.toLocaleString('en-IN')}
             </Text>
@@ -102,9 +81,7 @@ export const ProductCard: React.FC<Props> = ({
             <Text style={styles.originalPrice}>
               ₹{item.originalPrice?.toLocaleString('en-IN')}
             </Text>
-
           </View>
-
         </View>
 
         {/* ADD BUTTON */}
@@ -115,19 +92,11 @@ export const ProductCard: React.FC<Props> = ({
             onAdd(item.id);
           }}
           activeOpacity={0.8}>
+          <Text style={styles.addIcon}>＋</Text>
 
-          <Text style={styles.addIcon}>
-            ＋
-          </Text>
-
-          <Text style={styles.addText}>
-            Add
-          </Text>
-
+          <Text style={styles.addText}>Add</Text>
         </TouchableOpacity>
-
       </View>
-
     </TouchableOpacity>
   );
 };
@@ -145,47 +114,50 @@ const styles = StyleSheet.create({
 
     backgroundColor: '#E0E0E0',
 
-    marginBottom: 6,
+    marginBottom: 8,
   },
 
   infoContainer: {
-    height: 150,
+    flex: 1,
   },
 
   topContent: {
-    gap: 2,
+    rowGap: 4,
   },
 
+  /* TITLE */
   title: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Lato-Bold'
-        : 'Lato_700Bold',
+    fontFamily: Platform.OS === 'ios' ? 'Lato-Bold' : 'Lato_700Bold',
 
     fontSize: 14,
-    lineHeight: 22,
+    lineHeight: 20,
 
     color: '#281518',
+
+    height: 40, // FIXED 2 LINES
   },
 
+  /* DESCRIPTION */
   itemCount: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Inter'
-        : 'Inter_400Regular',
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter_400Regular',
 
     fontSize: 10,
     lineHeight: 12,
 
     color: '#757575',
+
+    height: 12,
   },
 
+  /* RATING */
   ratingRow: {
     flexDirection: 'row',
 
     alignItems: 'center',
 
     gap: 2,
+
+    height: 18,
   },
 
   star: {
@@ -196,29 +168,28 @@ const styles = StyleSheet.create({
   },
 
   ratingVal: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Lato-Bold'
-        : 'Lato_700Bold',
-
+    fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',
+    fontWeight: 'bold',
     fontSize: 12,
     lineHeight: 18,
 
     color: '#281518',
+
+    includeFontPadding: false,
   },
 
   reviewCount: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Inter'
-        : 'Inter_400Regular',
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter',
 
     fontSize: 10,
     lineHeight: 12,
 
     color: '#666666',
+
+    includeFontPadding: false,
   },
 
+  /* PRICE */
   priceRow: {
     flexDirection: 'row',
 
@@ -227,14 +198,13 @@ const styles = StyleSheet.create({
     gap: 4,
 
     marginTop: 2,
+
+    height: 24,
   },
 
   price: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Lato-Bold'
-        : 'Lato_700Bold',
-
+    fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',
+    fontWeight: 'bold',
     fontSize: 16,
     lineHeight: 22,
 
@@ -244,10 +214,7 @@ const styles = StyleSheet.create({
   },
 
   originalPrice: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Inter'
-        : 'Inter_400Regular',
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter',
 
     fontSize: 10,
     lineHeight: 10,
@@ -261,6 +228,7 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
   },
 
+  /* BUTTON */
   addBtn: {
     flexDirection: 'row',
 
@@ -276,22 +244,21 @@ const styles = StyleSheet.create({
 
     gap: 4,
 
-    marginTop: 'auto',
+    marginTop: 12,
   },
 
   addIcon: {
-    fontSize: 16,
-    lineHeight: 18,
-
+    fontSize: 18,
+    lineHeight: 20,
     color: '#FFFAF0',
+    includeFontPadding: false,
   },
 
   addText: {
-    fontFamily: 'Roboto-Medium',
-
+    fontFamily: Platform.OS === 'ios' ? 'Roboto' : 'Roboto',
     fontSize: 16,
-    lineHeight: 24,
-
+    lineHeight: 20,
     color: '#FFFAF0',
+    includeFontPadding: false,
   },
 });

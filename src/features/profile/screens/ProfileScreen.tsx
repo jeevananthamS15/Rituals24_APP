@@ -22,10 +22,9 @@ import {
   Pencil,
 } from 'lucide-react-native';
 
-
 import {ScreenWrapper} from '../../../components/layout/ScreenWrapper';
 import {APP_VERSION} from '../../../constants';
-
+import {useAuth} from '../../../app/providers/AuthProvider';
 const ICON_SIZE = 20;
 const ICON_COLOR = '#0D0D12';
 
@@ -74,8 +73,11 @@ const MENU_SECTIONS = [
 ];
 
 export const ProfileScreen = () => {
-  const userName = 'Amit';
-  const mobile = '9766776767';
+  const {user, logout} = useAuth();
+
+  const userName = user?.name || 'Devotee';
+
+const mobile = user?.phoneNumber || 'Not Available';
 
   return (
     <ScreenWrapper scrollable>
@@ -131,7 +133,12 @@ export const ProfileScreen = () => {
                       styles.menuItem,
                       item.highlighted && styles.highlightedItem,
                     ]}
-                    activeOpacity={0.7}>
+                    activeOpacity={0.7}
+                    onPress={async () => {
+                      if (item.id === 'logout') {
+                        await logout();
+                      }
+                    }}>
                     <Icon
                       size={ICON_SIZE}
                       color={item.destructive ? '#FF383C' : ICON_COLOR}

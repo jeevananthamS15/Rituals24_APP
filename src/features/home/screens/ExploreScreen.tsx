@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -9,24 +9,16 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native';
-import { theme } from '../../../theme';
-import { ScreenWrapper } from '../../../components/layout/ScreenWrapper';
-import { SectionHeader } from '../components/SectionHeader';
-import { PujaCard } from '../../pujas/components/PujaCard';
-import { PanditCard } from '../../pandits/components/PanditCard';
-import { TempleCard } from '../../temples/components/TempleCard';
-import { ProductCard } from '../../puja-store/components/ProductCard';
-import { BhajanCard } from '../../bhajan/components/BhajanCard';
-import { EXPLORE_TABS } from '../../../constants';
-import {
-  MOCK_PUJAS,
-  MOCK_PANDITS,
-  MOCK_TEMPLES,
-  MOCK_PRODUCTS,
-  MOCK_BHAJANS,
-} from '../../../constants/mockData';
-
-// lucide-react-native icons — run: npm install lucide-react-native
+import {theme} from '../../../theme';
+import {ScreenWrapper} from '../../../components/layout/ScreenWrapper';
+import {SectionHeader} from '../components/SectionHeader';
+import {PujaCard} from '../../pujas/components/PujaCard';
+import {PanditCard} from '../../pandits/components/PanditCard';
+import {TempleCard} from '../../temples/components/TempleCard';
+import {ProductCard} from '../../puja-store/components/ProductCard';
+import {BhajanCard} from '../../bhajan/components/BhajanCard';
+import {getHomeData} from '../../../services/home.service';
+import {EXPLORE_TABS} from '../../../constants';
 import {
   Search,
   Mic,
@@ -34,39 +26,79 @@ import {
   Heart,
   ShoppingCart,
   TrendingUp,
-  ChevronRight,
 } from 'lucide-react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
 const H_PADDING = 20;
-const CONTENT_WIDTH = SCREEN_WIDTH - H_PADDING * 2;
 
 const PRIMARY = '#2B000A';
 const TEXT_SECONDARY = '#666666';
 const TEXT_MUTED = '#757575';
 const BORDER = '#D9D9D9';
 const SURFACE = '#F9F9F9';
-const STAR_COLOR = '#F3B416';
 
 const TRENDING = [
-  { label: 'Pandits', icon: true },
-  { label: 'Temple Darshan', icon: true },
-  { label: 'Satyanarayan Puja', icon: true },
-  { label: 'Puja Kit', icon: true },
-  { label: 'Griha Pravesh', icon: true },
-  { label: 'Navratri', icon: true },
+  {label: 'Pandits'},
+  {label: 'Temple Darshan'},
+  {label: 'Satyanarayan Puja'},
+  {label: 'Puja Kit'},
+  {label: 'Griha Pravesh'},
+  {label: 'Navratri'},
 ];
 
 const EXPLORE_TABS_LIST = ['All', 'Pandits', 'Poojas', 'Temples', 'Store', 'Bhajan'];
 
+const Divider = () => (
+  <LinearGradient
+    colors={['#FFFFFF', '#2B000A', '#FFFFFF']}
+    start={{x: 0, y: 0}}
+    end={{x: 1, y: 0}}
+    style={styles.divider}
+  />
+);
+
 export const ExploreScreen = () => {
+  const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
   const [activeTab, setActiveTab] = useState('All');
+  const [pujas, setPujas] = useState([]);
+  const [pandits, setPandits] = useState([]);
+  const [temples, setTemples] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [bhajans, setBhajans] = useState([]);
+
+  useEffect(() => {
+    loadExploreData();
+  }, []);
+
+  const loadExploreData = async () => {
+    try {
+      setLoading(true);
+      const data = await getHomeData();
+      setPujas(data.pujas);
+      setPandits(data.pandits);
+      setTemples(data.temples);
+      setProducts(data.products);
+      setBhajans(data.bhajans);
+    } catch (error) {
+      console.log('EXPLORE API ERROR:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFFFFF'}}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScreenWrapper scrollable>
-
-      {/* Header */}
+      {/* ── Header ── */}
       <View style={styles.header}>
         <Text style={styles.title}>Explore</Text>
         <View style={styles.headerIcons}>
@@ -82,7 +114,7 @@ export const ExploreScreen = () => {
         </View>
       </View>
 
-      {/* Search Bar */}
+      {/* ── Search Bar ── */}
       <View style={styles.searchRow}>
         <View style={styles.searchBar}>
           <View style={styles.searchLeft}>
@@ -101,45 +133,38 @@ export const ExploreScreen = () => {
         </View>
       </View>
 
-      {/* Trending Searches */}
+      {/* ── Trending + Divider (one block, no fragment) ── */}
       {query.length === 0 && (
-        <>
-          <View style={styles.trendingSection}>
-            <Text style={styles.trendingTitle}>Trending Searches</Text>
-            <View style={styles.trendingGrid}>
-              {TRENDING.map((item) => (
-                <TouchableOpacity
-                  key={item.label}
-                  style={styles.trendingItem}
-                  onPress={() => setQuery(item.label)}
-                  activeOpacity={0.7}
-                >
-                  <TrendingUp size={16} color={TEXT_SECONDARY} strokeWidth={1.5} />
-                  <Text style={styles.trendingText}>{item.label}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+        <View style={styles.trendingSection}>
+          <Text style={styles.trendingTitle}>Trending Searches</Text>
+          <View style={styles.trendingGrid}>
+            {TRENDING.map(item => (
+              <TouchableOpacity
+                key={item.label}
+                style={styles.trendingItem}
+                onPress={() => setQuery(item.label)}
+                activeOpacity={0.7}>
+                <TrendingUp size={16} color={TEXT_SECONDARY} strokeWidth={1.5} />
+                <Text style={styles.trendingText}>{item.label}</Text>
+              </TouchableOpacity>
+            ))}
           </View>
-
-          {/* Divider */}
-          <View style={styles.divider} />
-        </>
+          <Divider />
+        </View>
       )}
 
-      {/* Filter Tabs */}
+      {/* ── Filter Tabs ── */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.tabs}
-        style={styles.tabsContainer}
-      >
-        {EXPLORE_TABS_LIST.map((tab) => (
+        contentContainerStyle={styles.tabsContent}
+        style={styles.tabsScroll}>
+        {EXPLORE_TABS_LIST.map(tab => (
           <TouchableOpacity
             key={tab}
             style={[styles.tab, activeTab === tab && styles.tabActive]}
             onPress={() => setActiveTab(tab)}
-            activeOpacity={0.7}
-          >
+            activeOpacity={0.7}>
             <Text style={[styles.tabText, activeTab === tab && styles.tabTextActive]}>
               {tab}
             </Text>
@@ -147,14 +172,14 @@ export const ExploreScreen = () => {
         ))}
       </ScrollView>
 
-      {/* Puja Services */}
+      {/* ── Puja Services ── */}
       {(activeTab === 'All' || activeTab === 'Poojas') && (
         <View style={styles.section}>
           <SectionHeader title="Our Puja Services" onViewAll={() => {}} />
           <FlatList
-            data={MOCK_PUJAS}
-            renderItem={({ item }) => <PujaCard item={item} onPress={() => {}} />}
-            keyExtractor={(item) => item.id}
+            data={pujas}
+            renderItem={({item}) => <PujaCard item={item} onPress={() => {}} />}
+            keyExtractor={item => item.id}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.hList}
@@ -162,16 +187,16 @@ export const ExploreScreen = () => {
         </View>
       )}
 
-      {/* Store */}
+      {/* ── Store ── */}
       {(activeTab === 'All' || activeTab === 'Store') && (
         <View style={styles.section}>
           <SectionHeader title="Our Store" onViewAll={() => {}} />
           <FlatList
-            data={MOCK_PRODUCTS}
-            renderItem={({ item }) => (
+            data={products}
+            renderItem={({item}) => (
               <ProductCard item={item} onPress={() => {}} onAdd={() => {}} />
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={item => item.id}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.hList}
@@ -179,14 +204,14 @@ export const ExploreScreen = () => {
         </View>
       )}
 
-      {/* Pandits */}
+      {/* ── Pandits ── */}
       {(activeTab === 'All' || activeTab === 'Pandits') && (
         <View style={styles.section}>
           <SectionHeader title="Our Pandits" onViewAll={() => {}} />
           <FlatList
-            data={MOCK_PANDITS}
-            renderItem={({ item }) => <PanditCard item={item} onPress={() => {}} />}
-            keyExtractor={(item) => item.id}
+            data={pandits}
+            renderItem={({item}) => <PanditCard item={item} onPress={() => {}} />}
+            keyExtractor={item => item.id}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.hList}
@@ -194,14 +219,14 @@ export const ExploreScreen = () => {
         </View>
       )}
 
-      {/* Temples */}
+      {/* ── Temples ── */}
       {(activeTab === 'All' || activeTab === 'Temples') && (
         <View style={styles.section}>
           <SectionHeader title="Temple Pooja & Darshan" onViewAll={() => {}} />
           <FlatList
-            data={MOCK_TEMPLES}
-            renderItem={({ item }) => <TempleCard item={item} onPress={() => {}} />}
-            keyExtractor={(item) => item.id}
+            data={temples}
+            renderItem={({item}) => <TempleCard item={item} onPress={() => {}} />}
+            keyExtractor={item => item.id}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.hList}
@@ -209,14 +234,16 @@ export const ExploreScreen = () => {
         </View>
       )}
 
-      {/* Bhajan */}
+      {/* ── Bhajan ── */}
       {(activeTab === 'All' || activeTab === 'Bhajan') && (
         <View style={[styles.section, styles.lastSection]}>
           <SectionHeader title="Book a Bhajan" onViewAll={() => {}} />
           <FlatList
-            data={MOCK_BHAJANS}
-            renderItem={({ item }) => <BhajanCard item={item} onPress={() => {}} />}
-            keyExtractor={(item) => item.id}
+            data={bhajans}
+            renderItem={({item}) => (
+              <BhajanCard item={item} onPress={() => {}} variant="home" />
+            )}
+            keyExtractor={item => item.id}
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.hList}
@@ -228,7 +255,7 @@ export const ExploreScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  /* ─── Header ─── */
+  /* ── Header ── */
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -256,7 +283,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  /* ─── Search ─── */
+  /* ── Search ── */
   searchRow: {
     paddingHorizontal: H_PADDING,
     marginBottom: 14,
@@ -285,7 +312,6 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: TEXT_MUTED,
     paddingVertical: 0,
-    textAlign: 'left',
   },
   micWrapper: {
     width: 24,
@@ -297,10 +323,10 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
 
-  /* ─── Trending ─── */
+  /* ── Trending ── */
   trendingSection: {
     paddingHorizontal: H_PADDING,
-    marginBottom: 14,
+    // NO marginBottom here — divider's own marginBottom handles the gap
   },
   trendingTitle: {
     fontFamily: 'Lato-Medium',
@@ -314,7 +340,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     rowGap: 6,
-    columnGap: 0,
   },
   trendingItem: {
     flexDirection: 'row',
@@ -331,21 +356,23 @@ const styles = StyleSheet.create({
     color: TEXT_SECONDARY,
   },
 
+  /* ── Divider ── */
   divider: {
-    height: 1,
-    backgroundColor: BORDER,
-    marginHorizontal: H_PADDING,
-    marginBottom: 14,
+    height: StyleSheet.hairlineWidth,
+    marginHorizontal: 0, // already inside paddingHorizontal of parent
+    marginTop: 10,
+    marginBottom: 10,    // this is the ONLY spacing between divider and tabs
   },
 
-  /* ─── Tabs ─── */
-  tabsContainer: {
+  /* ── Tabs ── */
+  tabsScroll: {
+    flexGrow: 0,         // KEY: prevents ScrollView from taking extra height
+    flexShrink: 0,
     marginBottom: 12,
   },
-  tabs: {
+  tabsContent: {
     paddingHorizontal: H_PADDING,
     gap: 8,
-    flexDirection: 'row',
     alignItems: 'center',
   },
   tab: {
@@ -371,7 +398,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 
-  /* ─── Sections ─── */
+  /* ── Sections ── */
   section: {
     marginBottom: 24,
   },

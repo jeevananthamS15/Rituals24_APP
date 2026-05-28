@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
 
     fontSize: 14,
     lineHeight: 22,
-
+    fontWeight: 'bold',
     minHeight: 22,
   },
 
@@ -149,17 +149,17 @@ const styles = StyleSheet.create({
   },
 
   ratingVal: {
-    fontFamily: Platform.OS === 'ios' ? 'Lato-Bold' : 'Lato_700Bold',
-
+    fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',
+    fontWeight: 'bold',
     fontSize: 12,
     lineHeight: 18,
   },
 
   reviewCount: {
-    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter_400Regular',
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter',
 
     fontSize: 10,
-    lineHeight: 12,
+    lineHeight: 18,
   },
 
   priceRow: {
@@ -173,8 +173,8 @@ const styles = StyleSheet.create({
   },
 
   price: {
-    fontFamily: Platform.OS === 'ios' ? 'Lato-Bold' : 'Lato_700Bold',
-
+    fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',
+    fontWeight: 'bold',
     fontSize: 16,
     lineHeight: 22,
 

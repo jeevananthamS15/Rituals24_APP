@@ -48,32 +48,19 @@ interface Props {
   onPress: (id: string) => void;
 }
 
-export const PanditCard: React.FC<Props> = ({
-  item,
-  onPress,
-}) => {
-  const tierKey = (
-    item.tier || 'silver'
-  ).toLowerCase();
+export const PanditCard: React.FC<Props> = ({item, onPress}) => {
+  const tierKey = (item.tier || 'silver').toLowerCase();
 
-  const tier =
-    TIER_CONFIG[tierKey] ??
-    TIER_CONFIG.silver;
+  const tier = TIER_CONFIG[tierKey] ?? TIER_CONFIG.silver;
 
   return (
     <TouchableOpacity
       style={styles.card}
       onPress={() => onPress(item.id)}
       activeOpacity={0.85}>
-
       {/* IMAGE SECTION */}
       <View style={styles.imageContainer}>
-
-        <Image
-          source={item.imageUrl}
-          style={styles.image}
-          resizeMode="cover"
-        />
+        <Image source={item.imageUrl} style={styles.image} resizeMode="cover" />
 
         <View
           style={[
@@ -82,7 +69,6 @@ export const PanditCard: React.FC<Props> = ({
               backgroundColor: tier.bg,
             },
           ]}>
-
           <Text
             style={[
               styles.pujasBadgeText,
@@ -90,113 +76,65 @@ export const PanditCard: React.FC<Props> = ({
                 color: tier.textColor,
               },
             ]}>
-
             ✓ {item.pujaCount}+ Pujas
-
           </Text>
-
         </View>
-
       </View>
 
       {/* INFO SECTION */}
       <View style={styles.infoContainer}>
-
         <View style={styles.topContent}>
-
-          <Text
-            style={styles.name}
-            numberOfLines={1}>
-
+          <Text style={styles.name} numberOfLines={1}>
             {item.name}
-
           </Text>
 
           <View style={styles.metaRow}>
+            <Text style={styles.metaText}>{item.years} Years</Text>
 
-            <Text style={styles.metaText}>
-              {item.years} Years
-            </Text>
+            <Text style={styles.bullet}>•</Text>
 
-            <Text style={styles.bullet}>
-              •
-            </Text>
-
-            <Text
-              style={styles.metaText}
-              numberOfLines={1}>
-
+            <Text style={styles.metaText} numberOfLines={1}>
               {item.languages?.join(', ')}
-
             </Text>
-
           </View>
 
           <View style={styles.ratingRow}>
+            <Text style={styles.star}>★</Text>
 
-            <Text style={styles.star}>
-              ★
-            </Text>
+            <Text style={styles.ratingVal}>{item.rating}</Text>
 
-            <Text style={styles.ratingVal}>
-              {item.rating}
-            </Text>
-
-            <Text style={styles.reviewCount}>
-              ({item.reviewCount})
-            </Text>
+            <Text style={styles.reviewCount}>({item.reviewCount})</Text>
 
             <View
               style={[
                 styles.tierPill,
                 {
-                  backgroundColor:
-                    tier.badgeBg,
+                  backgroundColor: tier.badgeBg,
                 },
               ]}>
-
               <Text
                 style={[
                   styles.tierText,
                   {
-                    color:
-                      tier.textColor,
+                    color: tier.textColor,
                   },
                 ]}>
-
                 {tier.badgeName}
-
               </Text>
-
             </View>
-
           </View>
 
           <View style={styles.priceRow}>
-
             <Text style={styles.price}>
-              ₹
-              {item.price?.toLocaleString(
-                'en-IN',
-              )}
+              ₹{item.price?.toLocaleString('en-IN')}
             </Text>
 
-            <Text
-              style={styles.originalPrice}>
-
-              ₹
-              {item.originalPrice?.toLocaleString(
-                'en-IN',
-              )}
-
+            <Text style={styles.originalPrice}>
+              ₹{item.originalPrice?.toLocaleString('en-IN')}
             </Text>
-
           </View>
-
         </View>
-
       </View>
-
     </TouchableOpacity>
   );
 };
@@ -241,10 +179,7 @@ const styles = StyleSheet.create({
   },
 
   pujasBadgeText: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Inter'
-        : 'Inter_600SemiBold',
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter_600SemiBold',
 
     fontSize: 10,
     lineHeight: 14,
@@ -259,11 +194,8 @@ const styles = StyleSheet.create({
   },
 
   name: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Lato-Bold'
-        : 'Lato_700Bold',
-
+    fontFamily: Platform.OS === 'ios' ? 'Lato-Bold' : 'Lato_700Bold',
+    fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 22,
 
@@ -280,10 +212,7 @@ const styles = StyleSheet.create({
   },
 
   metaText: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Inter'
-        : 'Inter_400Regular',
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter_400Regular',
 
     fontSize: 10,
     lineHeight: 12,
@@ -315,11 +244,8 @@ const styles = StyleSheet.create({
   },
 
   ratingVal: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Lato-Bold'
-        : 'Lato_700Bold',
-
+    fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',
+    fontWeight: 'bold',
     fontSize: 12,
     lineHeight: 18,
 
@@ -327,10 +253,7 @@ const styles = StyleSheet.create({
   },
 
   reviewCount: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Inter'
-        : 'Inter_400Regular',
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter_400Regular',
 
     fontSize: 10,
     lineHeight: 12,
@@ -348,10 +271,7 @@ const styles = StyleSheet.create({
   },
 
   tierText: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Inter'
-        : 'Inter_400Regular',
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter_400Regular',
 
     fontSize: 10,
     lineHeight: 12,
@@ -368,11 +288,8 @@ const styles = StyleSheet.create({
   },
 
   price: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Lato-Bold'
-        : 'Lato_700Bold',
-
+    fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',
+    fontWeight: 'bold',
     fontSize: 16,
     lineHeight: 22,
 
@@ -382,10 +299,7 @@ const styles = StyleSheet.create({
   },
 
   originalPrice: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Inter'
-        : 'Inter_400Regular',
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter_400Regular',
 
     fontSize: 10,
     lineHeight: 10,

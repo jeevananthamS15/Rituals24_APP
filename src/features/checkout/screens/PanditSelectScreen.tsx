@@ -105,7 +105,8 @@ const Header: React.FC<{
   step: number;
   filledCount: number;
   onBack: () => void;
-}> = ({step, filledCount, onBack}) => {
+  title?: string;
+}> = ({step, filledCount, onBack, title}) => {
   const insets = useSafeAreaInsets();
 
   return (
@@ -120,7 +121,7 @@ const Header: React.FC<{
       </TouchableOpacity>
 
       <View style={hdr.titleBlock}>
-        <Text style={hdr.title}>Satyanarayan puja</Text>
+        <Text style={hdr.title}> {title || 'Satyanarayan puja'}</Text>
 
         <Text style={hdr.step}>
           Step <Text style={hdr.bold}>{step} / 5</Text> :{' '}
@@ -215,23 +216,46 @@ const hdr = StyleSheet.create({
   },
 });
 
-const SummaryBar: React.FC = () => (
-  <View style={sb.wrap}>
-    <View style={sb.cell}>
-      <Text style={sb.lbl}>Mode:</Text>
-      <Text style={sb.val}>Home Visit</Text>
+const SummaryBar: React.FC<{
+  selectedMode?: string;
+  selectedDate?: number;
+  selectedTime?: any;
+}> = ({selectedMode, selectedDate, selectedTime}) => {
+  const formattedMode =
+    selectedMode === 'home_visit'
+      ? 'Home Visit'
+      : selectedMode === 'temple_visit'
+      ? 'Temple Visit'
+      : 'Home Visit';
+
+  return (
+    <View style={sb.wrap}>
+      <View style={sb.cell}>
+        <Text style={sb.lbl}>Mode:</Text>
+
+        <Text style={sb.val}>{formattedMode}</Text>
+      </View>
+
+      <View style={sb.div} />
+
+      <View style={sb.cell}>
+        <Text style={sb.lbl}>Date & Time:</Text>
+
+        <Text style={sb.val}>
+          {selectedDate
+            ? `${selectedDate}-05 / ${selectedTime?.time || ''}`
+            : '11-05 / 6:00 AM'}
+        </Text>
+      </View>
+
+      <View style={sb.div} />
+
+      <View style={sb.cell}>
+        <Text style={sb.lbl}>Pandits</Text>
+      </View>
     </View>
-    <View style={sb.div} />
-    <View style={sb.cell}>
-      <Text style={sb.lbl}>Date &amp; Time:</Text>
-      <Text style={sb.val}>11-05 / 6:00 AM</Text>
-    </View>
-    <View style={sb.div} />
-    <View style={sb.cell}>
-      <Text style={sb.lbl}>Pandits</Text>
-    </View>
-  </View>
-);
+  );
+};
 
 const sb = StyleSheet.create({
   wrap: {
@@ -428,16 +452,34 @@ const pc = StyleSheet.create({
 });
 
 // ─── Main Screen ──────────────────────────────────────────────────────────────
-export const PanditSelectScreen: React.FC<{navigation?: any}> = ({
-  navigation,
-}) => {
+export const PanditSelectScreen: React.FC<{
+  navigation?: any;
+  route?: any;
+}> = ({navigation, route}) => {
+  const {puja, pujaId, selectedMode, selectedDate, selectedTime} =
+    route?.params || {};
   const [selectedId, setSelectedId] = useState<string>('1');
   const insets = useSafeAreaInsets();
+  console.log('Received Puja:', puja);
+  console.log('Received Puja ID:', pujaId);
+  console.log('Received Mode:', selectedMode);
+  console.log('Received Date:', selectedDate);
+  console.log('Received Time:', selectedTime);
 
+  const selectedPandit = PANDITS.find(p => p.id === selectedId);
   return (
     <View style={s.container}>
-      <Header step={3} filledCount={3} onBack={() => navigation?.goBack()} />
-      <SummaryBar />
+      <Header
+        step={3}
+        filledCount={3}
+        title={puja?.title}
+        onBack={() => navigation?.goBack()}
+      />
+      <SummaryBar
+        selectedMode={selectedMode}
+        selectedDate={selectedDate}
+        selectedTime={selectedTime}
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -461,7 +503,16 @@ export const PanditSelectScreen: React.FC<{navigation?: any}> = ({
       <View style={[s.footer, {paddingBottom: insets.bottom + sc(8)}]}>
         <TouchableOpacity
           style={[s.cta, !selectedId && s.ctaDis]}
-          onPress={() => navigation?.navigate('AddOns')}
+          onPress={() =>
+            navigation?.navigate('AddOns', {
+              puja,
+              pujaId,
+              selectedMode,
+              selectedDate,
+              selectedTime,
+              selectedPandit: PANDITS.find(p => p.id === selectedId),
+            })
+          }
           disabled={!selectedId}
           activeOpacity={0.88}>
           <Text style={s.ctaTxt}>Continue Booking</Text>

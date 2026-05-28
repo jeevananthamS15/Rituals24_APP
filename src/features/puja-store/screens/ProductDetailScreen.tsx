@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ProductCard} from '../components/ProductCard';
-
+import {getHomeData} from '../../../services/home.service';
 import {
   ChevronLeft,
   Bell,
@@ -86,13 +86,26 @@ const StarRow = ({count = 5}: {count?: number}) => (
 );
 
 export const ProductDetailScreen = ({route, navigation}: Props) => {
-  const {productId} = route.params;
-  const product =
-    MOCK_PRODUCTS.find(p => p.id === productId) ?? MOCK_PRODUCTS[0];
-  const related = MOCK_PRODUCTS.filter(p => p.id !== productId).slice(0, 3);
+  const {product, products} = route.params;
+
+  const related = products.filter((p: any) => p.id !== product.id).slice(0, 3);
   const [quantity, setQuantity] = useState(2);
 
   const IMAGE_HEIGHT = scale(382);
+
+  if (!product) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#FFFFFF',
+        }}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={s.root}>
@@ -267,9 +280,14 @@ export const ProductDetailScreen = ({route, navigation}: Props) => {
               <ProductCard
                 key={item.id}
                 item={item}
-                onPress={id =>
-                  navigation.replace('ProductDetail', {productId: id})
-                }
+                onPress={id => {
+                  const selectedProduct = products.find(p => p.id === id);
+
+                  navigation.navigate('ProductDetail', {
+                    product: selectedProduct,
+                    products,
+                  });
+                }}same
                 onAdd={() => {}}
                 variant="home"
               />

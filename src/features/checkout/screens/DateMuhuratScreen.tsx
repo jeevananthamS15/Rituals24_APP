@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -8,9 +8,9 @@ import {
   Dimensions,
   Platform,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
 const BASE_WIDTH = 393;
 const s = (size: number) => (SCREEN_WIDTH / BASE_WIDTH) * size;
 
@@ -29,9 +29,7 @@ const DOT_GREEN = '#34C759';
 const DOT_ORANGE = '#FF8D28';
 const DOT_PURPLE = '#6155F5';
 
-
 const WEEK_DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-
 
 const MAY_2026_ROWS: (number | null)[][] = [
   [null, null, null, null, null, 1, 2],
@@ -41,7 +39,6 @@ const MAY_2026_ROWS: (number | null)[][] = [
   [24, 25, 26, 27, 28, 29, 30],
   [31, null, null, null, null, null, null],
 ];
-
 
 const DAY_DOTS: Record<number, string> = {
   6: DOT_PURPLE,
@@ -55,14 +52,13 @@ const DAY_DOTS: Record<number, string> = {
 };
 
 const TIME_SLOTS = [
-  { id: '1', time: '6:00 AM', label: 'Early Morning' },
-  { id: '2', time: '8:00 AM', label: 'Early Morning' },
-  { id: '3', time: '10:00 AM', label: 'Early Morning' },
-  { id: '4', time: '11:45 AM', label: 'Noon Muhurat' },
-  { id: '5', time: '4:00 PM', label: 'Early Morning' },
-  { id: '6', time: '6:00 PM', label: 'Early Morning' },
+  {id: '1', time: '6:00 AM', label: 'Early Morning'},
+  {id: '2', time: '8:00 AM', label: 'Early Morning'},
+  {id: '3', time: '10:00 AM', label: 'Early Morning'},
+  {id: '4', time: '11:45 AM', label: 'Noon Muhurat'},
+  {id: '5', time: '4:00 PM', label: 'Early Morning'},
+  {id: '6', time: '6:00 PM', label: 'Early Morning'},
 ];
-
 
 const ProgressBar = ({
   currentStep,
@@ -72,7 +68,7 @@ const ProgressBar = ({
   totalSteps?: number;
 }) => (
   <View style={pb.row}>
-    {Array.from({ length: totalSteps }).map((_, index) => {
+    {Array.from({length: totalSteps}).map((_, index) => {
       const isDone = index + 1 < currentStep;
       const isActive = index + 1 === currentStep;
 
@@ -81,11 +77,7 @@ const ProgressBar = ({
           key={`step-${index}`}
           style={[
             pb.line,
-            isDone
-              ? pb.done
-              : isActive
-              ? pb.active
-              : pb.inactive,
+            isDone ? pb.done : isActive ? pb.active : pb.inactive,
           ]}
         />
       );
@@ -121,11 +113,7 @@ const pb = StyleSheet.create({
   },
 });
 
-const Header = ({
-  onBack,
-}: {
-  onBack: () => void;
-}) => {
+const Header = ({onBack, title}: {onBack: () => void; title: string}) => {
   const insets = useSafeAreaInsets();
 
   return (
@@ -135,32 +123,22 @@ const Header = ({
         {
           paddingTop: insets.top + s(8),
         },
-      ]}
-    >
+      ]}>
       <TouchableOpacity
         style={hdr.backBtn}
         onPress={onBack}
-        activeOpacity={0.8}
-      >
+        activeOpacity={0.8}>
         <View style={hdr.circle}>
           <View style={hdr.chevron} />
         </View>
       </TouchableOpacity>
 
       <View style={hdr.titleBlock}>
-        <Text style={hdr.title}>
-          Satyanarayan puja
-        </Text>
+        <Text style={hdr.title}>{title}</Text>
 
         <Text style={hdr.step}>
-          Step{' '}
-          <Text style={hdr.stepBold}>
-            2 / 5
-          </Text>{' '}
-          :{' '}
-          <Text style={hdr.stepBold}>
-            Service mode
-          </Text>
+          Step <Text style={hdr.stepBold}>2 / 5</Text> :{' '}
+          <Text style={hdr.stepBold}>Service mode</Text>
         </Text>
 
         <ProgressBar currentStep={2} />
@@ -199,10 +177,7 @@ const hdr = StyleSheet.create({
     borderLeftWidth: 2,
     borderBottomWidth: 2,
     borderColor: PRIMARY,
-    transform: [
-      { rotate: '45deg' },
-      { translateX: s(2) },
-    ],
+    transform: [{rotate: '45deg'}, {translateX: s(2)}],
   },
 
   titleBlock: {
@@ -212,10 +187,7 @@ const hdr = StyleSheet.create({
   },
 
   title: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Lato'
-        : 'Lato',
+    fontFamily: Platform.OS === 'ios' ? 'Lato' : 'Lato',
     fontWeight: '700',
     fontSize: s(28),
     lineHeight: s(36),
@@ -223,10 +195,7 @@ const hdr = StyleSheet.create({
   },
 
   step: {
-    fontFamily:
-      Platform.OS === 'ios'
-        ? 'Inter'
-        : 'Inter',
+    fontFamily: Platform.OS === 'ios' ? 'Inter' : 'Inter',
     fontSize: s(10),
     lineHeight: s(12),
     color: WHITE,
@@ -237,7 +206,6 @@ const hdr = StyleSheet.create({
     fontWeight: '700',
   },
 });
-
 
 const BookingSummaryBar: React.FC = () => (
   <View style={bsb.container}>
@@ -270,10 +238,21 @@ const bsb = StyleSheet.create({
     marginTop: s(12),
     marginBottom: s(4),
   },
-  cell: { flex: 1, alignItems: 'center', gap: s(4) },
-  cellCenter: { flex: 1, alignItems: 'center' },
-  label: { fontSize: s(10), color: TEXT_PRIMARY, lineHeight: s(12),fontFamily:'Inter' },
-  value: { fontSize: s(10), fontWeight: '700', color: TEXT_PRIMARY, lineHeight: s(12),fontFamily:'Inter' },
+  cell: {flex: 1, alignItems: 'center', gap: s(4)},
+  cellCenter: {flex: 1, alignItems: 'center'},
+  label: {
+    fontSize: s(10),
+    color: TEXT_PRIMARY,
+    lineHeight: s(12),
+    fontFamily: 'Inter',
+  },
+  value: {
+    fontSize: s(10),
+    fontWeight: '700',
+    color: TEXT_PRIMARY,
+    lineHeight: s(12),
+    fontFamily: 'Inter',
+  },
   divider: {
     width: 1,
     height: s(28),
@@ -282,11 +261,10 @@ const bsb = StyleSheet.create({
   },
 });
 
-
 const CalendarWidget: React.FC<{
   selectedDay: number | null;
   onSelectDay: (day: number) => void;
-}> = ({ selectedDay, onSelectDay }) => (
+}> = ({selectedDay, onSelectDay}) => (
   <View style={cal.card}>
     <View style={cal.navRow}>
       <TouchableOpacity style={cal.navBtn} activeOpacity={0.7}>
@@ -310,7 +288,9 @@ const CalendarWidget: React.FC<{
     {/* Weekday headers */}
     <View style={cal.weekRow}>
       {WEEK_DAYS.map(d => (
-        <Text key={d} style={cal.weekDay}>{d}</Text>
+        <Text key={d} style={cal.weekDay}>
+          {d}
+        </Text>
       ))}
     </View>
 
@@ -327,19 +307,17 @@ const CalendarWidget: React.FC<{
               style={[cal.dayCell, isSelected && cal.dayCellSelected]}
               onPress={() => day && onSelectDay(day)}
               disabled={isEmpty}
-              activeOpacity={0.7}
-            >
+              activeOpacity={0.7}>
               <Text
                 style={[
                   cal.dayText,
                   isEmpty && cal.dayTextEmpty,
                   isSelected && cal.dayTextSelected,
-                ]}
-              >
+                ]}>
                 {day ?? ''}
               </Text>
               {dotColor && !isSelected && (
-                <View style={[cal.dot, { backgroundColor: dotColor }]} />
+                <View style={[cal.dot, {backgroundColor: dotColor}]} />
               )}
             </TouchableOpacity>
           );
@@ -357,7 +335,7 @@ const cal = StyleSheet.create({
     borderColor: BORDER,
     padding: s(16),
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.06,
     shadowRadius: 20,
     elevation: 3,
@@ -381,7 +359,7 @@ const cal = StyleSheet.create({
     borderLeftWidth: 2,
     borderBottomWidth: 2,
     borderColor: '#1E1E1E',
-    transform: [{ rotate: '45deg' }],
+    transform: [{rotate: '45deg'}],
   },
   chevronRight: {
     width: s(9),
@@ -389,7 +367,7 @@ const cal = StyleSheet.create({
     borderRightWidth: 2,
     borderTopWidth: 2,
     borderColor: '#1E1E1E',
-    transform: [{ rotate: '45deg' }],
+    transform: [{rotate: '45deg'}],
   },
   selects: {
     flex: 1,
@@ -419,7 +397,7 @@ const cal = StyleSheet.create({
     borderRightWidth: 1.6,
     borderBottomWidth: 1.6,
     borderColor: '#1E1E1E',
-    transform: [{ rotate: '45deg' }, { translateY: -s(2) }],
+    transform: [{rotate: '45deg'}, {translateY: -s(2)}],
   },
   weekRow: {
     flexDirection: 'row',
@@ -454,8 +432,8 @@ const cal = StyleSheet.create({
     lineHeight: s(22),
     textAlign: 'center',
   },
-  dayTextEmpty: { color: '#B3B3B3' },
-  dayTextSelected: { color: '#F5F5F5' },
+  dayTextEmpty: {color: '#B3B3B3'},
+  dayTextSelected: {color: '#F5F5F5'},
   dot: {
     width: 4,
     height: 4,
@@ -463,16 +441,15 @@ const cal = StyleSheet.create({
   },
 });
 
-
 const LegendRow: React.FC = () => (
   <View style={leg.row}>
     {[
-      { color: DOT_GREEN, label: 'Auspicious' },
-      { color: DOT_ORANGE, label: 'Festival' },
-      { color: DOT_PURPLE, label: 'Pitra' },
+      {color: DOT_GREEN, label: 'Auspicious'},
+      {color: DOT_ORANGE, label: 'Festival'},
+      {color: DOT_PURPLE, label: 'Pitra'},
     ].map(l => (
       <View key={l.label} style={leg.item}>
-        <View style={[leg.dot, { backgroundColor: l.color }]} />
+        <View style={[leg.dot, {backgroundColor: l.color}]} />
         <Text style={leg.text}>{l.label}</Text>
       </View>
     ))}
@@ -480,12 +457,16 @@ const LegendRow: React.FC = () => (
 );
 
 const leg = StyleSheet.create({
-  row: { flexDirection: 'row', gap: s(12), alignItems: 'center' },
-  item: { flexDirection: 'row', alignItems: 'center', gap: s(4) },
-  dot: { width: s(8), height: s(8), borderRadius: s(4) },
-  text: { fontSize: s(10), fontWeight: '700', color: TEXT_PRIMARY, lineHeight: s(12) },
+  row: {flexDirection: 'row', gap: s(12), alignItems: 'center'},
+  item: {flexDirection: 'row', alignItems: 'center', gap: s(4)},
+  dot: {width: s(8), height: s(8), borderRadius: s(4)},
+  text: {
+    fontSize: s(10),
+    fontWeight: '700',
+    color: TEXT_PRIMARY,
+    lineHeight: s(12),
+  },
 });
-
 
 const AuspiciousBanner: React.FC = () => (
   <View style={ab.container}>
@@ -517,8 +498,8 @@ const ab = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  iconText: { fontSize: s(18), color: WHITE },
-  textBlock: { gap: s(4) },
+  iconText: {fontSize: s(18), color: WHITE},
+  textBlock: {gap: s(4)},
   title: {
     fontSize: s(12),
     fontWeight: '700',
@@ -532,8 +513,7 @@ const ab = StyleSheet.create({
   },
 });
 
-
-const MuhuratCard: React.FC<{ day: number }> = ({ day }) => (
+const MuhuratCard: React.FC<{day: number}> = ({day}) => (
   <View style={mc.container}>
     {/* Header row */}
     <View style={mc.headerRow}>
@@ -553,16 +533,14 @@ const MuhuratCard: React.FC<{ day: number }> = ({ day }) => (
       </View>
     </View>
 
-
     <View style={mc.divider} />
-
 
     <Text style={mc.sectionLabel}>Auspicious Timing Today</Text>
 
     {[
-      { time: '5:40 AM -7:30 AM', name: 'Braham Muhurat', icon: '☀️' },
-      { time: '9:00 AM -10:30 AM', name: 'Abhijit Muhurat', icon: '📿' },
-      { time: '12:00 AM -1:00 AM', name: 'Rahu Kalam', icon: '⏳' },
+      {time: '5:40 AM -7:30 AM', name: 'Braham Muhurat', icon: '☀️'},
+      {time: '9:00 AM -10:30 AM', name: 'Abhijit Muhurat', icon: '📿'},
+      {time: '12:00 AM -1:00 AM', name: 'Rahu Kalam', icon: '⏳'},
     ].map(row => (
       <View key={row.name} style={mc.timingRow}>
         <View style={mc.timingText}>
@@ -572,7 +550,6 @@ const MuhuratCard: React.FC<{ day: number }> = ({ day }) => (
         <Text style={mc.timingIcon}>{row.icon}</Text>
       </View>
     ))}
-
 
     <View style={mc.divider} />
 
@@ -634,7 +611,7 @@ const mc = StyleSheet.create({
     lineHeight: s(12),
     textAlign: 'center',
   },
-  headerInfo: { flex: 1, gap: s(4) },
+  headerInfo: {flex: 1, gap: s(4)},
   monthYear: {
     fontSize: s(14),
     fontWeight: '700',
@@ -650,7 +627,7 @@ const mc = StyleSheet.create({
     paddingVertical: s(4),
     alignSelf: 'flex-start',
   },
-  starIcon: { fontSize: s(10), color: GOLD2 },
+  starIcon: {fontSize: s(10), color: GOLD2},
   nakshatraText: {
     fontSize: s(10),
     fontWeight: '700',
@@ -665,7 +642,7 @@ const mc = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  bookmarkIcon: { fontSize: s(16) },
+  bookmarkIcon: {fontSize: s(16)},
   divider: {
     height: 1,
     backgroundColor: 'rgba(255,255,255,0.3)',
@@ -685,7 +662,7 @@ const mc = StyleSheet.create({
     padding: s(12),
     paddingRight: s(16),
   },
-  timingText: { flex: 1, gap: s(4) },
+  timingText: {flex: 1, gap: s(4)},
   timingTime: {
     fontSize: s(14),
     fontWeight: '700',
@@ -697,12 +674,12 @@ const mc = StyleSheet.create({
     color: TEXT_ON_DARK,
     lineHeight: s(22),
   },
-  timingIcon: { fontSize: s(36) },
+  timingIcon: {fontSize: s(36)},
   infoGrid: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  infoCell: { flex: 1, gap: s(4), paddingVertical: s(4) },
+  infoCell: {flex: 1, gap: s(4), paddingVertical: s(4)},
   infoCellDivider: {
     width: 1,
     height: s(40),
@@ -722,33 +699,38 @@ const mc = StyleSheet.create({
   },
 });
 
-
-export const DateMuhuratScreen: React.FC<{ navigation?: any }> = ({ navigation }) => {
+export const DateMuhuratScreen: React.FC<{
+  navigation?: any;
+  route?: any;
+}> = ({navigation, route}) => {
+  const {puja, pujaId, selectedMode} = route?.params || {};
   const [selectedDay, setSelectedDay] = useState<number | null>(11);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
-
+  console.log(puja);
+  console.log(pujaId);
+  console.log(selectedMode);
   const selectedSlotObj = TIME_SLOTS.find(t => t.id === selectedSlot);
-
+  const selectedPuja = puja;
   return (
     <View style={styles.container}>
-      <Header onBack={() => navigation?.goBack()} />
+      <Header onBack={() => navigation?.goBack()} title={selectedPuja?.title} />
       <BookingSummaryBar />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scroll}
-      >
-
+        contentContainerStyle={styles.scroll}>
         <View style={styles.sectionHeaderRow}>
           <Text style={styles.sectionTitle}>Select Date</Text>
           <LegendRow />
         </View>
 
-        <CalendarWidget selectedDay={selectedDay} onSelectDay={setSelectedDay} />
+        <CalendarWidget
+          selectedDay={selectedDay}
+          onSelectDay={setSelectedDay}
+        />
 
         {selectedDay && <AuspiciousBanner />}
-
 
         <View>
           <Text style={styles.sectionTitle}>Available Time Slots</Text>
@@ -763,12 +745,16 @@ export const DateMuhuratScreen: React.FC<{ navigation?: any }> = ({ navigation }
                 key={slot.id}
                 style={[styles.slotCard, isActive && styles.slotCardActive]}
                 onPress={() => setSelectedSlot(slot.id)}
-                activeOpacity={0.75}
-              >
-                <Text style={[styles.slotTime, isActive && styles.slotTimeActive]}>
+                activeOpacity={0.75}>
+                <Text
+                  style={[styles.slotTime, isActive && styles.slotTimeActive]}>
                   {slot.time}
                 </Text>
-                <Text style={[styles.slotLabel, isActive && styles.slotLabelActive]}>
+                <Text
+                  style={[
+                    styles.slotLabel,
+                    isActive && styles.slotLabelActive,
+                  ]}>
                   {slot.label}
                 </Text>
               </TouchableOpacity>
@@ -776,16 +762,12 @@ export const DateMuhuratScreen: React.FC<{ navigation?: any }> = ({ navigation }
           })}
         </View>
 
-
         {selectedDay && <MuhuratCard day={selectedDay} />}
       </ScrollView>
 
-
-      <View style={[styles.footer, { paddingBottom: insets.bottom + s(8) }]}>
+      <View style={[styles.footer, {paddingBottom: insets.bottom + s(8)}]}>
         <View style={styles.footerLeft}>
-          <Text style={styles.footerDate}>
-            May {selectedDay ?? '--'}
-          </Text>
+          <Text style={styles.footerDate}>May {selectedDay ?? '--'}</Text>
           <Text style={styles.footerSub}>
             {selectedSlotObj ? selectedSlotObj.time : 'No time selected'}
           </Text>
@@ -795,10 +777,17 @@ export const DateMuhuratScreen: React.FC<{ navigation?: any }> = ({ navigation }
             styles.ctaBtn,
             (!selectedDay || !selectedSlot) && styles.ctaBtnDisabled,
           ]}
-          onPress={() => navigation?.navigate('PanditSelect')}
+          onPress={() =>
+            navigation?.navigate('PanditSelect', {
+              puja: selectedPuja,
+              pujaId,
+              selectedMode,
+              selectedDate: selectedDay,
+              selectedTime: selectedSlotObj,
+            })
+          }
           disabled={!selectedDay || !selectedSlot}
-          activeOpacity={0.88}
-        >
+          activeOpacity={0.88}>
           <Text style={styles.ctaText}>Continue Booking</Text>
           <Text style={styles.ctaArrow}> →</Text>
         </TouchableOpacity>
@@ -808,7 +797,7 @@ export const DateMuhuratScreen: React.FC<{ navigation?: any }> = ({ navigation }
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: WHITE },
+  container: {flex: 1, backgroundColor: WHITE},
   scroll: {
     paddingHorizontal: s(20),
     paddingTop: s(16),
@@ -863,14 +852,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
   },
-  slotTimeActive: { color: PRIMARY },
+  slotTimeActive: {color: PRIMARY},
   slotLabel: {
     fontSize: s(10),
     color: TEXT_PRIMARY,
     lineHeight: s(12),
     textAlign: 'center',
   },
-  slotLabelActive: { color: PRIMARY },
+  slotLabelActive: {color: PRIMARY},
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -881,7 +870,7 @@ const styles = StyleSheet.create({
     paddingTop: s(16),
     gap: s(12),
   },
-  footerLeft: { flex: 1 },
+  footerLeft: {flex: 1},
   footerDate: {
     fontSize: s(24),
     fontWeight: '700',
@@ -904,7 +893,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  ctaBtnDisabled: { opacity: 0.5 },
+  ctaBtnDisabled: {opacity: 0.5},
   ctaText: {
     color: '#FFFAF0',
     fontWeight: '500',
